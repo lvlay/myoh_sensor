@@ -1,0 +1,13 @@
+root {
+    platform {
+        maniu_sample_config {
+            match_attr = "maniu_sample_config";   //该字段的值必须和device_info.hcs中的deviceMatchAttr值一致
+        }
+
+        maniu_led_config {
+            match_attr = "maniu_led_config";   //该字段的值必须和device_info.hcs中的deviceMatchAttr值一致
+            led_version = 1;
+            led_number = 15; //针脚编号
+        }
+    }
+}
