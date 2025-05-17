@@ -1,0 +1,381 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ohos.hdi.display.composer.v1_0;
+
+import ohos.hdi.display.composer.v1_0.DisplayComposerType;
+import ohos.hdi.display.composer.v1_0.IHotPlugCallback;
+import ohos.hdi.display.composer.v1_0.IVBlankCallback;
+import ohos.hdi.display.composer.v1_0.IRefreshCallback;
+
+sequenceable OHOS.HDI.Display.HdifdParcelable;
+
+interface IDisplayComposer {
+    /* *
+     * @brief Registers the callback to be invoked when a hot plug event occurs.
+     *
+     * @param cb Indicates the instance used to notify the graphics service of a hot plug event occurred.
+
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    RegHotPlugCallback([in] IHotPlugCallback cb);
+
+    /**
+     * @brief Sets the client buffer cache count of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param count client buffer cache count.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetClientBufferCacheCount([in] unsigned int devId, [in] unsigned int count);
+
+    /* *
+     * @brief Registers the callback to be invoked when a VBLANK event occurs.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param cb Indicates the instance used to notify the graphics service of the VBLANK event occurred when
+     * <b>DisplayVsync</b> is enabled.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    RegDisplayVBlankCallback([in] unsigned int devId, [in] IVBlankCallback cb);
+
+    /* *
+     * @brief Obtains the capabilities of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param info Indicates the pointer to the capabilities supported by the display device. For details,
+     * see {@link DisplayCapability}.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayCapability([in] unsigned int devId, [out] struct DisplayCapability info);
+
+    /* *
+     * @brief Obtains the display modes supported by a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param modes Indicates the vector of the information about all modes supported by the display device,
+     * including all supported resolutions and refresh rates. Each mode has an ID, which will be used when
+     * the mode is set or obtained. For details, see {@link DisplayModeInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplaySupportedModes([in] unsigned int devId, [out] struct DisplayModeInfo[] modes);
+
+    /* *
+     * @brief Obtains the current display mode of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param modeId indicates the pointer to the ID of the current display mode of the device. The display mode ID
+     * is written by this API.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayMode([in] unsigned int devId, [out] unsigned int modeId);
+
+    /* *
+     * @brief Sets the display mode of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param modeId Indicates the ID of the display mode. The device is switched to the display mode specified by
+     * this parameter in this interface.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayMode([in] unsigned int devId, [in] unsigned int modeId);
+
+    /* *
+     * @brief Obtains the power status of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param status Indicates the pointer to the power status of the device. The status is written by this interface.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayPowerStatus([in] unsigned int devId, [out] enum DispPowerStatus status);
+
+    /* *
+     * @brief Sets the power status of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param status Indicates the power status to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayPowerStatus([in] unsigned int devId, [in] enum DispPowerStatus status);
+
+    /* *
+     * @brief Obtains the backlight value of a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param level Indicates the pointer to the backlight value of the device. The backlight value is written
+     * by this interface.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayBacklight([in] unsigned int devId, [out] unsigned int level);
+
+    /* *
+     * @brief Sets the backlight value for a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param level Indicates the backlight value to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayBacklight([in] unsigned int devId, [in] unsigned int level);
+
+    /* *
+     * @brief Enables or disables the vertical sync signal.
+     *
+     * When the vertical sync signal is generated, the <b>VBlankCallback</b> callback registered
+     * by <b>RegDisplayVBlankCallback</b> will be invoked. The vertical sync signal must be enabled when the graphics
+     * service needs to refresh the display, and disabled when display refresh is not required. The display does not
+     * need to refresh when <b>VBlankCallback</b> is invoked and the graphics service composes layers and sends the
+     * composition result to the device for display.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param enabled Specifies whether to enable the vertical sync signal. The value <b>true</b> means to enable the
+     * vertical sync signal, and <b>false</b> means to disable it.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode}otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayVsyncEnabled([in] unsigned int devId, [in] boolean enabled);
+
+    /**
+     * @brief Opens a layer on a specified display device.
+     *
+     * Before using a layer on the GUI, you must open the layer based on the layer information. After the layer is
+     * opened, you can obtain the layer ID and then use other functions based on the layer ID.
+     *
+     * @param devId Indicates the ID of the display device. The value ranges from 0 to 4, where 0 indicates the first
+     * display device, and 4 indicates the last display device.
+     * @param layerInfo Indicates the pointer to the layer information passed to open a layer, including the layer
+     * type, layer size, and pixel format.
+     * @param cacheCount Indicates the count of buffer cache.
+     * @param layerId Indicates the pointer to the layer ID, which uniquely identifies a layer. The layer ID is returned
+     * to the GUI after the layer is successfully opened.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined in {@link DispErrCode}
+     * otherwise.
+     * @see DestroyLayer
+     * @since 4.0
+     * @version 1.0
+     */
+    CreateLayer([in] unsigned int devId, [in] struct LayerInfo layerInfo, [in] unsigned int cacheCount,
+        [out] unsigned int layerId);
+
+    /**
+     * @brief Opens a layer on a specified display device.
+     *
+     * Before using a layer on the GUI, you must open the layer based on the layer information. After the layer is
+     * opened, you can obtain the layer ID and then use other functions based on the layer ID.
+     *
+     * @param devId Indicates the ID of the display device. The value ranges from 0 to 4, where 0 indicates the first
+     * display device, and 4 indicates the last display device.
+     * @param layerId Indicates the pointer to the layer ID, which uniquely identifies a layer. The layer ID is returned
+     * to the GUI after the layer is successfully opened.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined in {@link DispErrCode}
+     * otherwise.
+     * @see DestroyLayer
+     * @since 4.0
+     * @version 1.0
+     */
+    DestroyLayer([in] unsigned int devId, [in] unsigned int layerId);
+
+     /* *
+     * @brief Sets the cropped region for a display device.
+     *
+     * You can use this interface to set the cropped region of the client buffer of the display device.
+     * The cropped region cannot exceed the size of the client buffer.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param rect Indicates the pointer to the cropped region of the client buffer.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayClientCrop([in] unsigned int devId, [in] struct IRect rect);
+
+    /* *
+     * @brief Obtains the fences of the display layers after the commit operation.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param layers Indicates the vector of the start address of the layer array.
+     * @param fences Indicates the vector of the start address of the fence array.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayReleaseFence([in] unsigned int devId, [out] unsigned int[] layers, [out] HdifdParcelable[] fences);
+
+     /* *
+     * @brief Creates a virtual display device.
+     *
+     * @param width Indicates the pixel width of the display device.
+     * @param height Indicates the pixel height of the display device.
+     * @param format Indicates the pointer to the pixel format of the display device.
+     * @param devId Indicates the ID of the display device.
+     * For details, see {@link PixelFormat}. The <b>format</b> can be modified based on hardware requirements and
+     * returned to the graphics service.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    CreateVirtualDisplay([in] unsigned int width, [in] unsigned int height, [out] int format, [out] unsigned int devId);
+
+    /* *
+     * @brief Destroys a virtual display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    DestroyVirtualDisplay([in] unsigned int devId);
+
+    /* *
+     * @brief Sets the output buffer for a virtual display device.
+     *
+     * This buffer stores the output of the virtual display device. The buffer can be used only after the sync fence
+     * is in the signaled state.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param buffer Indicates the pointer to the output buffer.
+     * @param fence Indicates the sync fence.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetVirtualDisplayBuffer([in] unsigned int devId, [in] NativeBuffer buffer, [in] HdifdParcelable fence);
+
+    /* *
+     * @brief Sets the property for a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param id Indicates the property ID returned by <b>GetDisplayCapability</b>.
+     * @param value Indicates the property to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    SetDisplayProperty([in] unsigned int devId, [in] unsigned int id, [in] unsigned long value);
+
+    /* *
+     * @brief Obtains the property for a display device.
+     *
+     * @param devId Indicates the ID of the display device.
+     * @param id Indicates the property ID returned by <b>GetDisplayCapability</b>.
+     * @param value Indicates the property to get.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetDisplayProperty([in] unsigned int devId, [in] unsigned int id, [out] unsigned long value);
+
+    /* func for smq transfer */
+    /* *
+     * @brief Initializes a command request object.
+     *
+     * @param request Indicates the SharedMemQueue to Initializes.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    InitCmdRequest([in] SharedMemQueue<int> request);
+
+    /* *
+     * @brief Send a command request.
+     *
+     * @param inEleCnt Indicates the number of element.
+     * @param inFds Indicates the ID of HdifdParcelable.
+     * @param outEleCnt outEleCnt inEleCnt Indicates the number of element to get.
+     * @param outFds outEleCnt Indicates the ID of HdifdParcelable to get.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    CmdRequest([in] unsigned int inEleCnt, [in] struct HdifdInfo[] inFds, [out] unsigned int outEleCnt,
+        [out] struct HdifdInfo[] outFds);
+
+    /* *
+     * @brief Gets the return result of a command request.
+     *
+     * @param reply Indicates the the return result.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns an error code defined
+     * in {@link DispErrCode} otherwise.
+     * @since 4.0
+     * @version 1.0
+     */
+    GetCmdReply([out] SharedMemQueue<int> reply);
+}

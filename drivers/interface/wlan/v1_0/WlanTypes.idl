@@ -1,0 +1,256 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup WLAN
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+ /**
+ * @file WlanTypes.idl
+ *
+ * @brief Defines data types related to the WLAN module.
+ *
+ * The WLAN module data includes the {@code Feature} object information, station (STA) information,
+ * scan information, and network device information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.wlan.v1_0;
+
+/**
+ * @brief Defines the {@code Feature} object information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfFeatureInfo {
+    /** NIC name of the {@code Feature} object. */
+    String ifName;
+    /** {@code Feature} object. */
+    int type;
+};
+
+/**
+ * @brief Defines STA information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfStaInfo {
+    /** MAC address of an STA. */
+    unsigned char[] mac;
+};
+
+/**
+ * @brief Defines the service set identifier (SSID) information for a Wi-Fi scan.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfWifiDriverScanSsid {
+    /** SSID to scan. */
+    String ssid;
+    /** Length of the SSID. */ 
+    int ssidLen;
+};
+
+/**
+ * @brief Defines Wi-Fi scan parameters.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfWifiScan{
+    /** SSIDs to scan. */
+    struct HdfWifiDriverScanSsid[] ssids;
+    /** Frequencies to scan. */
+    int[] freqs;
+    /** Extended information element (IE) carried in a Wi-Fi scan request. */
+    unsigned char[] extraIes;
+    /** Basic service set identifier (BSSID) to scan. */
+    unsigned char[] bssid;
+    /** Whether the SSID to be scanned has a prefix. */
+    unsigned char prefixSsidScanFlag;
+    /** Fast connect flag. */
+    unsigned char fastConnectFlag;
+};
+
+/**
+ * @brief Defines network device Information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfNetDeviceInfo {
+    /** Index of the network device. */
+    unsigned int index;
+    /** Network interface card (NIC) name. */
+    String ifName;
+    /** Length of the NIC name. */
+    unsigned int ifNameLen;
+    /** NIC type. */
+    unsigned char iftype;
+    /** MAC address of the network device. */
+    unsigned char[] mac;
+};
+
+/**
+ * @brief Defines the network device information set.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfNetDeviceInfoResult {
+    /** A sef of network device information. */
+    struct HdfNetDeviceInfo[] deviceInfos;
+};
+
+/**
+ * @brief Defines the Wi-Fi scan result.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfWifiScanResult {
+    /** Flag of the basic service set (BSS)/independent basic service set (IBSS). */
+    unsigned int flags;
+    /** BSSID information. */
+    unsigned char[] bssid;
+    /** Capability information fields (in host byte order). */
+    unsigned short caps;
+    /** Channel frequency. */
+    unsigned int freq;
+    /** Beacon interval. */
+    unsigned short beaconInt;
+    /** Signal quality. */
+    int qual;
+    /** Signal strength. */
+    int level;
+    /** Time for receiving the latest beacon or probe response frame, in milliseconds. */
+    unsigned int age;
+    /** Variable value in the scan result. */
+    unsigned char[] variable;
+    /** IE in the following Probe Response message. */
+    unsigned char[] ie;
+    /** IE in the following beacon. */
+    unsigned char[] beaconIe;
+};
+
+/**
+ * @brief Define Wi-Fi frequency band information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct HdfWifiInfo {
+    /** Wi-Fi frequency band. */
+    int band;
+    /** Number of frequencies supported in the Wi-Fi frequency band. */
+    unsigned int size;
+};
+
+/**
+ * @brief Defines the channel measurement parameters.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct MeasChannelParam {
+    /** Channel ID. */
+    int channelId;
+    /** Measure time. */
+    int measTime;
+};
+
+/**
+ * @brief Defines the channel measurement result.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct MeasChannelResult {
+    /** Channel ID. */
+    int channelId;
+    /** Channel load. */
+    int chload;
+    /** Channel noise. */
+    int noise;
+};
+
+/**
+ * @brief Defines the projection parameters.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct ProjectionScreenCmdParam {
+    /** ID of the projection command. */
+    int cmdId;
+    /** Content of the projection command. */
+    byte[] buf;
+};
+
+/**
+ * @brief Defines STA information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct WifiStationInfo {
+    /** Receive (RX) rate. */
+    unsigned int rxRate;
+    /** Transmit (TX) rate. */
+    unsigned int txRate;
+    /** Transmission type. */
+    unsigned int flags;
+    /** RX Very High Throughput Modulation and Coding Scheme (VHT-MCS) configuration. */
+    unsigned char rxVhtmcs;
+    /** TX VHT-MCS configuration. */
+    unsigned char txVhtmcs;
+    /** RX Modulation and Coding Scheme (MCS) index. */
+    unsigned char rxMcs;
+    /** TX MCS index. */
+    unsigned char txMcs;
+    /** RX Very High Throughput Number of Spatial Streams (VHT-NSS) configuration. */
+    unsigned char rxVhtNss;
+    /** TX VHT-NSS configuration. */
+    unsigned char txVhtNss;
+};
+
+struct AdjustChannelInfo {
+    int msgId;
+    unsigned char chanNumber;
+    unsigned char bandwidth;
+    unsigned char switchType;
+    unsigned char statusCode;
+};
+/** @} */

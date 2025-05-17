@@ -1,0 +1,74 @@
+#include "v1_1/foo_proxy.h"
+#include <hdf_base.h>
+#include <hdf_log.h>
+#include <hdi_support.h>
+#include <iservmgr_hdi.h>
+#include <message_option.h>
+#include <message_parcel.h>
+#include <string_ex.h>
+
+#define HDF_LOG_TAG    foo_proxy
+
+sptr<OHOS::HDI::Foo::V1_1::IFoo> OHOS::HDI::Foo::V1_1::IFoo::CastFrom(const sptr<OHOS::HDI::Foo::V1_0::IFoo> &parent)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::Ping(const std::string& sendMsg, std::string& recvMsg, int32_t code)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetData(std::string& info, std::string& ver)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::Ping(const std::string& sendMsg, std::string& recvMsg)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetData(std::string& info)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::InfoTest(int32_t inParam, double& outParam)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetVersion(uint32_t& majorVer, uint32_t& minorVer)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::Ping_(const std::string& sendMsg, std::string& recvMsg, int32_t code,
+     const sptr<IRemoteObject> remote)
+{
+    MessageParcel fooData;
+    MessageParcel fooReply;
+    MessageOption fooOption(MessageOption::TF_SYNC);
+
+    if (!fooData.WriteInterfaceToken(OHOS::HDI::Foo::V1_1::IFoo::GetDescriptor())) {
+        HDF_LOGE("%{public}s: failed to write interface descriptor!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooData.WriteBool(false)) {
+        HDF_LOGE("%{public}s:failed to write flag of memory setting!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooData.WriteCString(sendMsg.c_str())) {
+        HDF_LOGE("%{public}s: write sendMsg failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooData.WriteInt32(code)) {
+        HDF_LOGE("%{public}s: write code failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (remote == nullptr) {
+        HDF_LOGE("%{public}s: invalid remote object!", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    int32_t fooRet = remote->SendRequest(CMD_FOO_PING_4, fooData, fooReply, fooOption);
+    if (fooRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s failed, error code is %{public}d", __func__, fooRet);
+        return fooRet;
+    }
+
+    const char* recvMsgCp = fooReply.ReadCString();
+    if (recvMsgCp == nullptr) {
+        HDF_LOGE("%{public}s: read recvMsg failed", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+    recvMsg = recvMsgCp;
+
+    return fooRet;
+}
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetData_(std::string& info, std::string& ver, const sptr<IRemoteObject> remote)

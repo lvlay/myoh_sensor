@@ -1,0 +1,58 @@
+# Copyright (c) 2022 Chipsea Technologies (Shenzhen) Corp., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//build/test.gni")
+import("./../../../../medical_sensor.gni")
+
+ohos_unittest("MedicalJsTest") {
+  module_out_path = "sensors/medical_sensor/interfaces"
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/interfaces/native/include",
+    "$SUBSYSTEM_DIR/interfaces/plugin/include",
+    "//third_party/libuv/include",
+    "//third_party/node/src",
+  ]
+
+  defines = [
+    "APP_LOG_TAG = \"medicalJs\"",
+    "LOG_DOMAIN = 0xD002700",
+  ]
+
+  sources = [ "medical_js_test.cpp" ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/interfaces/native:medical_interface_native",
+    "$SUBSYSTEM_DIR/interfaces/plugin:medical_static",
+    "//third_party/googletest:gtest",
+    "//third_party/googletest:gtest_main",
+    "//third_party/libuv:uv",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "ets_runtime:libark_jsruntime",
+    "hilog:libhilog",
+    "napi:ace_napi",
+  ]
+
+  relative_install_dir = "module"
+  part_name = "medical_sensor"
+  subsystem_name = "sensors"
+}
+
+group("unittest") {
+  testonly = true
+  deps = [ ":MedicalJsTest" ]
+}

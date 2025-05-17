@@ -1,0 +1,133 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiSensor
+ * @{
+ *
+ * @brief Provides unified APIs for sensor services to access sensor drivers.
+ *
+ * A sensor service can obtain a sensor driver object or agent and then call APIs provided by this object or agent to
+ * access different types of sensor devices based on the sensor IDs, thereby obtaining sensor information,
+ * subscribing to or unsubscribing from sensor data, enabling or disabling a sensor,
+ * setting the sensor data reporting mode, and setting sensor options such as the accuracy and measurement range.
+ *
+ * @version 1.0
+ */
+
+/**
+ * @file SensorTypes.idl
+ *
+ * @brief Defines the data used by the sensor module, including the sensor information,
+ * and reported sensor data.
+ *
+ * @since 2.2
+ * @version 1.0
+ */
+
+package ohos.hdi.sensor.v1_0;
+
+/**
+ * @brief Defines basic sensor information.
+ *
+ * Information about a sensor includes the sensor name, vendor, firmware version, hardware version, sensor type ID,
+ * sensor ID, maximum measurement range, accuracy, and power.
+ *
+ * @since 2.2
+ */
+struct HdfSensorInformation {
+    String sensorName; /**< Sensor name */
+    String vendorName; /**< Sensor vendor */
+    String firmwareVersion; /**< Sensor firmware version */
+    String hardwareVersion; /**< Sensor hardware version */
+    int sensorTypeId; /**< Sensor type ID (described in {@link SensorTypeTag}) */
+    int sensorId;     /**< Sensor ID, defined by the sensor driver developer */
+    float maxRange;   /**< Maximum measurement range of the sensor */
+    float accuracy;   /**< Sensor accuracy */
+    float power;      /**< Sensor power */
+    long minDelay; /**< Minimum sample period allowed in microseconds */
+    long maxDelay; /**< Maxmum sample period allowed in microseconds */
+};
+
+/**
+ * @brief Defines the data reported by the sensor.
+ *
+ * The reported sensor data includes the sensor ID, sensor algorithm version, data generation time,
+ * data options (such as the measurement range and accuracy), data reporting mode, data address, and data length.
+ *
+ * @since 2.2
+ */
+struct HdfSensorEvents {
+    int sensorId;            /**< Sensor ID */
+    int version;             /**< Sensor algorithm version */
+    long timestamp;           /**< Time when sensor data was generated */
+    unsigned int option;     /**< Sensor data options, including the measurement range and accuracy */
+    int mode;                /**< Sensor data reporting mode */
+    unsigned char[] data;    /**< Sensor data vector */
+    unsigned int dataLen;    /**< Sensor data length */
+};
+
+/**
+ * @brief Enumerates sensor types.
+ *
+ * @since 2.2
+ */
+enum HdfSensorTypeTag {
+    HDF_SENSOR_TYPE_NONE                = 0,   /**< None, for testing only */
+    HDF_SENSOR_TYPE_ACCELEROMETER       = 1,   /**< Acceleration sensor */
+    HDF_SENSOR_TYPE_GYROSCOPE           = 2,   /**< Gyroscope sensor */
+    HDF_SENSOR_TYPE_PHOTOPLETHYSMOGRAPH = 3,   /**< Photoplethysmography sensor */
+    HDF_SENSOR_TYPE_ELECTROCARDIOGRAPH  = 4,   /**< Electrocardiogram (ECG) sensor */
+    HDF_SENSOR_TYPE_AMBIENT_LIGHT       = 5,   /**< Ambient light sensor */
+    HDF_SENSOR_TYPE_MAGNETIC_FIELD      = 6,   /**< Magnetic field sensor */
+    HDF_SENSOR_TYPE_CAPACITIVE          = 7,   /**< Capacitive sensor */
+    HDF_SENSOR_TYPE_BAROMETER           = 8,   /**< Barometric pressure sensor */
+    HDF_SENSOR_TYPE_TEMPERATURE         = 9,   /**< Temperature sensor */
+    HDF_SENSOR_TYPE_HALL                = 10,  /**< Hall effect sensor */
+    HDF_SENSOR_TYPE_GESTURE             = 11,  /**< Gesture sensor */
+    HDF_SENSOR_TYPE_PROXIMITY           = 12,  /**< Proximity sensor */
+    HDF_SENSOR_TYPE_HUMIDITY            = 13,  /**< Humidity sensor */
+    HDF_SENSOR_TYPE_MEDICAL_BEGIN       = 128, /**< The begin of medical sensorId enumeration value range */
+    HDF_SENSOR_TYPE_MEDICAL_END         = 160, /**< The end of medical sensorId enumeration value range */
+    HDF_SENSOR_TYPE_PHYSICAL_MAX        = 255, /**< Maximum type of a physical sensor */
+    HDF_SENSOR_TYPE_ORIENTATION         = 256, /**< Orientation sensor */
+    HDF_SENSOR_TYPE_GRAVITY             = 257, /**< Gravity sensor */
+    HDF_SENSOR_TYPE_LINEAR_ACCELERATION = 258, /**< Linear acceleration sensor */
+    HDF_SENSOR_TYPE_ROTATION_VECTOR     = 259, /**< Rotation vector sensor */
+    HDF_SENSOR_TYPE_AMBIENT_TEMPERATURE = 260, /**< Ambient temperature sensor */
+    HDF_SENSOR_TYPE_MAGNETIC_FIELD_UNCALIBRATED = 261,   /**< Uncalibrated magnetic field sensor */
+    HDF_SENSOR_TYPE_GAME_ROTATION_VECTOR        = 262,   /**< Game rotation vector sensor */
+    HDF_SENSOR_TYPE_GYROSCOPE_UNCALIBRATED      = 263,   /**< Uncalibrated gyroscope sensor */
+    HDF_SENSOR_TYPE_SIGNIFICANT_MOTION          = 264,   /**< Significant motion sensor */
+    HDF_SENSOR_TYPE_PEDOMETER_DETECTION         = 265,   /**< Pedometer detection sensor */
+    HDF_SENSOR_TYPE_PEDOMETER                   = 266,   /**< Pedometer sensor */
+    HDF_SENSOR_TYPE_GEOMAGNETIC_ROTATION_VECTOR = 277,   /**< Geomagnetic rotation vector sensor */
+    HDF_SENSOR_TYPE_HEART_RATE                  = 278,   /**< Heart rate sensor */
+    HDF_SENSOR_TYPE_DEVICE_ORIENTATION          = 279,   /**< Device orientation sensor */
+    HDF_SENSOR_TYPE_WEAR_DETECTION              = 280,   /**< Wear detection sensor */
+    HDF_SENSOR_TYPE_ACCELEROMETER_UNCALIBRATED  = 281,   /**< Uncalibrated acceleration sensor */
+    HDF_SENSOR_TYPE_MAX,                                 /**< Maximum number of sensor types */
+};
+
+/**
+ * @brief Enumerates hardware service group for sensors
+ *
+ * @since 2.2
+ */
+enum HdfSensorGroupType {
+    HDF_TRADITIONAL_SENSOR_TYPE = 0, /**< traditional sensor type, the sensorId enumeration value range is 128-160 */
+    HDF_MEDICAL_SENSOR_TYPE = 1,  /**< medical sensor type, the sensorId enumeration value range is not within 128-160 */
+    HDF_SENSOR_GROUP_TYPE_MAX,          /**< Maximum sensor group type*/
+};

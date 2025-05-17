@@ -1,0 +1,103 @@
+{
+    "app": {
+      "bundleName": "com.example.myapplication",
+      "vendor": "example",
+      "version": {
+        "code": 1,
+        "name": "1.0"
+      },
+      "apiVersion": {
+        "compatible": 12,
+        "target": 12
+      }
+    },
+    "deviceConfig": {},
+    "module": {
+      "reqPermissions": [
+        {
+          "name": "ohos.permission.ACCELEROMETER",
+          "reason": "",
+          "usedScene": {
+            "ability": [
+              ".MainAbility"
+            ],
+            "when": "inuse"
+          }
+        },
+        {
+          "name": "ohos.permission.ACTIVITY_MOTION",
+          "reason": "need user ohos.permission.ACTIVITY_MOTION",
+          "usedScene": {
+            "ability": [
+              ".MainAbility"
+            ],
+            "when": "inuse"
+          }
+        },
+        {
+          "name": "ohos.permission.GYROSCOPE",
+          "reason": "",
+          "usedScene": {
+            "ability": [
+              ".MainAbility"
+            ],
+            "when": "inuse"
+          }
+        },
+        {
+            "name": "ohos.permission.GRANT_SENSITIVE_PERMISSIONS",
+            "reason": "user ohos.permission.GRANT_SENSITIVE_PERMISSIONS"
+        },
+        {
+            "name": "ohos.permission.REVOKE_SENSITIVE_PERMISSIONS",
+            "reason": "user ohos.permission.REVOKE_SENSITIVE_PERMISSIONS"
+        }
+      ],
+      "package": "com.example.myapplication",
+      "name": ".MyApplication",
+      "deviceType": [
+        "default",
+        "tablet",
+        "2inl"
+      ],
+      "distro": {
+        "deliveryWithInstall": true,
+        "moduleName": "entry",
+        "moduleType": "entry"
+      },
+      "abilities": [
+        {
+          "visible": true,
+          "skills": [
+            {
+              "entities": [
+                "entity.system.home"
+              ],
+              "actions": [
+                "action.system.home"
+              ]
+            }
+          ],
+          "name": "com.example.myapplication.MainAbility",
+          "icon": "$media:icon",
+          "description": "$string:mainability_description",
+          "label": "SensorJsTest",
+          "type": "page",
+          "launchType": "standard"
+        }
+      ],
+      "js": [
+        {
+          "pages": [
+            "pages/index/index"
+          ],
+          "name": "default",
+          "window": {
+            "designWidth": 720,
+            "autoDesignWidth": false
+          }
+        }
+      ]
+    }
+  }
+  

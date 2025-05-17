@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Motion
+ * @{
+ *
+ * @brief Provides common APIs for hardware services to access the motion driver module.
+ *
+ * A service can obtain a motion driver object or agent and then call APIs provided by this object or agent to
+ * enable or disable motion and subscribe to or unsubscribe from motion data.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @file IMotionInterface.idl
+ *
+ * @brief Defines the APIs for enabling or disabling motion and subscribing to or unsubscribing from motion data.
+ *
+ * The APIs defined here can be called to implement various motion features, such as pickup, flipping, shaking, and screen rotation.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+
+/**
+ * @brief Defines the package path of the motion driver module APIs.
+ *
+ * @since 4.0
+ */
+package ohos.hdi.motion.v1_1;
+
+import ohos.hdi.motion.v1_0.MotionTypes;
+import ohos.hdi.motion.v1_0.IMotionCallback;
+import ohos.hdi.motion.v1_0.IMotionInterface;
+import ohos.hdi.motion.v1_1.MotionTypes;
+
+/**
+ * @brief Defines the APIs for performing basic operations on motion devices.
+ *
+ * The APIs can be used to enable or disable motion and subscribe to or unsubscribe from motion data.
+ */
+interface IMotionInterface extends ohos.hdi.motion.v1_0.IMotionInterface {
+    /**
+     * @brief Sets motion config information.
+     *
+     * @param motionType Motion type. For details, see {@link HdfMotionTypeTag}.
+     * @param data Motion wave config parameters for a trick. For details, see {@link WaveParam}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.1
+     */
+    SetMotionConfig([in] int motionType, [in] unsigned char[] data);
+}
+/** @} */

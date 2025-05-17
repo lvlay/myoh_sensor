@@ -1,0 +1,101 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("./../../display_config.gni")
+
+group("display_composer_hdi_service") {
+  deps = [
+    ":libdisplay_composer_driver_1.0",
+    ":libdisplay_composer_service_1.2",
+  ]
+}
+
+ohos_shared_library("libdisplay_composer_service_1.2") {
+  defines = []
+  defines += display_defines
+  include_dirs = [
+    "../../utils/include",
+    "include",
+  ]
+  sources = [ "src/display_composer_service.cpp" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "drivers_interface_display:libcomposer_buffer_cache",
+    "drivers_interface_display:libdisplay_buffer_stub_1.0",
+    "drivers_interface_display:libdisplay_buffer_stub_1.1",
+    "drivers_interface_display:libdisplay_buffer_stub_1.2",
+    "drivers_interface_display:libdisplay_composer_hdi_impl",
+    "drivers_interface_display:libdisplay_composer_stub_1.0",
+    "drivers_interface_display:libdisplay_composer_stub_1.1",
+    "drivers_interface_display:libdisplay_composer_stub_1.2",
+    "graphic_surface:buffer_handle",
+    "hdf_core:libhdf_ipc_adapter",
+    "hdf_core:libhdf_utils",
+    "hdf_core:libhdi",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
+    "init:libbegetutil",
+    "ipc:ipc_single",
+  ]
+
+  if (build_variant != "user") {
+    include_dirs += [ "../../hal" ]
+    sources += [
+      "src/display_dump_disp.cpp",
+      "src/display_dump_service.cpp",
+      "src/display_dump_vdi.cpp",
+    ]
+    external_deps += [ "hdf_core:libhdf_host" ]
+    cflags_cc = [ "-DUSING_OHOS" ]
+    defines += [
+      "DISPLAY_COMPOSER_SERVICE_HIDUMPER",
+      "DISPLAY_COMSPOER_DEBUG_DUMP",
+    ]
+  }
+
+  install_images = [ chipset_base_dir ]
+  subsystem_name = "hdf"
+  part_name = "drivers_peripheral_display"
+}
+
+ohos_shared_library("libdisplay_composer_driver_1.0") {
+  include_dirs = []
+  sources = [ "src/display_composer_driver.cpp" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "drivers_interface_display:libdisplay_buffer_stub_1.0",
+    "drivers_interface_display:libdisplay_composer_stub_1.0",
+    "drivers_interface_display:libdisplay_composer_stub_1.1",
+    "drivers_interface_display:libdisplay_composer_stub_1.2",
+    "hdf_core:libhdf_host",
+    "hdf_core:libhdf_ipc_adapter",
+    "hdf_core:libhdf_utils",
+    "hdf_core:libhdi",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
+    "init:libbegetutil",
+    "ipc:ipc_single",
+  ]
+
+  if (drivers_peripheral_display_hicollie_enable) {
+    external_deps += [ "hicollie:libhicollie" ]
+  }
+
+  shlib_type = "hdi"
+  install_images = [ chipset_base_dir ]
+  subsystem_name = "hdf"
+  part_name = "drivers_peripheral_display"
+}

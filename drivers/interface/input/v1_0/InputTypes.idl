@@ -1,0 +1,151 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiInput
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer input service.
+ *
+ * Using the APIs provided by the Input module, input service developers can implement the following functions:
+ * enabling or disabling input devices, obtaining input events, querying device information, registering callback
+ * functions, and managing the feature status.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file InputTypes.idl
+ *
+ * @brief Defines input device-specific data types.
+ *
+ * This module defines the structures used by the driver APIs for the input service, including the device information,
+ * device attributes, and device capabilities.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the Input module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.input.v1_0;
+
+/**
+ * @brief Describes the input device.
+ */
+struct DevDesc {
+    unsigned int devIndex;        /**< Device index */
+    unsigned int devType;         /**< Device type */
+};
+
+/**
+ * @brief Describes identification information of the input device.
+ */
+struct DevIdentify {
+    unsigned short busType;       /**< Bus type */
+    unsigned short vendor;        /**< Vendor ID */
+    unsigned short product;       /**< Product ID */
+    unsigned short version;       /**< Version */
+};
+
+/**
+ * @brief Describes dimension information of the input device.
+ */
+struct DimensionInfo {
+    int axis;             /**< Axis */
+    int min;              /**< Minimum value of each coordinate */
+    int max;              /**< Maximum value of each coordinate */
+    int fuzz;             /**< Resolution of each coordinate */
+    int flat;             /**< Reference value of each coordinate */
+    int range;            /**< Range */
+};
+
+/**
+ * @brief Describes input device attributes.
+ */
+struct DevAttr {
+    String devName;                      /**< Device name */
+    struct DevIdentify id;               /**< Device identification information */
+    struct DimensionInfo[] axisInfo;     /**< Device dimension information */
+};
+
+/**
+ * @brief Describes the input device ability for storing bitmaps that record supported event types.
+ *
+ * A bit is used to indicate the type of events that can be reported by the input device.
+ *
+ */
+struct DevAbility {
+    unsigned long[] devProp;         /**< Device properties */
+    unsigned long[] eventType;       /**< Bitmap for recording the supported event types */
+    unsigned long[] absCode;         /**< Bitmap for recording the supported absolute coordinates */
+    unsigned long[] relCode;         /**< Bitmap for recording the supported relative coordinates */
+    unsigned long[] keyCode;         /**< Bitmap for recording the supported keycodes */
+    unsigned long[] ledCode;         /**< Bitmap for recording the supported indicators */
+    unsigned long[] miscCode;        /**< Bitmap for recording other supported functions */
+    unsigned long[] soundCode;       /**< Bitmap for recording supported sounds or alerts */
+    unsigned long[] forceCode;       /**< Bitmap for recording the supported force functions */
+    unsigned long[] switchCode;      /**< Bitmap for recording the supported switch functions */
+    unsigned long[] keyType;         /**< Bitmap of the key type */
+    unsigned long[] ledType;         /**< Bitmap of the LED type */
+    unsigned long[] soundType;       /**< Bitmap of the sound type */
+    unsigned long[] switchType;      /**< Bitmap of the switch type */
+};
+
+/**
+ * @brief Describes basic device information of the input device.
+ */
+struct DeviceInfo {
+    unsigned int devIndex;           /**< Device index */
+    unsigned int devType;            /**< Device type */
+    String chipInfo;                 /**< Driver chip information */
+    String vendorName;               /**< Module vendor name */
+    String chipName;                 /**< Driver chip name */
+    struct DevAttr attrSet;          /**< Device attributes */
+    struct DevAbility abilitySet;    /**< Device abilities */
+};
+
+/**
+ * @brief Defines the data structure of the extra command.
+ */
+struct ExtraCmd {
+    String cmdCode;     /**< Command code */
+    String cmdValue;    /**< Data transmitted in the command */
+};
+
+/**
+ * @brief Defines the data packet structure for hot plug events.
+ */
+struct HotPlugEvent {
+    unsigned int devIndex;      /**< Device index */
+    unsigned int devType;       /**< Device type */
+    unsigned int status;        /**< Device status 1: offline 0: online */
+};
+
+/**
+ * @brief Defines the data packet structure for input events.
+ */
+struct EventPackage {
+    unsigned int type;          /**< Type of the input event */
+    unsigned int code;          /**< Specific code item of the input event */
+    int value;                  /**< Value corresponding to the input event code */
+    unsigned long timestamp;    /**< Timestamp corresponding to the input event */
+};
+/** @} */

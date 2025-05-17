@@ -1,0 +1,124 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ohos.hdi.vibrator.v1_2;
+
+import ohos.hdi.vibrator.v1_1.VibratorTypes;
+
+/**
+ * @brief Enumerates the event types.
+ *
+ * @since 4.1
+ */
+enum EVENT_TYPE {
+    /**< Indicates that the vibration is continuous. */
+    CONTINUOUS = 0,
+    /**< Indicates that the vibration is instantaneous. */
+    TRANSIENT  = 1,
+};
+
+/**
+ * @brief Enumerates the vibration modes of this vibrator.
+ *
+ * @since 4.1
+ */
+enum HdfVibratorModeV1_2 {
+    /**< Indicates the one-shot vibration with the given duration. */
+    HDF_VIBRATOR_MODE_ONCE,
+    /**< Indicates the periodic vibration with the preset effect. */
+    HDF_VIBRATOR_MODE_PRESET,
+    /**< Indicates the vibration is high-definition. */
+    HDF_VIBRATOR_MODE_HDHAPTIC,
+    /**< Indicates invalid the effect mode. */
+    HDF_VIBRATOR_MODE_BUTT,
+};
+
+/**
+ * @brief Defines the vibration point parameters.
+ *
+ * The information include the time, intensity, and frequency.
+ *
+ * @since 4.1
+ */
+struct CurvePoint {
+    /** Time of the vibration point. */
+    int time;
+    /** Intensity of the vibration point. */
+    int intensity;
+    /** Frequency of the vibration point. */
+    int frequency;
+};
+
+/**
+ * @brief Defines the HD vibration event.
+ *
+ * The information include the HD vibration event.
+ *
+ * @since 4.1
+ */
+struct HapticEvent {
+    /** Indicates the vibration type. */
+    enum EVENT_TYPE type;
+    /** Indicates the vibration time. */
+    int time;
+    /** Indicates the vibration duration. */
+    int duration;
+    /** Indicates the vibration intensity. */
+    int intensity;
+    /** Indicates the vibration frequency. */
+    int frequency;
+    /** ID of the vibration motor. */
+    int index;
+    /** Indicates the number of vibration points. */
+    int pointNum;
+    /** Indicates the vibration point array. */
+    struct CurvePoint[] points;
+};
+
+/**
+ * @brief Defines the vibration data delivery packet.
+ *
+ * The information include the different trypes of vibrationsr;
+ *
+ * @since 4.1
+ */
+struct HapticPaket {
+    /** Indicates the vibration data delivery time. */
+    int time;
+    /** Indicates the vibration number of data to be delivered. */
+    int eventNum;
+    /** Indicates the vibration data delivery event array. */
+    struct HapticEvent[] events;
+};
+
+/**
+ * @brief Defines the vibration capability data package.
+ *
+ * The information include the different types of vibrations.
+ *
+ * @since 4.1
+ */
+struct HapticCapacity {
+    /** Indicates the vibration support HD vibration. */
+    boolean isSupportHdHaptic;
+    /** Indicates the vibration support predefined waveforms. */
+    boolean isSupportPresetMapping;
+    /** Indicates the vibration support dalay vibration. */
+    boolean isSupportTimeDelay;
+    /** Indicates the vibration Standby parameter. */
+    boolean reserved0;
+    /** Indicates the vibration Standby parameter. */
+    int reserved1;
+};

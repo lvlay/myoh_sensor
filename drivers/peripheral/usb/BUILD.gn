@@ -1,0 +1,38 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if (defined(ohos_lite)) {
+  group("usb_entry") {
+    deps = []
+  }
+} else {
+  import("//build/ohos.gni")
+  import("./../../hdf_core/adapter/uhdf2/uhdf.gni")
+
+  group("usb_entry") {
+    deps = [
+      "./cfg:usb_etc_files",
+      "./ddk:libusb_core",
+      "./ddk_service:usb_ddk_target",
+      "./gadget/function/acm:libusbfn_cdcacm",
+      "./gadget/function/ecm:libusbfn_cdcecm",
+      "./gadget/function/mtp:hdi_usbfn_mtp_service",
+      "./gadget/function/usbfn:libusbfn",
+      "./hdi_service:hdi_usb_service",
+      "./net:libusbhost_ecm",
+      "./net:libusbhost_rndis_rawapi",
+      "./serial:libusbhost_acm",
+      "./serial:libusbhost_acm_rawapi",
+    ]
+  }
+}

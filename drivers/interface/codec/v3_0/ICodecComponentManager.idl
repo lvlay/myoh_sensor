@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the Codec module.
+ *
+ * The Codec module provides APIs for initializing the custom data and audio and video codecs,
+ * setting codec parameters, and controlling and transferring data.
+ *
+ * @since 4.1
+ * @version 3.0
+ */
+
+/**
+ * @file ICodecComponentManager.idl
+ *
+ * @brief Declares the APIs for managing Codec components.
+ *
+ * You can use the APIs to obtain the component encoding and decoding capabilities, and create or destroy components.
+ *
+ * @since 4.1
+ * @version 2.0
+ */
+
+/**
+ * @brief Defines the path for the package of the Codec module APIs.
+ *
+ * @since 4.1
+ * @version 2.0
+ */
+package ohos.hdi.codec.v3_0;
+
+import ohos.hdi.codec.v3_0.CodecTypes;
+import ohos.hdi.codec.v3_0.ICodecComponent;
+import ohos.hdi.codec.v3_0.ICodecCallback;
+
+/**
+ * @brief Defines the APIs for managing the codec components.
+ *
+ * The APIs can be used to:
+ * - Obtain the number of codec components and codec capabilities.
+ * - Create or destroy a codec component.
+ */
+
+interface ICodecComponentManager {
+
+    /**
+     * @brief Obtains the number of codec components.
+     *
+     * Codec capabilities can be further obtained based on the number of codec components.
+     *
+     * @param count Indicates the number of codec components obtained.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the
+     * error codes, see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     * @version 2.0
+     */
+    GetComponentNum([out] int count);
+	
+    /**
+     * @brief Obtains codec capabilities.
+     *
+     * You can use this API to obtain the encoding and decoding capabilities provided by the Codec module.
+     * For details, see {@link CodecCompCapability}.
+     *
+     * @param capList Indicates the codec capabilities {@link CodecCompCapability} obtained.
+     * @param count Indicates the number of codec components, which is obtained by {@link GetComponentNum}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     * @version 2.0
+     */
+    GetComponentCapabilityList([out] struct CodecCompCapability[] capList, [in] int count);
+	
+    /**
+     * @brief Creates a codec component instance.
+     *
+     * 
+     *
+     * @param component Indicates the pointer to the Codec component created.
+     * @param componentId Indicates the ID of the component created.
+     * @param compName Indicates the component name.
+     * @param appData Indicates the pointer to an application-defined value that will be returned by the callback.
+     * @param callbacks Indicates the pointer to the OMX_CALLBACKTYPE structure. For details,
+     * see {@link ICodecCallback}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     * @version 2.0
+     */
+    CreateComponent([out] ICodecComponent component, [out] unsigned int componentId, [in] String compName,
+        [in] long appData, [in] ICodecCallback callbacks);
+	
+	/**
+     * @brief Destroys a codec component instance.
+     *
+     *
+     *
+     * @param componentId Indicates the ID of the codec component to destroy.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the
+     * error codes, see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     * @version 2.0
+     */
+    DestroyComponent([in] unsigned int componentId);
+}

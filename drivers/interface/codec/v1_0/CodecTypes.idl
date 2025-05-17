@@ -1,0 +1,392 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the Codec module.
+ *
+ * The Codec module provides APIs for initializing the custom data and audio and video codecs,
+ * setting codec parameters, and controlling and transferring data.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file CodecTypes.idl
+ *
+ * @brief Defines custom data types used in the Codec module APIs,
+ * including the codec types, audio and video parameters, and buffers.
+ *
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the path for the package of the Codec module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.codec.v1_0;
+
+/**
+ * @brief Enumerates the codec types.
+ */
+enum CodecType {
+    VIDEO_DECODER,   /**< Video decoder. */
+    VIDEO_ENCODER,   /**< Video encoder. */
+    AUDIO_DECODER,   /**< Audio decoder. */
+    AUDIO_ENCODER,   /**< Audio encoder. */
+    INVALID_TYPE,    /**< Invalid type. */
+};
+
+/**
+ * @brief Enumerates the types of audio and video that can be encoded or decoded.
+ */
+enum AvCodecRole {
+    MEDIA_ROLETYPE_IMAGE_JPEG = 0,          /**< JPEG image. */
+    MEDIA_ROLETYPE_VIDEO_AVC,               /**< H.264 video. */
+    MEDIA_ROLETYPE_VIDEO_HEVC,              /**< H.265 video. */
+    MEDIA_ROLETYPE_AUDIO_FIRST = 0x10000,   /**< Audio. */
+    MEDIA_ROLETYPE_AUDIO_AAC = 0x10000,     /**< Advanced Audio Coding (AAC). */
+    MEDIA_ROLETYPE_AUDIO_G711A,             /**< G.711 a-law audio. */
+    MEDIA_ROLETYPE_AUDIO_G711U,             /**< G.711 μ-law audio. */
+    MEDIA_ROLETYPE_AUDIO_G726,              /**< G.726 audio. */
+    MEDIA_ROLETYPE_AUDIO_PCM,               /**< PCM audio. */
+    MEDIA_ROLETYPE_AUDIO_MP3,               /**< MP3. */
+    MEDIA_ROLETYPE_INVALID,                 /**< Invalid type. */
+};
+
+/**
+ * @brief Enumerates the codec profiles.
+ */
+enum Profile {
+    INVALID_PROFILE = 0,             /**< Invalid profile. */
+    AAC_LC_PROFILE = 0x1000,         /**< AAC low complexity profile. */
+    AAC_MAIN_PROFILE,                /**< AAC main profile. */
+    AAC_HE_V1_PROFILE,               /**< Profile combining AAC high efficiency and spectral band replication (SBR),
+                                          also known as HE-AAC, AAC+, or aacPlus v1. */
+    AAC_HE_V2_PROFILE,               /**< HE-AAC combined with SBR and Parametric Stereo (PS),
+                                          also known as AAC++ or aacPlus v2. */
+    AAC_LD_PROFILE,                  /**< AAC low delay profile. */
+    AAC_ELD_PROFILE,                 /**< AAC enhanced low delay profile. */
+    AVC_BASELINE_PROFILE = 0x2000,   /**< H.264 baseline profile. */
+    AVC_MAIN_PROFILE,                /**< H.264 main profile. */
+    AVC_HIGH_PROFILE,                /**< H.264 high profile. */
+    HEVC_MAIN_PROFILE = 0x3000,      /**< H.265 main profile. */
+    HEVC_MAIN_10_PROFILE,            /**< H.265 10-bit main profile. */
+};
+
+/**
+ * @brief Enumerates the playback capabilities.
+ */
+enum CodecCapsMask {
+    CODEC_CAP_ADAPTIVE_PLAYBACK = 0x1,    /**< Adaptive playback. */
+    CODEC_CAP_SECURE_PLAYBACK = 0x2,      /**< Secure playback. */
+    CODEC_CAP_TUNNEL_PLAYBACK = 0x4,      /**< Tunnel playback. */
+    CODEC_CAP_MULTI_PLANE = 0x10000,      /**< Multi-plane (video image plane and audio channel plane) capability. */
+};
+
+/**
+ * @brief Enumerates the audio sampling rates.
+ */
+enum AudioSampleRate {
+    AUD_SAMPLE_RATE_8000 = 8000,      /**< 8000 */
+    AUD_SAMPLE_RATE_12000 = 12000,    /**< 12000 */
+    AUD_SAMPLE_RATE_11025 = 11025,    /**< 11025 */
+    AUD_SAMPLE_RATE_16000 = 16000,    /**< 16000 */
+    AUD_SAMPLE_RATE_22050 = 22050,    /**< 22050 */
+    AUD_SAMPLE_RATE_24000 = 24000,    /**< 24000 */
+    AUD_SAMPLE_RATE_32000 = 32000,    /**< 32000 */
+    AUD_SAMPLE_RATE_44100 = 44100,    /**< 44100 */
+    AUD_SAMPLE_RATE_48000 = 48000,    /**< 48000 */
+    AUD_SAMPLE_RATE_64000 = 64000,    /**< 64000 */
+    AUD_SAMPLE_RATE_96000 = 96000,    /**< 96000 */
+    AUD_SAMPLE_RATE_INVALID,          /**< Invalid sampling rate */
+};
+
+/**
+ * @brief Enumerates the audio sampling formats.
+ *
+ * For the planar sampling format, the data of each channel is independently stored in <b>data</b>.
+ * For the packed sampling format, only the first data is used, and the data of each channel is interleaved.
+ */
+enum CodecAudioSampleFormat {
+    AUDIO_SAMPLE_FMT_U8 = 0,     /**< Unsigned 8-bit integer, packed. */
+    AUDIO_SAMPLE_FMT_S16,        /**< Signed 16-bit integer, packed. */
+    AUDIO_SAMPLE_FMT_S32,        /**< Signed 32-bit integer, packed. */
+    AUDIO_SAMPLE_FMT_FLOAT,      /**< Float, packed. */
+    AUDIO_SAMPLE_FMT_DOUBLE,     /**< Double, packed. */
+    AUDIO_SAMPLE_FMT_U8P,        /**< Unsigned 8-bit integer, planar. */
+    AUDIO_SAMPLE_FMT_S16P,       /**< Signed 16-bit integer, planar. */
+    AUDIO_SAMPLE_FMT_S32P,       /**< Signed 32-bit integer, planar. */
+    AUDIO_SAMPLE_FMT_FLOATP,     /**< Float, planar. */
+    AUDIO_SAMPLE_FMT_DOUBLEP,    /**< Double, planar. */
+    AUDIO_SAMPLE_FMT_INVALID,    /**< Invalid sampling format. */
+};
+
+/**
+ * @brief Enumerates the codec processing modes.
+ */
+enum CodecProcessMode {
+    PROCESS_BLOCKING_INPUT_BUFFER = 0x1,        /**< Input buffer in sync mode. */
+    PROCESS_BLOCKING_OUTPUT_BUFFER = 0x2,       /**< Output buffer in sync mode. */
+    PROCESS_BLOCKING_CONTROL_FLOW = 0x4,        /**< Control flow in sync mode. */
+    PROCESS_NONBLOCKING_INPUT_BUFFER = 0x100,   /**< Input buffer in async mode. */
+    PROCESS_NONBLOCKING_OUTPUT_BUFFER = 0x200,  /**< Output buffer in async mode. */
+    PROCESS_NONBLOCKING_CONTROL_FLOW = 0x400,   /**< Control flow in asynchronous mode. */
+};
+
+/**
+ * @brief Enumerates the shared memory types.
+ */
+enum ShareMemTypes {
+    READ_WRITE_TYPE = 0x1,     /**< Shared memory that is readable and writable. */
+    READ_ONLY_TYPE = 0x2,      /**< Shared memory that is read-only. */
+};
+
+/**
+ * @brief Enumerates the bit rate modes.
+ */
+enum BitRateMode {
+    BIT_RATE_MODE_INVALID,    /**< Invalid value. */
+    BIT_RATE_MODE_VBR,        /**< Variable bit rate. */
+    BIT_RATE_MODE_CBR,        /**< Constant bit rate. */
+    BIT_RATE_MODE_CQ,         /**< Constant quality. */
+    BIT_RATE_MODE_VCBR,       /**< Constrained variable bit rate. */
+    BIT_RATE_MODE_ABR,        /**< Average bit rate. */
+};
+
+/**
+ * @brief Enumerates the component states.
+ */
+enum CodecEventType {
+    CODEC_EVENT_CMD_COMPLETE,                     /**< The component has completed a command. */
+    CODEC_EVENT_ERROR,                            /**< The component has detected an error. */
+    CODEC_EVENT_MARK,                             /**< The component has detected the buffer mark. */
+    CODEC_EVENT_PORT_SETTINGS_CHANGED,            /**< The component has reported port setting changes. */
+    CODEC_EVENT_BUFFER_FLAG,                      /**< The component has detected an EOS. */
+    CODEC_EVENT_RESOURCES_ACQUIRED,               /**< The component has been granted resources and is automatically
+                                                       starting the state change from CODEC_STATE_WAIT_FOR_RESOURCES
+                                                       to CODEC_STATE_IDLE. */
+    CODEC_EVENT_COMPONENT_RESUMED,                /**< The component is resumed due to reacquisition of resources. */
+    CODEC_EVENT_DYNAMIC_RESOURCES_AVAILABLE,      /**< The component has acquired previously unavailable
+                                                       dynamic resources. */
+    CODEC_EVENT_PORT_FORMAT_DETECTED,             /**< The component has detected a supported format. */
+    CODEC_EVENT_KHRONOS_EXTENSIONS = 0x6F000000,  /**< Reserved region for introducing Khronos standard extensions. */
+    CODEC_EVENT_VENDOR_START_UNUSED = 0x7F000000, /**< Reserved region for introducing vendor extensions. */
+    CODEC_EVENT_MAX = 0x7FFFFFFF,                 /**< Maximum value. */
+};
+
+/**
+ * @brief Enumerates the cmd parameters of the <b>SendCommand</b> API in <b>ICodecComponent</b>.
+ */
+enum CodecCommandType
+{
+    CODEC_COMMAND_STATE_SET,                         /**< Change the component state. */
+    CODEC_COMMAND_FLUSH,                             /**< Flush the data queue of a component. */
+    CODEC_COMMAND_PORT_DISABLE,                      /**< Disable a port on a component. */
+    CODEC_COMMAND_PORT_ENABLE,                       /**< Enable a port on a component. */
+    CODEC_COMMAND_MARK_BUFFER,                       /**< Mark a component/buffer for observation. */
+    CODEC_COMMAND_KHRONOS_EXTENSIONS = 0x6F000000,   /**< Reserved region for introducing Khronos standard extensions. */
+    CODEC_COMMAND_VENDOR_START_UNUSED = 0x7F000000,  /**< Reserved region for introducing vendor extensions. */
+    CODEC_COMMAND_MAX = 0x7FFFFFFF,                  /**< Maximum value. */
+};
+
+/**
+ * @brief Enuerates the component states.
+ */
+enum CodecStateType
+{
+    CODEC_STATE_INVALID,                             /**< The component has detected that its internal data structures are
+                                                          corrupted so that the state cannot be correctly determined. */
+    CODEC_STATE_LOADED,                              /**< The component has been loaded but has not completed
+                                                          initialization. Only <b>ICodecComponent.SetParameter</b>
+                                                          and <b>ICodecComponent.GetParameter</b> can be called for a
+                                                          component in this state. */
+    CODEC_STATE_IDLE,                                /**< The component initialization is complete, and the component is
+                                                          ready to start. */
+    CODEC_STATE_EXECUTING,                           /**< The component has accepted the start command and is processing
+                                                          data (if the data is available). */
+    CODEC_STATE_PAUSE,                               /**< The component has received the pause command. */
+    CODEC_STATE_WAIT_FOR_RESOURCES,                  /**< The component is waiting for resources, either after preemption
+                                                          or before it acquires the requested resources. */
+    CODEC_STATE_KHRONOS_EXTENSIONS = 0x6F000000,     /**< Reserved region for introducing Khronos standard extensions. */
+    CODEC_STATE_VENDOR_START_UNUSED = 0x7F000000,    /**< Reserved region for introducing vendor extensions. */
+    CODEC_STATE_MAX = 0x7FFFFFFF,                    /**< Maximum value. */
+};
+/**
+ * @brief Enuerates the port supplier preferences when establishing a tunnel between two ports.
+ */
+enum CodecBufferSupplierType
+{
+    CODEC_BUFFER_SUPPLY_UNSPECIFIED = 0,                   /**< The port that provides the buffers is not specified. */
+    CODEC_BUFFER_SUPPLY_INPUT,                             /**< The input port provides the buffers. */
+    CODEC_BUFFER_SUPPLY_OUTPUT,                            /**< The output port provides the buffers. */
+    CODEC_BUFFER_SUPPLY_KHRONOS_EXTENSIONS = 0x6F000000,   /**< Reserved region for introducing Khronos
+                                                                standard extensions. */
+    CODEC_BUFFER_SUPPLY_VENDOR_START_UNUSED = 0x7F000000,  /**< Reserved region for introducing vendor extensions. */
+    CODEC_BUFFER_SUPPLY_MAX = 0x7FFFFFFF,                  /**< Maximum value. */
+};
+
+/**
+ * @brief Defines the alignment structure.
+ */
+struct Alignment {
+    int widthAlignment;   /**< Alignment value of the width. */
+    int heightAlignment;  /**< Alignment value of the height. */
+};
+
+/**
+ * @brief Defines a rectangle.
+ */
+struct Rect {
+    int width;  /**< Width of the rectangle. */
+    int height; /**< Height of the rectangle. */
+};
+
+/**
+ * @brief Defines a value range.
+ */
+struct RangeValue {
+    int min;  /**< Minimum value. */
+    int max;  /**< Maximum value. */
+};
+
+/**
+ * @brief Defines the video encoding and decoding capabilities.
+ */
+struct CodecVideoPortCap {
+    struct Rect minSize;                   /**< Minimum resolution supported. */
+    struct Rect maxSize;                   /**< Maximum resolution supported. */
+    struct Alignment whAlignment;          /**< Alignment values of the width and height. */
+    struct RangeValue blockCount;          /**< Value range for the number of blocks supported. */
+    struct RangeValue blocksPerSecond;     /**< Value range for the number of blocks processed per second. */
+    struct Rect blockSize;                 /**< Block size supported. */
+    int[] supportPixFmts;                  /**< Supported pixel formats. For details, see <b>PixeFormat</b> defined by
+                                                <b>display_type.h</b> in {@link Display}. */
+    enum BitRateMode[] bitRatemode;        /**< Transmission rate modes, which can be constant or variable.
+                                                For details, see {@link BitRateMode}. */
+    struct RangeValue frameRate;           /**< Frame rate range. */
+    int[] measuredFrameRate;               /**< Frame rate measured. */
+};
+/**
+ * @brief Defines the audio encoding and decoding capabilities.
+ */
+struct CodecAudioPortCap {
+    int[] sampleFormats;  /**< Supported audio sampling formats. For details, see {@link AudioSampleFormat}. */
+    int[] sampleRate;     /**< Supported audio sampling rates. For details, see {@link AudioSampleRate}. */
+    int[] channelLayouts; /**< Supported channel layouts, which include single channel, balanced channel,
+                               and 3D stereo channel. */
+    int[] channelCount;   /**< Supported number of audio channels. */
+};
+
+/**
+ * @brief Defines the audio and video encoding and decoding capabilities.
+ */
+struct PortCap {
+    struct CodecVideoPortCap video;           /**< Video encoding and decoding capabilities. */
+    struct CodecAudioPortCap audio;           /**< Audio encoding and decoding capabilities. */
+};
+
+/**
+ * @brief Defines the version type of a component.
+ */
+struct CodecVerType {
+    unsigned char majorVersion;        /**<  Major version accessor element. */
+    unsigned char minorVersion;        /**<  Minor version accessor element. */
+    unsigned char revision;            /**< Revision version accessor element. */
+    unsigned char step;                /**< Step version accessor element. */
+};
+
+/**
+ * @brief Defines the component version information.
+ */
+union CodecVersionType {
+    struct CodecVerType version;        /**< Component version. */
+    unsigned int nVersion;              /**< 32-bit value to make accessing the version easily done in a single
+                                             word size copy or compare operation. */
+};
+
+/**
+ * @brief Defines the codec capabilities.
+ */
+struct CodecCompCapability {
+    enum AvCodecRole role;                     /**< Media type. */
+    enum CodecType type;                       /**< Codec type. */
+    String compName;                           /**< Name of the codec component. */
+    int[] supportProfiles;                     /**< Supported profiles. For details, see {@link Profile}. */
+    int maxInst;                               /**< Maximum instance. */
+    boolean isSoftwareCodec;                   /**< Whether it is a software codec. */
+    int processModeMask;                       /**< Codec processing mode mask. For details,
+                                                    see {@link CodecProcessMode}. */
+    unsigned int capsMask;                     /**< Mask of the codec playback capabilities. For details,
+                                                    see {@link CodecCapsMask}. */
+    struct RangeValue bitRate;                 /**< Supported bit rate range. */
+    struct PortCap port;                       /**< Supported audio and video encoding/decoding capabilities. */
+    boolean canSwapWidthHeight;                /**< Whether width and height verification is supported. */
+};
+
+/**
+ * @brief Defines the codec buffer information.
+ */
+struct OmxCodecBuffer {
+    unsigned int bufferId;               /**< Buffer ID. */
+    unsigned int size;                   /**< Size of the structure. */
+    union CodecVersionType version;       /**< Component version. */
+    unsigned int bufferType;             /**< Buffer type. For details, see {@link CodecBufferType}. */
+    NativeBuffer bufferhandle;           /**< Buffer handle used for encoding or decoding. For details,
+                                              see {@link NativeBuffer}. */
+    FileDescriptor fd;                   /**< Anonymous shared memory file descriptor. */
+    unsigned int allocLen;               /**< Size of the buffer allocated. */
+    unsigned int filledLen;              /**< Size of the buffer filled. */
+    unsigned int offset;                 /**< Offset to the start position of the valid data in the buffer. */
+    FileDescriptor fenceFd;              /**< Fence file descriptor. */
+    enum ShareMemTypes type;             /**< Shared memory type. */
+    long pts;                            /**< Timestamp of the first logical sample in the buffer. */
+    unsigned int flag;                   /**< Buffer specific flag. */
+};
+
+/**
+ * @brief Defines the structure that is used to pass data from an output port to an input port.
+ */
+struct CodecTunnelSetupType {
+    unsigned int tunnelFlags;                 /**< Bit flags for tunneling. */
+    enum CodecBufferSupplierType supplier;    /**< Supplier preference. */
+};
+
+/**
+ * @brief Defines the component information.
+ */
+struct CompVerInfo {
+    String compName;                    /**< Component name. */
+    unsigned char[] compUUID;           /**< UUID of the component. */
+    union CodecVersionType compVersion;  /**< OMX component version. */
+    union CodecVersionType specVersion;  /**< Version of the specifications on which the component is built. */
+};
+
+/**
+ * @brief Defines the event information to report.
+ */
+struct EventInfo {
+    long appData;                /**< Upper-layer instance passed in when the callback is invoked. */
+    unsigned int data1;          /**< Error type, which can be <b>portIndex</b> or other data. */
+    unsigned int data2;          /**< Data 2 carried in the reported event. */
+    byte[] eventData;            /**< Data carried in the reported event. */
+};

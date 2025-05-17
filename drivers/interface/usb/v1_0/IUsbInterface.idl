@@ -1,0 +1,485 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* *
+ * @addtogroup HdiUsb
+ * @{
+ *
+ * @brief Provides unified APIs for usb services to access usb drivers.
+ *
+ * A usb service can obtain a usb driver object or agent and then call APIs provided by this object or agent to
+ * access different types of usb devices based on the usb IDs, thereby obtaining usb information,
+ * subscribing to or unsubscribing from usb data, enabling or disabling a usb,
+ * setting the usb data reporting mode, and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 3.2
+ */
+
+/* *
+ * @file IUsbInterface.idl
+ *
+ * @brief Declares the APIs provided by the usb module for obtaining usb information, subscribing to or
+ * unsubscribing from usb data, enabling or disabling a usb, setting the usb data reporting mode,
+ * and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.usb.v1_0;
+
+import ohos.hdi.usb.v1_0.UsbTypes;
+import ohos.hdi.usb.v1_0.IUsbdSubscriber;
+import ohos.hdi.usb.v1_0.IUsbdBulkCallback;
+
+/* *
+ * @brief Defines the functions for performing basic operations on usb.
+ *
+ * The operations include obtaining usb information, subscribing to or unsubscribing from usb data,
+ * enabling or disabling a usb, setting the usb data reporting mode, and setting usb options such as
+ * the accuracy and measurement range.
+ */
+interface IUsbInterface {
+
+    /* *
+     * @brief Opens a USB device to set up a connection.
+     *
+     * @param dev Indicates the USB device address.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    OpenDevice([in] struct UsbDev dev);
+
+    /* *
+     * @brief Closes a USB device to release all system resources related to the device.
+     *
+     * @param dev Indicates the USB device address.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    CloseDevice([in] struct UsbDev dev);
+
+    /* *
+     * @brief Obtains the USB device descriptor.
+     *
+     * @param dev Indicates the USB device address.
+     * @param descriptor Indicates the USB device descriptor.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetDeviceDescriptor([in] struct UsbDev dev, [out] unsigned char[] descriptor);
+
+    /* *
+     * @brief Obtains the string descriptor of a USB device based on the specified string ID.
+     *
+     * @param dev Indicates the USB device address.
+     * @param descId Indicates string descriptor ID.
+     * @param descriptor Indicates the configuration descriptor of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetStringDescriptor([in] struct UsbDev dev, [in] unsigned char descId, [out] unsigned char[] descriptor);
+
+    /* *
+     * @brief Obtains the configuration descriptor of a USB device based on the specified config ID.
+     *
+     * @param dev Indicates the USB device address.
+     * @param descId Indicates configuration descriptor ID.
+     * @param descriptor Indicates the configuration descriptor of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetConfigDescriptor([in] struct UsbDev dev, [in] unsigned char descId, [out] unsigned char[] descriptor);
+
+    /* *
+     * @brief Obtains the raw descriptor.
+     *
+     * @param dev Indicates the USB device address.
+     * @param descriptor Indicates the raw descriptor of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetRawDescriptor([in] struct UsbDev dev, [out] unsigned char[] descriptor);
+
+    /* *
+     * @brief Obtains the file descriptor.
+     *
+     * @param dev Indicates the USB device address.
+     * @param fd USB device file descriptor
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     * @deprecated since 5.0
+     * @useinstead ohos.hdi.usb.v1_1.IUsbInterface.GetDeviceFileDescriptor
+     */
+    GetFileDescriptor([in] struct UsbDev dev, [out] int fd);
+
+    /* *
+     * @brief Sets the configuration information of a USB device.
+     *
+     * @param dev Indicates the USB device address.
+     * @param configIndex Indicates the configuration information of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    SetConfig([in] struct UsbDev dev, [in] unsigned char configIndex);
+
+    /* *
+     * @brief Obtains the configuration information of a USB device.
+     *
+     * @param dev Indicates the USB device address.
+     * @param configIndex Indicates the configuration information of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetConfig([in] struct UsbDev dev, [out] unsigned char configIndex);
+
+    /* *
+     * @brief Claims a USB interface exclusively. This must be done before data transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param interfaceid Indicates the interface ID of the USB device.
+     * @param force Indicates whether to enable the force mode. The value <b>1</b> indicates that the force mode is
+     * enabled, and value <b>0</b> indicates the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    ClaimInterface([in] struct UsbDev dev, [in] unsigned char interfaceid, [in] unsigned char force);
+
+    /* *
+     * @brief Manage a USB interface exclusively. Detach or attach the interface.
+     *
+     * @param dev Indicates the USB device address.
+     * @param interfaceid Indicates the interface ID of the USB device.
+     * @param disable Indicates whether to disable the interface.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    ManageInterface([in] struct UsbDev dev, [in] unsigned char interfaceid, [in] boolean disable);
+
+    /* *
+     * @brief Releases a USB interface. This is usually done after data transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param interfaceid Indicates the interface ID of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    ReleaseInterface([in] struct UsbDev dev, [in] unsigned char interfaceid);
+
+    /* *
+     * @brief Sets the alternate settings for the specified USB interface. This allows you to switch between two
+     * interfaces with the same ID but different alternate settings.
+     *
+     * @param dev Indicates the USB device address.
+     * @param interfaceid Indicates the interface ID of the USB device.
+     * @param altIndex Indicates the alternate settings of the USB interface.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    SetInterface([in] struct UsbDev dev, [in] unsigned char interfaceid, [in] unsigned char altIndex);
+
+    /* *
+     * @brief Reads data on a specified endpoint during bulk transfer. The endpoint must be in the data reading
+     * direction. You can specify a timeout duration if needed.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     * @deprecated since 5.0
+     * @useinstead ohos.hdi.usb.v1_1.IUsbInterface.BulkTransferReadwithLength
+     */
+    BulkTransferRead([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [out] unsigned char[] data);
+
+    /* *
+     * @brief Writes data on a specified endpoint during bulk transfer. The endpoint must be in the data writing
+     * direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the written data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    BulkTransferWrite([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [in] unsigned char[] data);
+
+    /* *
+     * @brief Performs control transfer for endpoint 0 of the device. The data transfer direction is determined by the
+     * request type. If the result of <b>requestType</b>&
+     * <b>USB_ENDPOINT_DIR_MASK</b> is <b>USB_DIR_OUT</b>, the endpoint is in the data writing direction; if the result
+     * is <b>USB_DIR_IN</b>, the endpoint is in the data reading direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param ctrl Indicates the control data packet structure.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     * @deprecated since 5.0
+     * @useinstead ohos.hdi.usb.v1_1.IUsbInterface.ControlTransferReadwithLength
+     */
+    ControlTransferRead([in] struct UsbDev dev, [in] struct UsbCtrlTransfer ctrl, [out] unsigned char[] data);
+
+    /* *
+     * @brief Performs control transfer for endpoint 0 of the device. The data transfer direction is determined by the
+     * request type. If the result of <b>requestType</b>&
+     * <b>USB_ENDPOINT_DIR_MASK</b> is <b>USB_DIR_OUT</b>, the endpoint is in the data writing direction; if the result
+     * is <b>USB_DIR_IN</b>, the endpoint is in the data writing direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param ctrl Indicates the control data packet structure.
+     * @param data Indicates the write data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    ControlTransferWrite([in] struct UsbDev dev, [in] struct UsbCtrlTransfer ctrl, [in] unsigned char[] data);
+
+    /* *
+     * @brief Reads data on a specified endpoint during interrupt transfer. The endpoint must be in the data reading
+     * direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    InterruptTransferRead([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [out] unsigned char[] data);
+
+    /* *
+     * @brief Writes data on a specified endpoint during interrupt transfer. The endpoint must be in the data writing
+     * direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    InterruptTransferWrite([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [in] unsigned char[] data);
+
+    /* *
+     * @brief Reads data on a specified endpoint during isochronous transfer. The endpoint must be in the data reading
+     * direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    IsoTransferRead([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [out] unsigned char[] data);
+
+    /* *
+     * @brief Writes data on a specified endpoint during isochronous transfer. The endpoint must be in the data writing
+     * direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    IsoTransferWrite([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [in] unsigned char[] data);
+
+    /* *
+     * @brief Sends or receives requests for isochronous transfer on a specified endpoint. The data transfer direction
+     * is determined by the endpoint direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param clientData Indicates the client data.
+     * @param buffer Indicates the transferred data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    RequestQueue([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] unsigned char[] clientData, [in] unsigned char[] buffer);
+
+    /* *
+     * @brief Waits for the operation result of the isochronous transfer request in <b>RequestQueue</b>.
+     *
+     * @param dev Indicates the USB device address.
+     * @param clientData Indicates the client data.
+     * @param buffer Indicates the transferred data.
+     * @param timeout Indicates the timeout duration.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    RequestWait([in] struct UsbDev dev, [out] unsigned char[] clientData, [out] unsigned char[] buffer, [in] int timeout);
+
+    /* *
+     * @brief Cancels the data transfer requests to be processed.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    RequestCancel([in] struct UsbDev dev, [in] struct UsbPipe pipe);
+
+    /* *
+     * @brief Obtains the list of functions (represented by bit field) supported by the current device.
+     *
+     * @param funcs Indicates the list of functions supported by the current device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    GetCurrentFunctions([out] int funcs);
+
+    /* *
+     * @brief Sets the list of functions (represented by bit field) supported by the current device.
+     *
+     * @param funcs Indicates the list of functions supported by the current device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    SetCurrentFunctions([in] int funcs);
+
+    /* *
+     * @brief Closes a USB device to release all system resources related to the device.
+     *
+     * @param portId Indicates the port ID of the USB interface.
+     * @param powerRole Indicates the power role.
+     * @param dataRole Indicates the data role.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    SetPortRole([in] int portId, [in] int powerRole, [in] int dataRole);
+
+    /* *
+     * @brief Queries the current settings of a port.
+     *
+     * @param portId Indicates the port ID of the USB interface.
+     * @param powerRole Indicates the power role.
+     * @param dataRole Indicates the data role.
+     * @param mode Indicates the mode.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    QueryPort([out] int portId, [out] int powerRole, [out] int dataRole, [out] int mode);
+
+    /* *
+     * @brief Binds a subscriber.
+     *
+     * @param subscriber Indicates the subscriber.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    BindUsbdSubscriber([in] IUsbdSubscriber subscriber);
+
+    /* *
+     * @brief Unbinds a subscriber.
+     *
+     * @param subscriber Indicates the subscriber.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    UnbindUsbdSubscriber([in] IUsbdSubscriber subscriber);
+
+    /* *
+     * @brief Registers a callback for isochronous bulk transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param cb Indicates the reference to the callback.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    RegBulkCallback([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] IUsbdBulkCallback cb);
+
+    /* *
+     * @brief Unregisters the callback for isochronous bulk transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    UnRegBulkCallback([in] struct UsbDev dev, [in] struct UsbPipe pipe);
+
+    /* *
+     * @brief Reads data during isochronous bulk transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param ashmem Indicates the shared memory, which is used to store the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    BulkRead([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] Ashmem ashmem);
+
+    /* *
+     * @brief Writes data during isochronous bulk transfer.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param ashmem Indicates the shared memory, which is used to store the written data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    BulkWrite([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] Ashmem ashmem);
+
+    /* *
+     * @brief Cancels the isochronous bulk transfer. The read and write operations on the current USB interface will
+     * be cancelled.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 3.2
+     */
+    BulkCancel([in] struct UsbDev dev, [in] struct UsbPipe pipe);
+}

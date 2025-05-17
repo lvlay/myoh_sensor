@@ -1,0 +1,11 @@
+using namespace OHOS;
+using namespace OHOS::HDI;
+
+enum {
+    CMD_FOO_CALLBACK_GET_VERSION = 0,
+    CMD_FOO_CALLBACK_PUSH_DATA = 1,
+};
+
+class IFooCallback : public HdiBase {
+    virtual int32_t PushData(const std::string& message) = 0;
+};

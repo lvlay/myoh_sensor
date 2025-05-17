@@ -1,0 +1,213 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup NNRt
+ * @{
+ *
+ * @brief Provides a unified interface for AI chip drivers to access OpenHarmony. 
+ * Neural Network Runtime (NNRt) is a cross-chip inference computing runtime environment oriented to the AI field.
+ * It serves as a bridge between the upper-layer AI inference framework and the underlying acceleration chip to implement cross-chip inference computing of AI models.
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file INnrtDevice.idl
+ *
+ * @brief Defines methods related to chip devices.
+ *
+ * You can use the methods to query chip device information and build AI models.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the NNRt module.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.nnrt.v1_0;
+
+import ohos.hdi.nnrt.v1_0.NnrtTypes;
+import ohos.hdi.nnrt.v1_0.ModelTypes;
+import ohos.hdi.nnrt.v1_0.IPreparedModel;
+
+/**
+ * @brief Provides methods for device management and model building.
+ *
+ * When multiple devices are registered, ensure that the combination of the device name and vendor name is globally unique.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+interface INnrtDevice {
+    /**
+     * @brief Obtains the device name.
+     *
+     * @param name Indicates the device name obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    GetDeviceName([out] String name);
+
+    /**
+     * @brief Obtains the device vendor name.
+     *
+     * @param name Indicates the device vendor name obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    GetVendorName([out] String name);
+
+    /**
+     * @brief Obtains the device type.
+     *
+     * @param deviceType Indicates the device type obtained. For details, see {@link DeviceType}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    GetDeviceType([out] enum DeviceType deviceType);
+
+    /**
+      * @brief Obtains the device status.
+     *
+     * @param deviceType Indicates the device status obtained. For details, see {@link DeviceStatus}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    GetDeviceStatus([out] enum DeviceStatus status);
+
+    /**
+     * @brief Obtains the device's support for the operators of the specified AI model.
+     *
+     * @param model Indicates the AI model. For details, see {@link Model}.
+     * @param ops Indicates the operators supported and not supported by the device. The operators are listed in the same sequence as they listed in the API model.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    GetSupportedOperation([in] struct Model model, [out] boolean[] ops);
+
+    /**
+     * @brief Checks whether the device supports the Float32 model with the Float16 precision.
+     *
+     * @param isSupported Indicates whether the Float16 precision is supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    IsFloat16PrecisionSupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports performance preference settings. For details about the performance preference, see {@link PerformanceMode}.
+     *
+     * @param isSupported Indicates whether the device supports performance preference settings.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    IsPerformanceModeSupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports task priority settings. For details about the priority, see {@link Priority}.
+     *
+     * @param isSupported Indicates whether the device supports task priority settings.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    IsPrioritySupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports dynamic input, which allows a model of different shapes to be used for different operations.
+     *
+     * If dynamic input is supported, <b>-1</b> is added in the shape of the input tensor.
+     *
+     * @param isSupported Indicates whether dynamic input is supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    IsDynamicInputSupported([out] boolean isSupported);
+
+    /**
+     * @brief Builds a model.
+     *
+     * If the AI model supports dynamic input, at least one dimension of the input tensor contains <b>-1</b>.
+     *
+     * @param model indicates the module to build. For details, see {@link Model}.
+     * @param config Indicates the module configuration. For details, see {@link ModelConfig}.
+     * @param preparedModel Indicates the model object built. For details, see {@link IPreparedModel}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    PrepareModel([in] struct Model model, [in] struct ModelConfig config, [out] IPreparedModel preparedModel);
+
+    /**
+     * @brief Checks whether the device supports caching of the AI models built.
+     *
+     * If yes, <b>PrepareModelFromModelCache()</b> and <b>ExportModelCache()</b> need to be implemented.
+     *
+     * @param isSupported Indicates whether the device supports caching of the AI models built.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    IsModelCacheSupported([out] boolean isSupported);
+
+    /**
+     * @brief Loads an AI model from the cache. The AI model is exported by using <b>ExportModelCache()</b>.
+     *
+     * @param modelCache Indicates an array of the model files, which are in the same sequence as they exported. For details, see {@link SharedBuffer}.
+     * @param config Indicates the configuration for loading the model. For details, see {@link ModelConfig}.
+     * @param preparedModel Indicates the model object obtained. For details, see {@link IPreparedModel}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    PrepareModelFromModelCache([in] struct SharedBuffer[] modelCache, [in] struct ModelConfig config,
+                               [out] IPreparedModel preparedModel);
+
+    /**
+     * @brief Allocates the shared memory for the device. The shared memory allows quick access to the input and output data for AI inference.
+     *
+     * @param length Indicates the shared memory to allocate, in bytes.
+     * @param buffer Indicates the information about the shared memory allocated, including the file descriptor and size of the shared memory. For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    AllocateBuffer([in] unsigned int length, [out] struct SharedBuffer buffer);
+
+    /**
+      * @brief Releases the shared memory.
+     *
+     * @param buffer Indicates the shared memory to release. For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    ReleaseBuffer([in] struct SharedBuffer buffer);
+}
+
+/** @} */

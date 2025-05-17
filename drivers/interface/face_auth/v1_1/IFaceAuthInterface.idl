@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfFaceAuth
+ * @{
+ *
+ * @brief Provides APIs for the face auth driver.
+ *
+ * The face auth driver provides a unified interface for the face auth service to access the face auth driver.
+ * After obtaining the face auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the face auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @file IFaceAuthInterface.idl
+ *
+ * @brief Defines the API for getting the executor list of the face auth driver.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.face_auth.v1_1;
+
+import ohos.hdi.face_auth.v1_0.IFaceAuthInterface;
+import ohos.hdi.face_auth.v1_1.IExecutor;
+
+/**
+ * @brief Defines the API for getting the executor list of the face auth driver.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+interface IFaceAuthInterface extends ohos.hdi.face_auth.v1_0.IFaceAuthInterface {
+    /**
+     * @brief Obtains the executor list of the driver.
+     *
+     * @param executorList Indicates the executor list of the driver. See {@link IExecutor}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    GetExecutorListV1_1([out] IExecutor[] executorList);
+}
+/** @} */

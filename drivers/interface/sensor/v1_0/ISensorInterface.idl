@@ -1,0 +1,175 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiSensor
+ * @{
+ *
+ * @brief Provides unified APIs for sensor services to access sensor drivers.
+ *
+ * A sensor service can obtain a sensor driver object or agent and then call APIs provided by this object or agent to
+ * access different types of sensor devices based on the sensor IDs, thereby obtaining sensor information,
+ * subscribing to or unsubscribing from sensor data, enabling or disabling a sensor,
+ * setting the sensor data reporting mode, and setting sensor options such as the accuracy and measurement range.
+ *
+ * @since 2.2
+ */
+
+/**
+ * @file ISensorInterface.idl
+ *
+ * @brief Declares the APIs provided by the sensor module for obtaining sensor information, subscribing to or
+ * unsubscribing from sensor data, enabling or disabling a sensor, setting the sensor data reporting mode,
+ * and setting sensor options such as the accuracy and measurement range.
+ *
+ * @since 2.2
+ * @version 1.0
+ */
+
+package ohos.hdi.sensor.v1_0;
+
+import ohos.hdi.sensor.v1_0.SensorTypes;
+import ohos.hdi.sensor.v1_0.ISensorCallback;
+
+/**
+ * @brief Defines the functions for performing basic operations on sensors.
+ *
+ * The operations include obtaining sensor information, subscribing to or unsubscribing from sensor data,
+ * enabling or disabling a sensor, setting the sensor data reporting mode, and setting sensor options such as
+ * the accuracy and measurement range.
+ */
+interface ISensorInterface {
+    /**
+     * @brief Obtains information about all sensors in the system.
+     *
+     * @param info Indicates the vector of the information about all sensors in the system.
+     * The information about a sensor generally includes the sensor name, sensor vendor, firmware version,
+     * hardware version, sensor type ID, sensor ID, maximum measurement range, accuracy, and power. For details,
+     * see {@link HdfSensorInformation}.
+     * @return Returns <b>0</b> if the information is obtained; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    GetAllSensorInfo([out] struct HdfSensorInformation[] info);
+
+    /**
+     * @brief Enables the sensor available in the sensor list based on the specified sensor ID.
+     * The subscriber can obtain the sensor data only after the sensor is enabled.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @return Returns <b>0</b> if the sensor is successfully enabled; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Enable([in] int sensorId);
+
+    /**
+     * @brief Disables an enabled sensor.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @return Returns <b>0</b> if the sensor is successfully disabled; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Disable([in] int sensorId);
+
+    /**
+     * @brief Sets the data sampling interval and data reporting interval for the specified sensor.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @param samplingInterval Indicates the sensor data sampling interval to set, in nanoseconds.
+     * @param reportInterval Indicates the sensor data reporting interval, in nanoseconds.
+     * @return Returns <b>0</b> if the setting is successful; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    SetBatch([in] int sensorId,[in] long samplingInterval, [in] long reportInterval);
+
+    /**
+     * @brief Sets the data reporting mode for the specified sensor.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @param mode Indicates the data reporting mode to set. For details, see {@link SensorModeType}.
+     * @return Returns <b>0</b> if the sensor data reporting mode is successfully set;
+     * returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    SetMode([in] int sensorId, [in] int mode);
+
+    /**
+     * @brief Sets options for the specified sensor, including its measurement range and accuracy.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @param option Indicates the options to set, such as the measurement range and accuracy.
+     * @return Returns <b>0</b> if the options are successfully set; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    SetOption([in] int sensorId, [in] unsigned int option);
+
+    /**
+     * @brief Registers the callback for reporting sensor data to the subscriber.
+     *
+     * @param groupId Indicates the sensor group ID.
+     * The sensorId enumeration value range is 128-160, which means that the medical sensor service is subscribed.
+     * It only needs to be subscribed once successfully, and there is no need to subscribe repeatedly.
+     * The sensorId enumeration value range is not within 128-160, which means that the traditional sensor
+     * is subscribed, and the subscription is successful once.
+     * @param callbackObj Indicates the callback to register. For details, see {@link ISensorCallback}.
+     * @return Returns <b>0</b> if the callback is successfully registered; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Register([in] int groupId, [in] ISensorCallback callbackObj);
+
+    /**
+     * @brief Deregisters the callback for reporting sensor data.
+     *
+     * @param groupId Indicates the sensor group ID.
+     * The sensorId enumeration value range is 128-160, which means that the medical sensor service is subscribed.
+     * It only needs to cancel the subscription once successfully, and there is no need to
+     * cancel the subscription repeatedly. The sensorId enumeration value range is not within 128-160,
+     * which means that the traditional sensor is subscribed. You can cancel the subscription once successfully.
+     * @param callbackObj Indicates the callback to deregister. For details, see {@link ISensorCallback}.
+     * @return Returns <b>0</b> if the callback is successfully deregistered; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Unregister([in] int groupId, [in] ISensorCallback callbackObj);
+
+    /**
+     * @brief Obtain the sensor event data in the small system.
+     *
+     * @param sensorId Indicates the sensor ID. For details, see {@link SensorTypeTag}.
+     * @param event Indicates the vector of the sensor event data in the system.
+     * The sensor event data includes the sensor ID, sensor algorithm version, data generation time,
+     * data options (such as the measurement range and accuracy), data reporting mode, data address, and data length.
+     * For details, see {@link HdfSensorEvents}.
+     * @return Returns <b>0</b> if the event data is obtained; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    ReadData([in] int sensorId, [out] struct HdfSensorEvents[] event);
+}

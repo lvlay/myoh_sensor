@@ -1,0 +1,46 @@
+#ifndef HDI_BUFF_MAX_SIZE
+#define HDI_BUFF_MAX_SIZE (1024 * 200)
+#endif
+
+#ifndef HDI_CHECK_VALUE_RETURN
+#define HDI_CHECK_VALUE_RETURN(lv, compare, rv, ret) do { \
+    if ((lv) compare (rv)) { \
+        return ret; \
+    } \
+} while (false)
+#endif
+
+#ifndef HDI_CHECK_VALUE_RET_GOTO
+#define HDI_CHECK_VALUE_RET_GOTO(lv, compare, rv, ret, value, table) do { \
+    if ((lv) compare (rv)) { \
+        ret = value; \
+        goto table; \
+    } \
+} while (false)
+#endif
+
+namespace OHOS {
+namespace HDI {
+namespace Foo {
+namespace V1_0 {
+using namespace OHOS;
+using namespace OHOS::HDI;
+
+enum {
+    CMD_FOO_GET_VERSION = 0,
+    CMD_FOO_PING = 1,
+    CMD_FOO_GET_DATA = 2,
+    CMD_FOO_INFO_TEST = 3,
+};
+
+class IFoo : public HdiBase {
+    virtual int32_t Ping(const std::string& sendMsg, std::string& recvMsg) = 0;
+
+    virtual int32_t GetData(std::string& info) = 0;
+
+    virtual int32_t InfoTest(int32_t inParam, double& outParam) = 0;
+};
+} // V1_0
+} // Foo
+} // HDI
+} // OHOS

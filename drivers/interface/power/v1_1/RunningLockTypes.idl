@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup power
+ * @{
+ *
+ * @brief Provides APIs for performing hibernation/wakeup operations, subscribing to the hibernation/wakeup status,
+ * and managing running locks.
+ * 
+ * After obtaining an object or proxy of this module, the power service can invoke related APIs to perform
+ * hibernation/wakeup operations, subscribe to the hibernation/wakeup status, and manage running locks.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+/**
+ * @file RunningLockTypes.idl
+ *
+ * @brief Enumerates data types related to running lock management.
+ *
+ * Such data types include running lock types and running lock information.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+
+package ohos.hdi.power.v1_1;
+
+/**
+ * @brief Enumerates base running lock types.
+ *
+ * @since 4.0
+ */
+enum BaseRunningLockType {
+    /**
+     * Running lock for keeping screen on.
+     */
+    RUNNINGLOCK_SCREEN = 0,
+    /**
+     * Running lock for keeping the CPU on to finish background tasks.
+     */
+    RUNNINGLOCK_BACKGROUND = 1,
+    /**
+     * Running lock for controlling screen on and off by proximity sensor.
+     */
+    RUNNINGLOCK_PROXIMITY_SCREEN_CONTROL = 2,
+};
+
+/**
+ * @brief Enumerates running lock types.
+ *
+ * @since 4.0
+ */
+enum RunningLockType {
+    /**
+     * Running lock for keeping background phone tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_PHONE = 3, // RUNNINGLOCK_BACKGROUND | 1 << 1 = 0b00000011
+    /**
+     * Running lock for keeping background notification tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_NOTIFICATION = 5, // RUNNINGLOCK_BACKGROUND | 1 << 2 = 0b00000101
+    /**
+     * Running lock for keeping background audio tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_AUDIO = 9, // RUNNINGLOCK_BACKGROUND | 1 << 3 = 0b00001001
+    /**
+     * Running lock for keeping background sport tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_SPORT = 17, // RUNNINGLOCK_BACKGROUND | 1 << 4 = 0b00010001
+    /**
+     * Running lock for keeping background navigation tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_NAVIGATION = 33, // RUNNINGLOCK_BACKGROUND | 1 << 5 = 0b00100001
+    /**
+     * Running lock for keeping background common tasks to finish.
+     */
+    RUNNINGLOCK_BACKGROUND_TASK = 65, // RUNNINGLOCK_BACKGROUND | 1 << 6 = 0b01000001
+    /**
+     * Reserved running lock type.
+     */
+    RUNNINGLOCK_BUTT
+};
+
+/**
+ * @brief Defines the running lock information.
+ *
+ * @since 4.0
+ */
+struct RunningLockInfo {
+    /** Name of the running lock. It cannot be null or empty */
+    String name;
+    /** Running lock type */
+    enum RunningLockType type; // The default value is RUNNINGLOCK_BACKGROUND_TASK.
+    /** Timeout duration of the running lock, in ms. A value smaller than 0 means no timeout. */
+    int timeoutMs; // The default value is 3000.
+    /** PID */
+    int pid;
+    /** UID */
+    int uid;
+};
+/** @} */

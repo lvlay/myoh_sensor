@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiNfc
+ * @{
+ *
+ * @brief Provides unified APIs for nfc services to access nfc drivers.
+ *
+ * An nfc service can obtain an nfc driver object or agent and then call APIs provided by this object or agent to
+ * access nfc devices, thereby obtaining enabling or disabling an nfc controller, initializing an nfc core,
+ * writing NCI data to an nfc driver, starting configuration for RF discovery of nfc remote endpoints,
+ * sending nfc commands to an nfc driver for IO control.
+ *
+ * @version 1.0
+ */
+
+
+package ohos.hdi.nfc.v1_0;
+
+import ohos.hdi.nfc.v1_0.NfcTypes;
+
+/**
+ * @brief Declares callbacks for reporting data and events from the nfc chip to the nfc stack.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+[callback] interface INfcCallback {
+    /**
+    * @brief Defines the function for reporting nfc data from the nfc chip.
+    * 
+    * @param data Indicates the reporting data from nfc chip.
+    * 
+    * @since 3.2
+    */
+    OnData([in] List<unsigned char> data);
+
+    /**
+    * @brief Defines the function for reporting nfc events from the nfc chip.
+    * 
+    * @param event Indicates the reporting event ID defined in NfcEvent.
+    * @param status Indicates the reporting nfc status defined in NfcStatus. For details,
+    * see {@link NfcTypes}.
+    *
+    * @since 3.2
+    */
+    OnEvent([in] enum NfcEvent event, [in] enum NfcStatus status);
+}

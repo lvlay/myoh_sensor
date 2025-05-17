@@ -1,0 +1,153 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdiLpfenceWififence
+ * @{
+ *
+ * @brief Provides Wi-Fi fence APIs for the low-power fence service.
+ *
+ * You can use the APIs provided by this module to add or remove Wi-Fi fences, obtain Wi-Fi fence information of a device, and obtain the relationship between a device and a Wi-Fi fence.
+ * The Wi-Fi fence feature is used to determine whether a device is in a specific indoor location, for example, an area at home or a store in a shopping mall.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @file IWififenceInterface.idl
+ *
+ * @brief Declares the callbacks for the Wi-Fi fence module.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Declares the path of the Wi-Fi fence module interface package.
+ *
+ * @since 4.0
+ */
+package ohos.hdi.location.lpfence.wififence.v1_0;
+
+/**
+ * @brief Imports data types of the Wi-Fi fence module.
+ *
+ * @since 4.0
+ */
+import ohos.hdi.location.lpfence.wififence.v1_0.WififenceTypes;
+
+/**
+ * @brief Imports callbacks of the Wi-Fi fence module.
+ *
+ * @since 4.0
+ */
+import ohos.hdi.location.lpfence.wififence.v1_0.IWififenceCallback;
+
+/**
+ * @brief Provides APIs for basic Wi-Fi fence operations.
+ *
+ * You can use the APIs to register or unregister a callback, add or remove Wi-Fi fences, obtain Wi-Fi fence information of a device, and determine whether a device is in a specific location.
+ */
+interface IWififenceInterface {
+    /**
+     * @brief Registers a callback.
+     *
+     * Before enabling the Wi-Fi fence feature, you need to register a callback to report the Wi-Fi fence status when the status changes.
+     *
+     * @param callbackObj Indicates the callback to register, which needs to be registered only once. For details, see {@link IWififenceCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    RegisterWififenceCallback([in] IWififenceCallback callbackObj);
+
+    /**
+     * @brief Unregisters a callback.
+     *
+     * When the Wi-Fi fence feature is no longer required or the registered callback needs to be changed, you need to unregister the callback.
+     *
+     * @param callbackObj Indicates the callback to unregister, which needs to be unregistered only once. For details, see {@link IWififenceCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    UnregisterWififenceCallback([in] IWififenceCallback callbackObj);
+
+    /**
+     * @brief Adds Wi-Fi fences.
+     *
+     * Multiple Wi-Fi fences can be added at a time. A Wi-Fi fence contains multiple groups of MAC addresses.
+     *
+     * @param wififence Indicates information about the Wi-Fi fences to add. For details, see {@link WififenceRequest}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    AddWififences([in] struct WififenceRequest[] wififence);
+
+    /**
+     * @brief Removes Wi-Fi fences.
+     *
+     * Multiple Wi-Fi fences can be removed at a time.
+     *
+     * @param wififenceId Indicates the IDs of the Wi-Fi fences to remove. For details, see {@link WififenceRequest}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    RemoveWififences([in] int[] wififenceId);
+
+    /**
+     * @brief Obtains the relationship between a Wi-Fi fence and this device.
+     *
+     * For details about the relationships between a device and a Wi-Fi fence, see {@link WififenceTransition}.
+     *
+     * @param wififenceId Indicates the ID of the Wi-Fi fence.
+     *
+     * @return Returns the information obtained if the operation is successful. For details, see {@link WififenceTransition}.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GetWififenceStatus([in] int wififenceId);
+
+    /**
+     * @brief Obtains the Wi-Fi fence information for this device.
+     *
+     * You can use this API to obtain information about the maximum number of Wi-Fi fences allowed for and the number of Wi-Fi fences added to a device. The information obtained is returned by {@link OnGetWifenceSizeCb}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GetWififenceSize();
+}
+/** @} */

@@ -1,0 +1,32 @@
+namespace OHOS {
+class MessageParcel;
+}
+
+using namespace OHOS;
+
+enum FooType : int32_t {
+    FOO_TYPE_ONE = 1,
+    FOO_TYPE_TWO = 2,
+};
+
+struct FooInfo {
+    uint32_t id;
+    std::string name;
+    OHOS::HDI::Foo::V1_0::FooType type;
+};
+
+struct ExtendedFooInfo {
+    uint32_t id;
+    std::string name;
+    OHOS::HDI::Foo::V1_0::FooType type;
+    uint32_t extendedId;
+    std::string extendedInfo;
+};
+
+bool FooInfoBlockMarshalling(OHOS::MessageParcel &data, const OHOS::HDI::Foo::V1_0::FooInfo& dataBlock);
+
+bool FooInfoBlockUnmarshalling(OHOS::MessageParcel &data, OHOS::HDI::Foo::V1_0::FooInfo& dataBlock);
+
+bool ExtendedFooInfoBlockMarshalling(OHOS::MessageParcel &data, const OHOS::HDI::Foo::V1_0::ExtendedFooInfo& dataBlock);
+
+bool ExtendedFooInfoBlockUnmarshalling(OHOS::MessageParcel &data, OHOS::HDI::Foo::V1_0::ExtendedFooInfo& dataBlock);

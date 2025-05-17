@@ -1,0 +1,132 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the Codec module.
+ *
+ * The Codec module provides APIs for initializing the custom data and audio and video codecs,
+ * setting codec parameters, and controlling and transferring data.
+ *
+ * @since 4.1
+ * @version 2.0
+ */
+
+/**
+ * @file ICodecCallback.idl
+ *
+ * @brief Defines the callbacks used to report codec events and processing results of the input and output buffers.
+ *
+ * 
+ *
+ * @since 4.1
+ * @version 2.0
+ */
+
+/**
+ * @brief Defines the path for the package of the Codec module APIs.
+ *
+ * @since 4.1
+ * @version 2.0
+ */
+package ohos.hdi.codec.v2_0;
+
+import ohos.hdi.codec.v2_0.CodecTypes;
+
+/**
+ * @brief Defines the callbacks of the Codec module.
+ *
+ * The following callbacks are provided:
+ * - Callback used to report component error events, command completion events, and port setting events.
+ * For details, see {@link EventHandler}.
+ * - Callback invoked when the input port has data processed in the buffer. For details, see {@link EmptyBufferDone}.
+ * - Callback invoked when the output port has data filled into the buffer. For details, see {@link FillBufferDone}.
+ * The callbacks are registered by using:
+ * - {@link CreateComponent} when a component is created.
+ * - {@link SetCallbacks} when the component is in the OMX_StateLoaded state.
+ */
+
+
+[callback] interface ICodecCallback {
+
+    /**
+     * @brief Reports an event, such as an error, a command completion event, and port setting changes.
+     *
+     * - When <b>event</b> is <b>CODEC_EVENT_CMD_COMPLETE</b> and <b>eventData</b> is null,
+     * <b>data2</b> indicates a state if <b>data1</b> is <b>CODEC_COMMAND_STATE_SET</b> and indicates a port if
+     * <b>data1</b> is any <b>CodecCommandType</b> other than <b>CODEC_COMMAND_STATE_SET</b>.
+     * - When <b>event</b> is <b>CODEC_EVENT_ERROR</b>, <b>data1</b> indicates an error code and <b>data2</b>
+     * and <b>eventData</b> are both <b>0</b>.
+     * - When <b>event</b> is <b>CODEC_EVENT_MARK</b>, <b>data1</b> and <b>data2</b> are both <b>0</b> and
+     * <b>eventData</b> points to the mark.
+     * - When <b>event</b> is <b>CODEC_EVENT_PORT_SETTINGS_CHANGED</b>, <b>data1</b> indicates a port and <b>data2</b>
+     * and <b>eventData</b> are <b>0</b>.
+     * - When <b>event</b> is <b>CODEC_EVENT_BUFFER_FLAG</b>, <b>data1</b> indicates a port, <b>data2</b> indicates a
+     * flag, and <b>eventData</b> is <b>0</b>.
+     * - When <b>event</b> is <b>CODEC_EVENT_RESOURCES_ACQUIRED</b> or <b>CODEC_EVENT_DYNAMIC_RESOURCES_AVAILABLE</b>,
+     * <b>data1</b>, <b>data2</b>, and <b>eventData</b> are <b>0</b>.
+     *
+     * @param event Indicates the type of the event to report. For details, see {@link CodecEventType}.
+     * @param info Indicates the pointer to the information to report. For details, see {@link EventInfo}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     */
+    EventHandler([in] enum CodecEventType event, [in] struct EventInfo info);
+	
+    /**
+     * @brief Reports an event indicating that the encoding or decoding in the input buffer is complete.
+     *
+     *
+     * @param appData Indicates the application data. Generally, it is an upper-layer instance
+     * passed in for the callback.
+     * @param buffer Indicates information about the input buffer that was emptied. For details,
+     * see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the
+     * error codes, see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     */
+    EmptyBufferDone([in] long appData, [in] struct OmxCodecBuffer buffer);
+	
+    /**
+     * @brief Reports an event indicating that the output buffer is filled.
+     *
+     *
+     * @param appData Indicates the application data. Generally, it is an upper-layer instance
+     * passed in for the callback.
+     * @param buffer Indicates information about the buffer that was filled. For details, see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 4.1
+     */
+    FillBufferDone([in] long appData, [in] struct OmxCodecBuffer buffer);
+}

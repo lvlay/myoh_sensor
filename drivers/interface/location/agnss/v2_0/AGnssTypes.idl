@@ -1,0 +1,208 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiAGnss
+ * @{
+ *
+ * @brief Provides unified APIs for the AGNSS service.
+ *
+ * The upper layer can use the interfaces provided by this module to set the AGNSS callback, AGNSS server address,
+ * AGNSS reference information, and setId.
+ *
+ * @since 5.0
+ */
+
+/*
+ * @file AGnssTypes.idl
+ *
+ * @brief Defines the data structure used by the AGNSS module.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+
+package ohos.hdi.location.agnss.v2_0;
+
+/*
+ * @brief Defines the AGNSS reference information type.
+ *
+ * @since 5.0
+ */
+enum AGnssRefInfoType {
+    ANSS_REF_INFO_TYPE_CELLID = 1,
+    ANSS_REF_INFO_TYPE_MAC = 2,
+};
+
+/*
+ * @brief Defines the protocol type of the AGNSS user plane.
+ *
+ * @since 5.0
+ */
+enum AGnssUserPlaneProtocol {
+    AGNSS_TYPE_SUPL         = 1,
+    AGNSS_TYPE_C2K          = 2,
+    AGNSS_TYPE_SUPL_IMS     = 3,
+    AGNSS_TYPE_SUPL_EIMS    = 4
+};
+
+/*
+ * @brief Defines the action type for operating data services.
+ *
+ * @since 5.0
+ */
+enum DataLinkSetUpType {
+    /* Request to establish a data connection. */
+    ESTABLISH_DATA_CONNECTION = 1,
+
+    /* Request to release a data connection. */
+    RELEASE_DATA_CONNECTION   = 2
+};
+
+enum DataConnectionState {
+    DATA_CONNECTION_DISCONNECTED = 1,
+    DATA_CONNECTION_CONNECTED = 2,
+};
+
+/*
+ * @brief Defines the cell id type.
+ *
+ * @since 5.0
+ */
+enum CellIdType {
+    CELLID_TYPE_GSM   = 1,
+    CELLID_TYPE_UMTS  = 2,
+    CELLID_TYPE_LTE   = 3,
+    CELLID_TYPE_NR    = 4,
+};
+
+/*
+ * @brief Defines the setid type.
+ *
+ * @since 5.0
+ */
+enum SubscriberSetIdType {
+    AGNSS_SETID_TYPE_NULL = 0,
+    AGNSS_SETID_TYPE_IMSI = 1,
+    AGNSS_SETID_TYPE_MSISDN = 2,
+};
+
+/*
+ * @brief Defines the APN IP type.
+ *
+ * @since 5.0
+ */
+enum ApnIpCategory {
+    APN_CATEGORY_INVALID = 0,
+    APN_CATEGORY_IPV4 = 1,
+    APN_CATEGORY_IPV6 = 2,
+    APN_CATEGORY_IPV4V6 = 3
+};
+
+/*
+ * @brief Defines the cell information structure in the AGNSS reference information.
+ *
+ * @since 5.0
+ */
+struct AGnssRefCellId {
+    enum CellIdType type;
+
+    /* Mobile Country Code. */
+    unsigned short mcc;
+
+    /* Mobile Network Code. */
+    unsigned short mnc;
+
+    /* Location Area Code in 2G, 3G and LTE. */
+    unsigned short lac;
+
+    /* Cell id in 2G. Utran Cell id in 3G. Cell Global Id EUTRA in LTE. */
+    unsigned int cid;
+
+    /* Tracking Area Code in LTE. */
+    unsigned short tac;
+
+    /* Physical Cell id in LTE. */
+    unsigned short pcid;
+
+    /* NR Cell ID */
+    unsigned int nci;
+};
+
+/*
+ * @brief Defines the AGNSS server information.
+ *
+ * @since 5.0
+ */
+struct AGnssServerInfo {
+    enum AGnssUserPlaneProtocol type;
+    String server;
+    int port;
+};
+
+/*
+ * @brief Defines the AGNSS setid information.
+ *
+ * @since 5.0
+ */
+struct SubscriberSetId {
+    enum SubscriberSetIdType type;
+    String id;
+};
+
+/*
+ * @brief Defines the AGNSS mac information.
+ *
+ * @since 5.0
+ */
+struct AGnssRefMac {
+    unsigned char[] mac;
+};
+
+/*
+ * @brief Defines the AGNSS reference information structure.
+ *
+ * @since 5.0
+ */
+struct AGnssRefInfo {
+    enum AGnssRefInfoType type;
+    struct AGnssRefCellId cellId;
+    struct AGnssRefMac mac;
+};
+
+/*
+ * @brief Defines the structure of the request for operating the data service.
+ *
+ * @since 5.0
+ */
+struct AGnssDataLinkRequest {
+    enum AGnssUserPlaneProtocol agnssType;
+    enum DataLinkSetUpType setUpType;
+    unsigned char[] serverIpAddr;
+    unsigned char[] serverIpV6Addr;
+};
+
+/*
+ * @brief Defines the structure of Data service network state.
+ *
+ * @since 5.0
+ */
+struct NetworkState {
+    int netId;
+    enum ApnIpCategory apnIpCategory;
+    String apn;
+    enum DataConnectionState state;
+};
+/** @} */

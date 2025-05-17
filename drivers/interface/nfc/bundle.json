@@ -1,0 +1,89 @@
+{
+    "name": "@ohos/drivers_interface_nfc",
+    "description": "drivers interface nfc",
+    "version": "3.2",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/nfc"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_nfc",
+      "subsystem": "hdf",
+      "syscap": [""],
+      "adapter_system_type": ["standard"],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/nfc/v1_1:nfc_idl_target",
+          "//drivers/interface/nfc/v1_0:nfc_idl_target",
+          "//drivers/interface/nfc/v1_1:libnfc_stub_1.1",
+          "//drivers/interface/nfc/v1_0:libnfc_stub_1.0"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/nfc/v1_0:libnfc_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          },
+          {
+            "name": "//drivers/interface/nfc/v1_1:libnfc_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          },
+          {
+            "name": "//drivers/interface/nfc/v1_0:libnfc_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          },
+          {
+            "name": "//drivers/interface/nfc/v1_1:libnfc_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          },
+          {
+            "name": "//drivers/interface/nfc/v1_0:nfc_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          },
+          {
+            "name": "//drivers/interface/nfc/v1_1:nfc_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/nfc"
+            }
+          }
+        ]
+      }
+    }
+  }

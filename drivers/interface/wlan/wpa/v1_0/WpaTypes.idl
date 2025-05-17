@@ -1,0 +1,479 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup WPA
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+ /**
+ * @file WpaTypes.idl
+ *
+ * @brief Defines data types related to the WLAN module.
+ *
+ * The WLAN module data includes the {@code Feature} object information, station (STA) information,
+ * scan information, and network device information.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+package ohos.hdi.wlan.wpa.v1_0;
+
+/**
+ * @brief Defines the {@code Feature} object information.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiFeatureInfo {
+    /** NIC name of the {@code Feature} object. */
+    String ifName;
+    /** {@code Feature} object. */
+    int type;
+};
+
+/**
+ * @brief Defines the Wifi Status information for a Wi-Fi.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWifiStatus {
+    /** Basic service set identifier (BSSID) to scan. */
+    unsigned char[] bssid;
+    int freq;
+    /** SSID to scan. */
+    String ssid;
+    /** Length of the SSID. */
+    int ssidLen;
+    String keyMgmt;
+    int keyMgmtLen;
+    unsigned char[] address;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWifiWpaNetworkInfo {
+    int id;
+    unsigned char[] ssid;
+    unsigned char[] bssid;
+    unsigned char[] flags;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWifiWpsParam {
+    int anyFlag;
+    int multiAp;
+    unsigned char[] bssid;
+    unsigned char[] pinCode;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaCmdStatus {
+    unsigned char[] bssid;
+    int freq;
+    unsigned char[] ssid;
+    int id;
+    unsigned char[] keyMgmt;
+    unsigned char[] address;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaDisconnectParam {
+    unsigned char[] bssid;
+    int reasonCode;
+    int locallyGenerated;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaConnectParam {
+    unsigned char[] bssid;
+    int networkId;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaBssidChangedParam {
+    unsigned char[] bssid;
+    unsigned char[] reason;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaStateChangedParam {
+    int status;
+    unsigned char[] bssid;
+    int networkId;
+    unsigned char[] ssid;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaTempDisabledParam {
+    int networkId;
+    unsigned char[] ssid;
+    int authFailures;
+    int duration;
+    unsigned char[] reason;
+};
+
+/**
+ * @brief Defines the Wpa Status information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaAssociateRejectParam {
+    unsigned char[] bssid;
+    int statusCode;
+    int timeOut;
+};
+
+/**
+ * @brief Defines the Recv ScanResult information for a Wi-Fi
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaRecvScanResultParam {
+    unsigned int scanId;
+};
+
+/**
+ *  @brief Enumerates Wifi Technologies
+ */
+enum WifiTechnology {
+    UNKNOWN_TECHNOLOGY = 0,
+    /**
+     * For 802.11a/b/g
+     */
+    LEGACY = 1,
+    /**
+     * For 802.11n
+     */
+    HT = 2,
+    /**
+     * For 802.11ac
+     */
+    VHT = 3,
+    /**
+     * For 802.11ax
+     */
+    HE = 4,
+};
+
+/**
+ * @brief Enumerates Channel operating width in Mhz.
+ */
+enum WifiChannelWidthInMhz {
+  WIDTH_20 = 0,
+  WIDTH_40 = 1,
+  WIDTH_80 = 2,
+  WIDTH_160 = 3,
+  WIDTH_80P80 = 4,
+  WIDTH_5 = 5,
+  WIDTH_10 = 6,
+  WIDTH_INVALID = -1
+};
+
+/**
+ *@brief Enumerates Detailed network mode for legacy network
+ */
+enum LegacyMode {
+    UNKNOWN_MODE = 0,
+    /**
+     * For 802.11a
+     */
+    A_MODE = 1,
+    /**
+     * For 802.11b
+     */
+    B_MODE = 2,
+    /**
+     * For 802.11g
+     */
+    G_MODE = 3,
+};
+
+/**
+ * Connection Capabilities supported by current network and device
+ */
+struct ConnectionCapabilities {
+    /**
+     * Wifi Technology
+     */
+    WifiTechnology technology;
+    /**
+     * channel bandwidth
+     */
+    WifiChannelWidthInMhz channelBandwidth;
+    /**
+     * max number of Tx spatial streams
+     */
+    int maxNumberTxSpatialStreams;
+    /**
+     * max number of Rx spatial streams
+     */
+    int maxNumberRxSpatialStreams;
+    /**
+     * detailed network mode for legacy network
+     */
+    LegacyMode legacyMode;
+};
+
+/**
+ * @brief Defines the p2p Network Info for a Wi-Fi 
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiP2pNetworkInfo {
+    int id;
+    unsigned char[] ssid;
+    unsigned char[] bssid;
+    unsigned char[] flags;
+};
+
+/**
+ * @brief Defines the p2p Network List for a Wi-Fi 
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiP2pNetworkList  {
+    int infoNum;
+    struct HdiP2pNetworkInfo[] infos;
+};
+
+/**
+ * @brief Defines the P2p Device Info for a Wi-Fi 
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiP2pDeviceInfo {
+    unsigned char[] srcAddress;
+    unsigned char[] p2pDeviceAddress;
+    unsigned char[] primaryDeviceType;
+    unsigned char[] deviceName;
+    int configMethods;
+    int deviceCapabilities;
+    int groupCapabilities;
+    unsigned char[] wfdDeviceInfo;
+    unsigned int wfdLength;
+    unsigned char[] operSsid;
+};
+
+struct HdiP2pServiceInfo {
+    int mode; /* 0/1, upnp/bonjour  */
+    int version;
+    unsigned char[] name;
+    unsigned char[] query;
+    unsigned char[] resp;
+};
+
+struct HdiP2pReqService {
+    unsigned char[] bssid;
+    unsigned char[] msg;
+};
+
+struct HdiP2pServDiscReqInfo {
+    int freq;
+    int dialogToken;
+    int updateIndic;
+    unsigned char[] mac;
+    unsigned char[] tlvs;
+};
+
+struct HdiHid2dConnectInfo {
+    unsigned char[] ssid;
+    unsigned char[] bssid;
+    unsigned char[] passphrase;
+    int frequency;
+};
+struct HdiP2pConnectInfo {
+    int persistent; /* |persistent=<network id>] */
+    int mode; /* [join|auth] */
+    int goIntent; /* [go_intent=<0..15>] */
+    int provdisc; /* [provdisc] */
+    unsigned char[] peerDevAddr;
+    unsigned char[] pin; /* <pbc|pin|PIN#|p2ps> */
+};
+
+struct HdiP2pDeviceInfoParam {
+    unsigned char[] srcAddress;
+    unsigned char[] p2pDeviceAddress;
+    unsigned char[] primaryDeviceType;
+    unsigned char[] deviceName;
+    int configMethods;
+    int deviceCapabilities;
+    int groupCapabilities;
+    unsigned char[] wfdDeviceInfo;
+    unsigned int wfdLength;
+    unsigned char[] operSsid;
+};
+
+struct HdiP2pDeviceLostParam {
+    unsigned char[] p2pDeviceAddress;
+    int networkId;
+};
+
+struct HdiP2pGoNegotiationRequestParam {
+    unsigned char[] srcAddress;
+    int passwordId;
+};
+
+struct HdiP2pGoNegotiationCompletedParam {
+    int status;
+};
+
+struct HdiP2pInvitationReceivedParam {
+    int type; /* 0:Received, 1:Accepted */
+    int persistentNetworkId;
+    int operatingFrequency;
+    unsigned char[] srcAddress;
+    unsigned char[] goDeviceAddress;
+    unsigned char[] bssid;
+};
+
+struct HdiP2pInvitationResultParam {
+    int status;
+    unsigned char[] bssid;
+};
+
+struct HdiP2pGroupStartedParam {
+    int isGo;
+    int isPersistent;
+    int frequency;
+    unsigned char[] groupIfName;
+    unsigned char[] ssid;
+    unsigned char[] psk;
+    unsigned char[] passphrase;
+    unsigned char[] goDeviceAddress;
+};
+
+struct HdiP2pGroupRemovedParam {
+    int isGo;
+    unsigned char[] groupIfName;
+};
+
+struct HdiP2pProvisionDiscoveryCompletedParam {
+    int isRequest;
+    int provDiscStatusCode;
+    int configMethods;
+    unsigned char[] p2pDeviceAddress;
+    unsigned char[] generatedPin;
+};
+
+struct HdiP2pServDiscReqInfoParam {
+    int freq;
+    int dialogToken;
+    int updateIndic;
+    unsigned char[] mac;
+    unsigned char[] tlvs;
+};
+
+struct HdiP2pServDiscRespParam {
+    int updateIndicator;
+    unsigned char[] srcAddress;
+    unsigned char[] tlvs;
+};
+
+struct HdiP2pStaConnectStateParam {
+    int state;
+    unsigned char[] srcAddress;
+    unsigned char[] p2pDeviceAddress;
+};
+
+struct HdiP2pIfaceCreatedParam {
+    int isGo;
+};
+
+/**
+ * @brief STA authentication rejection parameter
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+struct HdiWpaAuthRejectParam {
+    unsigned char[] bssid;
+    unsigned short authType;
+    unsigned short authTransaction;
+    unsigned short statusCode;
+};
+
+struct WpaVendorInfo {
+    int type;
+    int freq;
+    int width;
+    int id;
+    int status;
+    int reason;
+    unsigned char[] ssid;
+    unsigned char[] psk;
+    unsigned char[] devAddr;
+    unsigned char[] data;
+};

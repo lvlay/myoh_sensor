@@ -1,0 +1,170 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiGnss
+ * @{
+ *
+ * @brief Provides unified APIs for GNSS services to access GNSS drivers.
+ *
+ * A GNSS service can obtain a GNSS driver object or agent and then call APIs provided by this object or agent to
+ * access GNSS devices, thereby Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, obtain the positioning result, obtain the nmea,
+ * obtain the satellite status information, and obtain the cache location information.
+ *
+ * @since 3.2
+ */
+
+/*
+ * @file IGnssInterface.idl
+ *
+ * @brief Declares the APIs provided by the GNSS module for Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, Delete auxiliary data, inject PGNSS data,
+ * obtain the number of GNSS cache locations, and obtain all cache locations.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.location.gnss.v1_0;
+
+import ohos.hdi.location.gnss.v1_0.IGnssCallback;
+import ohos.hdi.location.gnss.v1_0.GnssTypes;
+
+/*
+ * @brief Defines the functions for performing basic operations on GNSS.
+ *
+ * The functions include  Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, Delete auxiliary data, inject PGNSS data,
+ * obtain the number of GNSS cache locations, and obtain all cache locations.
+ *
+ * @since 3.2
+ */
+interface IGnssInterface {
+    /*
+     * @brief Setting GNSS configuration parameters.
+     *
+     * @param para Indicates GNSS configuration parameters, including basic GNSS parameters and GNSS cache
+     * function configuration parameters. For details, see {@link GnssConfigPara}.
+     * @return Returns <b>0</b> If the setting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetGnssConfigPara([in] struct GnssConfigPara para);
+
+    /*
+     * @brief Enable the GNSS module and transmit the callback of the upper layer to the GNSS module.
+     *
+     * @param callback Indicates Callback function sent by the upper layer to the GNSS driver. The GNSS driver returns
+     * location results and satellite status information by the callbacks. For details, see {@link IGnssCallback}.
+     * @return Returns <b>0</b> if the GNSS is successfully enabled; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    EnableGnss([in] IGnssCallback callbackObj);
+
+    /*
+     * @brief Disable the GNSS module.
+     *
+     * @return Returns <b>0</b> if the GNSS is successfully disabled; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    DisableGnss();
+
+    /*
+     * @brief Start the navigation function.
+     *
+     * @param type Indicates the GNSS startup type, which is used to distinguish between common GNSS positioning
+     * and GNSS caching function. For details, see {@link GnssStartType}.
+     * @return Returns <b>0</b> if the GNSS navigation is successfully started; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    StartGnss([in] enum GnssStartType type);
+
+    /*
+     * @brief Stop the navigation function.
+     *
+     * @param type Indicates the GNSS startup type, which is used to distinguish between common GNSS positioning
+     * and GNSS caching function. For details, see {@link GnssStartType}.
+     * @return Returns <b>0</b> if the GNSS navigation is successfully stopped; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    StopGnss([in] enum GnssStartType type);
+
+    /*
+     * @brief Inject reference information to the GNSS module.
+     *
+     * @param refInfo Indicates the GNSS reference information structure, including the reference time and reference
+     * location. For details, see {@link GnssRefInfo}.
+     * @return Returns <b>0</b> if ingestion succeeded; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetGnssReferenceInfo([in] struct GnssRefInfo refInfo);
+
+    /*
+     * @brief Delete the specified auxiliary data.
+     *
+     * @param data Indicates the type of auxiliary data to be deleted. For details, see {@link GnssAuxiliaryData}.
+     * @return Returns <b>0</b> if deleted successfully; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    DeleteAuxiliaryData([in] enum GnssAuxiliaryData data);
+
+    /*
+     * @brief Ingesting Predict Gnss Data.
+     *
+     * @param data Indicates Predict Gnss Data.
+     * @return Returns <b>0</b> if ingesting successfully; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetPredictGnssData([in] String data);
+
+    /*
+     * @brief Obtain the number of locations that can be cached by the GNSS module.
+     *
+     * @param size Indicates an output parameter used to receive the number of locations that can be
+     * cached by the GNSS module.
+     * @return Returns <b>0</b> if obtain size successfully; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetCachedGnssLocationsSize([out] int size);
+
+    /*
+     * @brief Request to obtain all the location information in the GNSS cache at a time and clear the cache buffer.
+     * The cache location is reported through callback.
+     *
+     * @return Returns <b>0</b> if sending request successfully; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetCachedGnssLocations();
+}

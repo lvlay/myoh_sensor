@@ -1,0 +1,61 @@
+{
+    "name": "@ohos/drivers_interface_act_recg",
+    "description": "activity recognition device driver interface",
+    "version": "3.2",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/activity_recognition"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_act_recg",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "rom": "150KB",
+      "ram": "200KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/activity_recognition/v1_0:ar_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/activity_recognition/v1_0:libar_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/activity_recognition"
+            }
+          },
+          {
+            "name": "//drivers/interface/activity_recognition/v1_0:libar_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/activity_recognition"
+            }
+          },
+          {
+            "name": "//drivers/interface/activity_recognition/v1_0:ar_idl_headers_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/activity_recognition"
+            }
+          }
+        ]
+      }
+    }
+  }

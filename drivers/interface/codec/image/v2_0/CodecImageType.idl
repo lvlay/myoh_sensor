@@ -1,0 +1,385 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the image Codec module.
+ *
+ * The Codec module provides APIs for image codec, setting codec parameters,
+ * and controlling and transferring image data.
+ *
+ * @since 4.0
+ * @version 2.0
+ */
+
+/**
+ * @file CodecImageTypes.idl
+ *
+ * @brief Defines custom data types used in the image Codec module APIs,
+ * including the codec image parameters, types and buffers.
+ *
+ *
+ * @since 4.0
+ * @version 2.0
+ */
+
+/**
+ * @brief Defines the path for the package of the image Codec module APIs.
+ *
+ * @since 4.0
+ * @version 2.0
+ */
+package ohos.hdi.codec.image.v2_0;
+
+/**
+ * @brief Defines the image region information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecImageRegion {
+    unsigned int left;      /**< Distance to the left of the image. */
+    unsigned int right;     /**< Distance to the right of the image. */
+    unsigned int top;       /**< Distance to the top of the image. */
+    unsigned int bottom;    /**< Distance to the bottom of the image. */
+    unsigned int flag;      /**< True is use regionInfo. */
+    unsigned int rsv;       /**< Reserved for extend. */
+};
+
+/**
+ * @brief Enumerates the types of image that can be encoded or decoded
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+enum CodecImageRole {
+    CODEC_IMAGE_JPEG = 0,       /**< Jpeg image. */
+    CODEC_IMAGE_HEIF,           /**< Heif image. */
+    CODEC_IMAGE_INVALID,        /**< Invalid image type. */
+};
+
+/**
+ * @brief Defines the codec image buffer information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecImageBuffer {
+    unsigned int id;            /**< Buffer ID. */
+    unsigned int size;          /**< Size of buffer. */
+    NativeBuffer buffer;        /**< Buffer handle used for encoding or decoding. For details,
+                                     see {@link NativeBuffer}. */
+    FileDescriptor fenceFd;     /**< Fence file descriptor. */
+    CodecImageRole bufferRole;  /**< Image buffer role, see {@link CodecImageRole}. */
+};
+
+/**
+ * @brief Defines the image codec type.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+enum CodecImageType {
+    CODEC_IMAGE_TYPE_DECODER = 0,     /**< Image decoder. */
+    CODEC_IMAGE_TYPE_ENCODER,         /**< Image encoder. */
+    CODEC_IMAGE_TYPE_INVALID,         /**< Invalid type. */
+};
+
+/**
+ * @brief Defines the image codec capabilities.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecImageCapability {
+    String name;                        /**< Name of the image codec. */
+    enum CodecImageRole role;           /**< Role of the image codec. */
+    enum CodecImageType type;           /**< Type of the image codec. */
+    unsigned int widthAlignment;        /**< Alignment value of the width. */
+    unsigned int heightAlignment;       /**< Alignment value of the height. */
+    unsigned int maxSample;             /**< Maximum sample. */
+    unsigned int maxWidth;              /**< Maximum width. */
+    unsigned int maxHeight;             /**< Maximum height. */
+    unsigned int minWidth;              /**< Minimum width. */
+    unsigned int minHeight;             /**< Minimum height. */
+    unsigned int maxInst;               /**< Maximum instance. */
+    unsigned int[] supportPixFmts;      /**< Supported PixFormat. For details, see {@link PixFormat}. */
+    boolean isSoftwareCodec;            /**< Whether it is a software codec. */
+};
+
+/**
+ * @brief Defines the jpeg image quant table information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecJpegQuantTable {
+    unsigned short[] quantVal;          /**< Quant table value. */
+    boolean tableFlag;                  /**< True when quant has been output. */
+};
+
+/**
+ * @brief Defines the jpeg image huff table information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecJpegHuffTable {
+    unsigned char[] bits;               /**< Bits value, bits[0] is unused. */
+    unsigned char[] huffVal;            /**< Huff table value. */
+    boolean tableFlag;                  /**< True when huff table valid. */
+};
+
+/**
+ * @brief Defines the jpeg image huff table information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecJpegCompInfo {
+    unsigned int componentId;           /**< CompInfo index in JpegDecInfo. */
+    unsigned int componentIndex;        /**< CompInfo index in JpegDecInfo. */
+    unsigned int hSampFactor;           /**< Horizontal sample factor. */
+    unsigned int vSampFactor;           /**< vertical sample factor. */
+    unsigned int quantTableNo;          /**< Quant table value. */
+    unsigned int dcTableNo;             /**< Dc table index. */
+    unsigned int acTableNo;             /**< Ac table index. */
+    boolean infoFlag;
+};
+
+/**
+ * @brief Defines the jpeg image decode information.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct CodecJpegDecInfo {
+    unsigned int imageWidth;                        /**< Image width. */
+    unsigned int imageHeight;                       /**< Image height. */
+    unsigned int dataPrecision;                     /**< Bit height. */
+    unsigned int numComponents;                     /**< Num of color component in jpeg image. */
+    unsigned int restartInterval;                   /**< MCUs per restart. */
+    boolean arithCode;                              /**< False is Huff coding,
+                                                         true is arithmetic coding. */
+    boolean progressiveMode;                        /**< If SOF specifiy progressive mode. */
+    struct CodecJpegCompInfo[] compInfo;            /**< Jpeg compress information. */
+    struct CodecJpegHuffTable[] dcHuffTbl;          /**< Dc huffman table information. */
+    struct CodecJpegHuffTable[] acHuffTbl;          /**< Ac huffman table information. */
+    struct CodecJpegQuantTable[] quantTbl;          /**< Quant table information. */
+    struct CodecImageRegion region;                 /**< Image region information. */
+    unsigned int sampleSize;                        /**< Image sample size. */
+    unsigned int compressPos;                       /**< The offset of Jpeg compressed data. */
+};
+
+/**
+ * @brief Defines the supported property type for heif image encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+enum PropertyType {
+    MIRROR_INFO,                         /**< True means the image is displayed as a vertical mirror,
+                                              false means the image is displayed as a horizontal mirror. */
+    ROTATE_INFO,                         /**< Determines how many degrees the image is rotated to display,
+                                              valid value is 0/90/180/270. */
+    COLOR_TYPE,                          /**< Image color type. */
+    COLOR_INFO,                          /**< Detailed color info when color type is set to NCLX. */
+    ICC_PROFILE,                         /**< Detailed color info when color type is set to RICC or PROF. */
+    CONTENT_LIGHT_LEVEL,                 /**< Clli info for HDR. */
+    MASTER_DISPLAY_COLOR_VOLUME,         /**< Mdcv info for HDR. */
+    TONE_MAP_METADATA,                   /**< Tone map meta data for HDR. */
+    USER_DATA_DO_COMPRESS,               /**< Determines whether user data is compressed. */
+    IT35_INFO,                           /**< It35 info for HDR. */
+};
+
+/**
+ * @brief Defines the color type of the output heif image.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+enum ColorType  {
+    NCLX,       /**< NCLX color type. */
+    RICC,       /**< RICC color type. */
+    PROF,       /**< PROF color type. */
+};
+
+/**
+ * @brief Defines the color info when ColorType is set to NCLX.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ColourInfo {
+    unsigned short colourPrimaries;               /**< Gamut triangle, and white point coordinates. */
+    unsigned short transferCharacteristics;       /**< Transfer function/OETF. */
+    unsigned short matrixCoefficients;            /**< Specifies the matrix coefficient for YUV-RGB conversion. */
+    boolean fullRangeFlag;                        /**< Specifies the YUV value range during the conversion 
+                                                       between YUV and RGB. */
+};
+
+/**
+ * @brief Defines details for Clli info of HDR heif image.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ContentLightLevel {
+    unsigned short maxContentLightLevel;          /**< Max value of content light level. */
+    unsigned short maxPicAverageLightLevel;       /**< Max value of average light level. */
+};
+
+/**
+ * @brief Defines details for Mdcv info of HDR heif image.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct MasteringDisplayColourVolume {
+    unsigned short displayPrimariesRX;              /**< Display primaries for X-plane of red. */
+    unsigned short displayPrimariesRY;              /**< Display primaries for Y-plane of red. */
+    unsigned short displayPrimariesGX;              /**< Display primaries for X-plane of green. */
+    unsigned short displayPrimariesGY;              /**< Display primaries for Y-plane of green. */
+    unsigned short displayPrimariesBX;              /**< Display primaries for X-plane of blue. */
+    unsigned short displayPrimariesBY;              /**< Display primaries for Y-plane of blue. */
+    unsigned short whitePointX;                     /**< White point for X-plane. */
+    unsigned short whitePointY;                     /**< White point for Y-plane. */
+    unsigned int maxDisplayMasteringLuminance;      /**< Max display mastering luminance. */
+    unsigned int minDisplayMasteringLuminance;      /**< Min display mastering luminance. */
+};
+
+/**
+ * @brief Defines a struct to describe a signed rational number.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct SignedRational {
+    int numerator;                 /**< Numerator of a signed rational number. */
+    unsigned int denominator;      /**< Denominator of a signed rational number. */
+};
+
+/**
+ * @brief Defines a struct to describe an unsigned rational number.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct UnsignedRational {
+    unsigned int numerator;       /**< Numerator of an unsigned rational number. */
+    unsigned int denominator;     /**< Denominator of an unsigned rational number. */
+};
+
+/**
+ * @brief Defines details for gain map channel info of HDR heif image.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ToneMapChannel {
+    SignedRational gainMapMin;         /**< Per-component min gain map values. */
+    SignedRational gainMapMax;         /**< Per-component max gain map values. */
+    UnsignedRational gamma;            /**< Per-component gamma values. */
+    SignedRational baseOffset;         /**< Baseline image offset. */
+    SignedRational alternateOffset;    /**< Alternate image offset. */
+};
+
+/**
+ * @brief Defines details for gain map metadata of HDR heif image.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ToneMapMetadata {
+    unsigned short channelCnt;                /**< The number of channels, it is either 1 or 3. */
+    boolean useBaseColorSpace;                /**< Determine whether to use base color space. */
+    UnsignedRational baseHdrHeadroom;         /**< Value of base hdr headroom. */
+    UnsignedRational alternateHdrHeadroom;    /**< Value of alternate hdr headroom. */
+    ToneMapChannel channels1;                 /**< Detail info of channel 1. */
+    ToneMapChannel channels2;                 /**< Detail info of channel 2. */
+    ToneMapChannel channels3;                 /**< Detail info of channel 3. */
+};
+
+/**
+ * @brief Defines buffer that store non-pixel data for heif encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct SharedBuffer {
+    FileDescriptor fd;                /**< Fd related to the buffer. */
+    unsigned int filledLen;           /**< Used size of the buffer. */
+    unsigned int capacity;            /**< Total size of the buffer. */
+};
+
+/**
+ * @brief Defines how to store pixel data for heif encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ImageItem {
+    String itemName;                   /**< Item name. */
+    unsigned int id;                   /**< Item id. */
+    NativeBuffer pixelBuffer;          /**< Buffer to store pixel data. */
+    boolean isPrimary;                 /**< Primary image flag. */
+    boolean isHidden;                  /**< Determines whether to display this image. */
+    String compressType;               /**< Determines how to compress the pixel data. */
+    unsigned int quality;              /**< Compress quality, value range: [0, 100]. */
+    unsigned char[] liteProperties;    /**< Store smaller propety data, (enum + struct)... */
+    SharedBuffer sharedProperties;     /**< Store larger data, (enum + buffersize + buffer)... */
+};
+
+/**
+ * @brief Defines how to store meta data for heif encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct MetaItem {
+    String itemName;                   /**< Name of the item. */
+    unsigned int id;                   /**< Id of the item. */
+    SharedBuffer data;                 /**< Data of the item. */
+    unsigned char[] properties;        /**< Extra properties of the item. */
+};
+
+/**
+ * @brief Defines reference type for heif encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+enum ReferenceType {
+    DIMG,      /**< Describe relation between base map and gain map for HDR. */
+    THMB,      /**< Describe relation between primary image and thumbnail. */
+    AUXL,      /**< Describe relation between primary image and auxilary image. */
+    CDSC,      /**< Describe relation between primary image and meta data. */
+};
+
+/**
+ * @brief Defines the relation between different items for heif encode.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+struct ItemRef {
+    ReferenceType type;       /**< Relation between two items. */
+    String auxType;           /**< Extra info for auxilary image, only valid when type is set to AUXL. */
+    unsigned int from;        /**< One party to a relation. */
+    unsigned int[] to;        /**< The other party to a relation. */
+};
+

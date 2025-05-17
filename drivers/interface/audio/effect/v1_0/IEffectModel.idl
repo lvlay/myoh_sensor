@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ohos.hdi.audio.effect.v1_0;
+import ohos.hdi.audio.effect.v1_0.EffectTypes;
+import ohos.hdi.audio.effect.v1_0.IEffectControl;
+
+interface IEffectModel {
+    /**
+     * @brief Query whether the vendor/OEM supplies effect libraries. If supplies, use the supplied effect libraries.
+     * If not, use the system service software effect.
+     *
+     * @param model Indicates the pointer to the effect model to operate.
+     * @param supply indicates the state whether the vendor/OEM supplies effect libraries.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    IsSupplyEffectLibs([out] boolean supply);
+
+    /**
+     * @brief Get descriptors of all supported audio effects.
+     *
+     * @param model Indicates the pointer to the effect model to operate.
+     * @param descs Indicates the effect list.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GetAllEffectDescriptors([out] struct EffectControllerDescriptor[] descs);
+
+    /**
+     * @brief Create an effect controller which is used to operate the effect instance.
+     *
+     * @param model Indicates the pointer to the effect model to operate.
+     * @param info Indicates the effect information.
+     * @param contoller Indicates the <b>IEffectControl</b> object.
+     * @param contollerId Indicates the contoller to the <b>IEffectControl</b> object.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    CreateEffectController([in]struct EffectInfo info, [out] IEffectControl contoller,
+                           [out] struct ControllerId id);
+
+    /**
+     * @brief Destroy the effect controller specified by the controllerId.
+     *
+     * @param model Indicates the pointer to the effect model to operate.
+     * @param contollerId Indicates the contoller to the <b>EffectControl</b> object.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    DestroyEffectController([in] struct ControllerId id);
+
+    /**
+     * @brief Get a descriptor of specified effect.
+     *
+     * @param model Indicates the pointer to the effect model to operate.
+     * @param effectId Indicates the effectId of the effect.
+     * @param desc Indicates the specified effect descriptor.
+     *
+     * @return Returns <b>0</b> if the process success; returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GetEffectDescriptor([in] String effectId, [out] struct EffectControllerDescriptor desc);
+}

@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiConnectedNfcTag
+ * @{
+ *
+ * @brief Provides unified APIs for nfc services to access nfc drivers.
+ *
+ * A ConnectedNfcTag service can obtain a ConnectedNfcTag driver object or agent and then call APIs provided by this
+ * object or agent to access ConnectedNfcTag devices, thereby obtaining initializing or uninitializing a ConnectedNfcTag
+ * driver, writing or reading NDEF contents into an nfc tag.
+ *
+ * @version 1.1
+ */
+
+package ohos.hdi.connected_nfc_tag.v1_1;
+
+import ohos.hdi.connected_nfc_tag.v1_0.IConnectedNfcTag;
+import ohos.hdi.connected_nfc_tag.v1_1.IConnectedNfcTagCallback;
+
+/**
+ * @brief Declares the APIs provided by the nfc module for obtaining nfc tag events.
+ * @since 5.0
+ * @version 1.1
+ */
+
+interface IConnectedNfcTag extends ohos.hdi.connected_nfc_tag.v1_0.IConnectedNfcTag {
+    /**
+     * @brief Register nfc tag chip events.
+     * 
+     * @since 5.0
+     * @version 1.1
+     */
+    RegisterCallBack([in] IConnectedNfcTagCallback callbackObj);
+
+    /**
+     * @brief Reads NDEF data from the connected nfc tag. Replace old api ReadNdefTag 
+     *
+     * @return the NDEF data in unsigned char[].
+     *
+     * @since 5.0
+     * @version 1.1
+     */
+    ReadNdefData([out] unsigned char[] ndefData);
+
+    /**
+     * @brief Writes NDEF data into the connected nfc tag. Replace old api WriteNdefTag
+     * 
+     * @param the NDEF data to write in unsigned char[].
+     * @return Returns <b>0</b> if the operation is succeed, otherwise marks the reason of failure.
+     *
+     * @since 5.0
+     * @version 1.1
+     */
+    WriteNdefData([in] unsigned char[] ndefData);
+}

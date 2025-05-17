@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiGeofence
+ * @{
+ *
+ * @brief Provides unified APIs for the GNSS geofence service.
+ *
+ * A gnss service module can use the interfaces of this module to add fences, and delete fences, and monitor
+ * fence status changes.
+ *
+ * @since 3.2
+ */
+
+/*
+ * @file IGeofenceInterface.idl
+ *
+ * @brief Define interfaces such as adding fences, deleting fences, and setting callback.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.location.geofence.v1_0;
+
+import ohos.hdi.location.geofence.v1_0.IGeofenceCallback;
+import ohos.hdi.location.geofence.v1_0.GeofenceTypes;
+
+/*
+ * @brief Defines the functions for performing basic operations on geofence.
+ *
+ * The operations include adding fences, deleting fences, and setting callback.
+ *
+ * @since 3.2
+ */
+interface IGeofenceInterface {
+    /*
+     * @brief Set callback function for geofence.
+     *
+     * @param callback Indicates callback function of geofence, gnss driver use this callback to report
+     * the geofence service Availability, and report geofence event, and report the geofence operation result.
+     * For details, see {@link IGeofenceCallback}.
+     * @return Returns <b>0</b> if setup callback successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetGeofenceCallback([in] IGeofenceCallback callbackObj);
+
+    /*
+     * @brief Add a geofence.
+     *
+     * @param fence Indicates geofence configuration parameters. For details, see {@link GeofenceInfo}.
+     * @param monitorEvent Indicates the geofence events that the application needs to listen to.
+     * For details, see {@link GeofenceEvent}.
+     * @return Returns <b>0</b> if add geofence successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    AddGnssGeofence([in] struct GeofenceInfo fence,
+                    [in] enum GeofenceEvent monitorEvent);
+
+    /*
+     * @brief Delete a geofence.
+     *
+     * @param fenceIndex Indicates the ID of the geofence.
+     * @return Returns <b>0</b> if delete geofence successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    DeleteGnssGeofence([in] int fenceIndex);
+}

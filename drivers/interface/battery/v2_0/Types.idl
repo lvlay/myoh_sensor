@@ -1,0 +1,190 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup battery
+ * @{
+ *
+ * @brief Provides APIs for obtaining and subscribing to battery information.
+ * 
+ * After obtaining an object or proxy of this module, the battery service can invoke related APIs to obtain and
+ * subscribe to battery information.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+
+/**
+ * @file Types.idl
+ *
+ * @brief Enumerates data types related to battery information.
+ *
+ * Such data types include the health status, charging status, charging device type, and battery information structure.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+package ohos.hdi.battery.v2_0;
+
+
+/**
+ * @brief Enumerates the battery health status.
+ *
+ * @since 3.1
+ */
+enum BatteryHealthState
+{
+    /** Unknown state */
+    BATTERY_HEALTH_UNKNOWN = 0,
+    /** Normal state */
+    BATTERY_HEALTH_GOOD,
+    /** Overheated state */
+    BATTERY_HEALTH_OVERHEAT,
+    /** Overvoltage state */
+    BATTERY_HEALTH_OVERVOLTAGE,
+    /** Cool state */
+    BATTERY_HEALTH_COLD,
+    /** Exhausted state */
+    BATTERY_HEALTH_DEAD,
+    /** Reserved */
+    BATTERY_HEALTH_RESERVED,
+};
+
+/**
+ * @brief Enumerates the battery charging status.
+ *
+ * @since 3.1
+ */
+enum BatteryChargeState
+{
+    /** Unknown state */
+    CHARGE_STATE_NONE = 0,
+    /** Charging enabled state */
+    CHARGE_STATE_ENABLE,
+    /** Charging disabled state */
+    CHARGE_STATE_DISABLE,
+    /** Battery full state */
+    CHARGE_STATE_FULL,
+    /** Reserved */
+    CHARGE_STATE_RESERVED,
+};
+
+/**
+ * @brief Enumerates the charging device type.
+ *
+ * @since 3.2
+ */
+enum BatteryPluggedType
+{
+    /** Unknown type */
+    PLUGGED_TYPE_NONE = 0,
+    /** AC charger */
+    PLUGGED_TYPE_AC,
+    /** USB charger */
+    PLUGGED_TYPE_USB,
+    /** Wireless charger */
+    PLUGGED_TYPE_WIRELESS,
+    /** Reserved */
+    PLUGGED_TYPE_BUTT
+};
+
+/**
+ * @brief Defines the battery information.
+ *
+ * @since 3.1
+ */
+struct BatteryInfo {
+    /** Battery percentage */
+    int capacity;
+    /** Battery voltage */
+    int voltage;
+    /** Battery temperature */
+    int temperature;
+    /** Battery health status */
+    int healthState;
+    /** Charging device type */
+    int pluggedType;
+    /** Maximum charging current */
+    int pluggedMaxCurrent;
+    /** Maximum charging voltage */
+    int pluggedMaxVoltage;
+    /** Charging status */
+    int chargeState;
+    /** Number of battery charging times */
+    int chargeCounter;
+    /** Total battery capacity */
+    int totalEnergy;
+    /** Average battery current */
+    int curAverage;
+    /** Real-time battery current */
+    int curNow;
+    /** Remaining battery capacity */
+    int remainEnergy;
+    /** Whether the battery is supported or whether the battery is present */
+    byte present;
+    /** Battery technology */
+    String technology;
+    /** Uevent name */
+    String uevent;
+};
+
+/**
+ * @brief Defines the battery charging limit type.
+ *
+ * @since 3.2
+ */
+enum ChargingLimitType
+{
+    /** Limit type: charging current */
+    TYPE_CURRENT = 0,
+    /** Limit type: charging voltage */
+    TYPE_VOLTAGE,
+};
+
+/**
+ * @brief Defines the limit on the battery charging current or voltage.
+ *
+ * @since 3.2
+ */
+struct ChargingLimit
+{
+    enum ChargingLimitType type;
+    String protocol;
+    int value;
+};
+
+/**
+ * @brief Indicates the type of the charger plugged-in.
+ *
+ * @since 4.0
+ */
+enum ChargeType
+{
+  /** Unknown type */
+  CHARGE_TYPE_NONE = 0,
+  /** Wired normal type */
+  CHARGE_TYPE_WIRED_NORMAL,
+  /** Wired quick type */
+  CHARGE_TYPE_WIRED_QUICK,
+  /** Wired super quick type */
+  CHARGE_TYPE_WIRED_SUPER_QUICK,
+  /** Wireless normal type */
+  CHARGE_TYPE_WIRELESS_NORMAL,
+  /** Wireless quick type */
+  CHARGE_TYPE_WIRELESS_QUICK,
+  /** Wireless supeer quick type */
+  CHARGE_TYPE_WIRELESS_SUPER_QUICK,
+};
+/** @} */

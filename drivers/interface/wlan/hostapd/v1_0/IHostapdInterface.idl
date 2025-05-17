@@ -1,0 +1,345 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Hostapd
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @file IHostapdInterface.idl
+ *
+ * @brief Provides APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to or disconnect from a WLAN hotspot,
+ * set the country code, and manage network devices.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the Hostapd module interface.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+package ohos.hdi.wlan.hostapd.v1_0;
+
+import ohos.hdi.wlan.hostapd.v1_0.HostapdTypes;
+import ohos.hdi.wlan.hostapd.v1_0.IHostapdCallback;
+
+/**
+ * @brief Defines an interface for the upper-layer WLAN service.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+interface IHostapdInterface {
+    /**
+     * @brief Start AP.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    StartAp();
+
+    /**
+     * @brief Start AP for different ifName.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    StartApWithCmd([in] String ifName, [in] int id);
+
+    /**
+     * @brief Stop AP.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    StopAp();
+
+    /**
+     * @brief Enable AP.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    EnableAp([in] String ifName, [in] int id);
+
+    /**
+     * @brief Disable AP.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    DisableAp([in] String ifName, [in] int id);
+
+    /**
+     * @brief Set the AP password.
+     *
+     * @param pass - Password.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApPasswd([in] String ifName, [in] String pass, [in]int id);
+
+    /**
+     * @brief Set the AP Name.
+     *
+     * @param name - The SAP SSID.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApName([in] String ifName, [in] String name, [in] int id);
+
+    /**
+     * @brief Set the AP securityType.
+     *
+     * @param securityType - The SAP security type, eg:wpa/wpa_psk etc.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApWpaValue([in] String ifName, [in] int securityType, [in] int id);
+
+    /**
+     * @brief Set the AP bandwith.
+     *
+     * @param band - The SAP bandwith.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApBand([in] String ifName, [in] int band, [in] int id);
+
+    /**
+     * @brief Set the AP need support protocol type.
+     *
+     * @param value - Hostapd config value.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetAp80211n([in] String ifName, [in] int value, [in] int id);
+
+    /**
+     * @brief Set AP Wmm mode.
+     *
+     * @param value - Enable or Disable Wmm.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApWmm([in] String ifName, [in] int value, [in] int id);
+
+    /**
+     * @brief Set AP channel.
+     *
+     * @param channel - SAP channel.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApChannel([in] String ifName, [in] int channel, [in] int id);
+
+    /**
+     * @brief Set AP max connection.
+     *
+     * @param maxConn - Set the maximum number of connected devices.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetApMaxConn([in] String ifName, [in] int maxConn, [in] int id);
+
+    /**
+     * @brief To check the configuration information, deliver security parameters to
+     * the driver, and clear old AP information after set ap configuration information.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param id - ap id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    ReloadApConfigInfo([in] String ifName, [in] int id);
+
+    /**
+     * @brief To set the blocklish filtering in AP mode to prohibit
+     * the MAC address connection.
+     *
+     * @param mac - Blocklisted MAC address.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    SetMacFilter([in] String ifName, [in] String mac, [in] int id);
+
+    /**
+     * @brief To set blocklist filtering in AP mode and delete a specified MAC
+     * address from the blocklist.
+     *
+     * @param mac - Blocklisted MAC address.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    DelMacFilter([in] String ifName, [in] String mac, [in] int id);
+
+    /**
+     * @brief Obtains information about all connected STAs.
+     *
+     * @param infos - Connected STA information array.
+     * @param size - Obtains the size of all sta information arrays and Size of the
+     *               obtained sta information array.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    GetStaInfos([in] String ifName, [out] String buf, [in] int size, [in] int id);
+
+    /**
+     * @brief To disconnect the specified STA connection.
+     *
+     * @param mac - Disconnect the specified mac.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    DisassociateSta([in] String ifName, [in] String mac, [in] int id);
+
+    /**
+     * @brief Registers a callback to listen for asynchronous events.
+     *
+     * @param cbFunc Indicates the callback to register.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    RegisterEventCallback([in] IHostapdCallback cbFunc, [in] String ifName);
+
+    /**
+     * @brief Unregisters a callback.
+     *
+     * @param cbFunc Indicates the callback to unregister.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    UnregisterEventCallback([in] IHostapdCallback cbFunc, [in] String ifName);
+
+     /**
+     * @brief Used to process cmd of Hostapd
+     *
+     * @param ifName Indicates the NIC name.
+     * @param cmd Indicates command of HostApd from WifiHal
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+     HostApdShellCmd([in] String ifName, [in] String cmd);
+ }

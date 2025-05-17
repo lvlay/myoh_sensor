@@ -1,0 +1,74 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/components/hdi/hdi.gni")
+
+hdi("display_buffer") {
+  module_name = "display_buffer"
+  imports = [ "ohos.hdi.display.buffer.v1_0:display_buffer" ]
+
+  sources = [
+    "DisplayBufferType.idl",
+    "IMapper.idl",
+  ]
+  innerapi_tags = [
+    "chipsetsdk_indirect",
+    "platformsdk_indirect",
+  ]
+
+  branch_protector_ret = "pac_ret"
+
+  language = "cpp"
+  subsystem_name = "hdf"
+  part_name = "drivers_interface_display"
+}
+
+config("libdisplay_buffer_hdi_impl_config") {
+  include_dirs = [ "./../" ]
+}
+
+ohos_shared_library("libdisplay_buffer_hdi_impl_v1_2") {
+  sources = [
+    "../v1_0/hdi_impl/display_buffer_hdi_impl.cpp",
+    "../v1_1/hdi_impl/display_buffer_hdi_impl.cpp",
+    "./hdi_impl/display_buffer_hdi_impl.cpp",
+  ]
+
+  public_configs = [ ":libdisplay_buffer_hdi_impl_config" ]
+
+  deps = [
+    ":libdisplay_buffer_proxy_1.2",
+    "../v1_0:libdisplay_buffer_proxy_1.0",
+    "../v1_1:libdisplay_buffer_proxy_1.1",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "graphic_surface:buffer_handle",
+    "hdf_core:libhdi",
+    "hdf_core:libpub_utils",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+
+  install_images = [ "system" ]
+  subsystem_name = "hdf"
+  innerapi_tags = [
+    "chipsetsdk_indirect",
+    "platformsdk_indirect",
+  ]
+
+  branch_protector_ret = "pac_ret"
+
+  part_name = "drivers_interface_display"
+}

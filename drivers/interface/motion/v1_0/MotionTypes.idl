@@ -1,0 +1,95 @@
+/*
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Motion
+ * @{
+ *
+ * @brief Provides common APIs for hardware services to access the motion driver module.
+ *
+ * A service can obtain a motion driver object or agent and then call APIs provided by this object or agent to
+ * enable or disable motion and subscribe to or unsubscribe from motion data.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @file MotionTypes.idl
+ *
+ * @brief Defines the data structures used by the motion module, including the motion types and reported motion data structure.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the motion driver module APIs.
+ *
+ * @since 3.2
+ */
+package ohos.hdi.motion.v1_0;
+
+/**
+ * @brief Enumerates motion types.
+ *
+ * @since 3.2
+ */
+enum HdfMotionTypeTag {
+    /** Pickup */
+    HDF_MOTION_TYPE_PICKUP = 0,
+    /** Flip */
+    HDF_MOTION_TYPE_FLIP,
+    /** Closing to the ear */
+    HDF_MOTION_CLOSE_TO_EAR,
+    /** Shaking */
+    HDF_MOTION_TYPE_SHAKE,
+    /** Screen rotation */
+    HDF_MOTION_TYPE_ROTATION,
+    /** Pocket mode */
+    HDF_MOTION_TYPE_POCKET_MODE,
+    /** Taking away from the ear */
+    HDF_MOTION_TYPE_LEAVE_EAR,
+    /** Wrist-up */
+    HDF_MOTION_TYPE_WRIST_UP,
+    /** Wrist-down */
+    HDF_MOTION_TYPE_WRIST_DOWN,
+    /** Wave */
+    HDF_MOTION_TYPE_WAVE,
+    /** Step counter */
+    HDF_MOTION_TYPE_STEP_COUNTER,
+    /** Maximum motion type */
+    HDF_MOTION_TYPE_MAX,
+};
+
+/**
+ * @brief Defines the motion event data structure.
+ *
+ * The motion event data includes the motion type, motion result, motion status, length of motion data, and motion data.
+ *
+ * @since 3.2
+ */
+struct HdfMotionEvent {
+    /** Provides the motion type. */
+    int motion;
+    /** Provides the motion result. */
+    int result;
+    /** Provides the motion status. */
+    int status;
+    /** Provides the length of motion data. */
+    int datalen;
+    /** Provides the motion data. */
+    int [] data;
+};
+/** @} */

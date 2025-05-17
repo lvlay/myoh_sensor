@@ -1,0 +1,91 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Hostapd
+ * @{
+ *
+ * @brief Defines APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @file IHostapdCallback.idl
+ *
+ * @brief Provides callbacks to be invoked when the hostapd is restarted, the scan result is returned,
+ * and a Netlink message is received.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+package ohos.hdi.wlan.hostapd.v1_0;
+
+import ohos.hdi.wlan.hostapd.v1_0.HostapdTypes;
+
+/**
+ * @brief Interface for hostapd callback.
+ *
+ * The callback is invoked to continue the subsequent processing when the hostapd restarts, hotspot scan ends,
+ * or a Netlink message is received.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+[callback] interface IHostapdCallback {
+    /**
+     * @brief Wi-Fi Hal calls back the STA to join the AP.
+     *
+     * @param staJoinParm Indicates the sta join content.
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventStaJoin([in] struct HdiApCbParm apCbParm, [in] String ifName);
+
+    /**
+     * @brief Wi-Fi Hal callback AP status.
+     *
+     * @param apStateParm Indicates the ap state content.
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventApState([in] struct HdiApCbParm apCbParm, [in] String ifName);
+
+    /**
+    * Used to handle Hostapd callback parameters
+    *
+    * @param notifyParam Indicates the paramerter of Hostapd.
+    * @param ifName Indicates the NIC name.
+    *
+    * @since 4.1
+    * @version 1.0
+    */
+    OnEventHostApdNotify([in] String notifyParam, [in] String ifName);
+}

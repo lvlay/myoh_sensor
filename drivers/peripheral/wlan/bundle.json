@@ -1,0 +1,79 @@
+{
+  "name": "@ohos/drivers_peripheral_wlan",
+  "description": "wlan device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/wlan"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_wlan",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_wlan_feature_enable_HDF_NL80211",
+      "drivers_peripheral_wlan_feature_enable_HDF_UT",
+      "drivers_peripheral_wlan_feature_enable_HDF_WLAN_EXTEND_VDI"
+    ],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "660KB",
+    "ram": "7600KB",
+    "deps": {
+      "components": [
+        "hdf_core",
+        "hilog",
+        "c_utils",
+        "drivers_interface_wlan",
+        "ipc",
+        "hilog_lite",
+        "wpa_supplicant",
+        "init"
+      ],
+      "third_party": [
+        "libnl"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/wlan:wlan_entry",
+        "//drivers/peripheral/wlan/wpa:wpa_entry",
+        "//drivers/peripheral/wlan/hostapd:hostapd_entry",
+        "//drivers/peripheral/wlan/chip:wlan_chip_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/wlan/test:hdf_test_wlan"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/wlan/client:wifi_driver_client",
+          "header": {
+            "header_files": [
+              "wifi_driver_client.h"
+            ],
+            "header_base": "//drivers/peripheral/wlan/client/include"
+          }
+        },
+        {
+          "name": "//drivers/peripheral/wlan/wpa/client:wpa_hdi_client",
+          "header": {
+            "header_files": [
+              "wpa_client.h"
+            ],
+            "header_base": "//drivers/peripheral/wlan/wpa/client/include"
+          }
+        },
+        {
+          "name": "//drivers/peripheral/wlan/hostapd/client:hostapd_hdi_client",
+          "header": {
+            "header_files": [
+              "hostapd_client.h"
+            ],
+          "header_base": "//drivers/peripheral/wlan/hostapd/client/include"
+          }
+        }
+      ]
+    }
+  }
+}

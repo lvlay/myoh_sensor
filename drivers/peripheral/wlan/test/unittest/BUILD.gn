@@ -1,0 +1,234 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+TEST_ROOT_DIR = "../.."
+HDF_CORE_DIR = "../../../.."
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/test.gni")
+} else {
+  import("//build/test.gni")
+  import("$HDF_CORE_DIR/hdf_core/adapter/uhdf2/uhdf.gni")
+}
+
+configFlag = [
+  "-Wall",
+  "-Wextra",
+  "-Werror",
+  "-fsigned-char",
+  "-fno-common",
+  "-fno-strict-aliasing",
+]
+
+if (defined(ohos_lite)) {
+  unittest("hdf_common_wifi") {
+    output_extension = "bin"
+    output_dir = "$root_out_dir/test/unittest/hdf"
+    include_dirs = [
+      "//third_party/bounds_checking_function/include",
+      "$HDF_CORE_DIR/hdf_core/framework/include/platform",
+      "$HDF_CORE_DIR/hdf_core/framework/include/core",
+      "$HDF_CORE_DIR/hdf_core/framework/include",
+      "$HDF_CORE_DIR/hdf_core/framework/test/unittest/include",
+    ]
+
+    sources = [
+      "common/hdf_flow_control_test.cpp",
+      "common/hdf_message_test.cpp",
+      "common/hdf_module_test.cpp",
+      "common/hdf_net_buff_test.cpp",
+      "common/hdf_net_device_test.cpp",
+    ]
+    public_deps = [
+      "$HDF_CORE_DIR/hdf_core/adapter/build/test_common:libhdf_test_common",
+      "$HDF_CORE_DIR/hdf_core/adapter/uhdf/manager:hdf_core",
+      "$HDF_CORE_DIR/hdf_core/adapter/uhdf/platform:hdf_platform",
+      "//third_party/bounds_checking_function:libsec_shared",
+    ]
+    external_deps = [ "hilog_lite:hilog_shared" ]
+
+    cflags = configFlag
+  }
+
+  unittest("hdf_hal_wifi") {
+    output_extension = "bin"
+    output_dir = "$root_out_dir/test/unittest/hdf"
+    include_dirs = [
+      "//third_party/bounds_checking_function/include",
+      "$TEST_ROOT_DIR/client/include",
+      "$TEST_ROOT_DIR/hal/include",
+      "$TEST_ROOT_DIR/interfaces/include",
+    ]
+
+    sources = [ "hal/wifi_hal_test.cpp" ]
+    public_deps = [
+      "$TEST_ROOT_DIR/client:wifi_driver_client",
+      "$TEST_ROOT_DIR/hal:wifi_hal",
+      "//third_party/bounds_checking_function:libsec_shared",
+    ]
+    external_deps = [ "hdf_core:hdf_posix_osal" ]
+
+    cflags = configFlag
+  }
+
+  unittest("hdf_client_wifi") {
+    output_extension = "bin"
+    output_dir = "$root_out_dir/test/unittest/hdf"
+    include_dirs = [
+      "//third_party/bounds_checking_function/include",
+      "$TEST_ROOT_DIR/client/include",
+      "$TEST_ROOT_DIR/hal/include",
+      "$TEST_ROOT_DIR/interfaces/include",
+    ]
+
+    sources = [ "client/hdf_client_test.cpp" ]
+    public_deps = [
+      "$TEST_ROOT_DIR/client:wifi_driver_client",
+      "//third_party/bounds_checking_function:libsec_shared",
+    ]
+    external_deps = [ "hdf_core:hdf_posix_osal" ]
+
+    cflags = configFlag
+  }
+} else {
+  module_output_path = "drivers_peripheral_wlan/wlan"
+  ohos_unittest("hdf_common_wifi") {
+    module_out_path = module_output_path
+    include_dirs = [
+      "$TEST_ROOT_DIR/client/include",
+      "$TEST_ROOT_DIR/hal/include",
+      "$TEST_ROOT_DIR/interfaces/include",
+    ]
+    sources = [
+      "./common/hdf_flow_control_test.cpp",
+      "./common/hdf_message_test.cpp",
+      "./common/hdf_module_test.cpp",
+      "./common/hdf_net_buff_test.cpp",
+      "./common/hdf_net_device_test.cpp",
+    ]
+    resource_config_file =
+        "$HDF_CORE_DIR/hdf_core/adapter/uhdf2/test/resource/wlan/ohos_test.xml"
+
+    cflags = configFlag
+    deps = [
+      "$HDF_CORE_DIR/hdf_core/adapter/build/test_common:libhdf_test_common",
+    ]
+    if (is_standard_system) {
+      external_deps = [
+        "c_utils:utils",
+        "hdf_core:libhdf_host",
+        "hdf_core:libhdf_utils",
+        "hilog:libhilog",
+      ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+  }
+
+  ohos_unittest("hdf_hal_wifi") {
+    module_out_path = module_output_path
+    include_dirs = [
+      "$TEST_ROOT_DIR/client/include",
+      "$TEST_ROOT_DIR/hal/include",
+      "$TEST_ROOT_DIR/interfaces/include",
+    ]
+    sources = [ "./hal/wifi_hal_test.cpp" ]
+    resource_config_file =
+        "$HDF_CORE_DIR/hdf_core/adapter/uhdf2/test/resource/wlan/ohos_test.xml"
+
+    cflags = configFlag
+    deps = [
+      "$TEST_ROOT_DIR/client:wifi_driver_client",
+      "$TEST_ROOT_DIR/hal:wifi_hal",
+    ]
+    if (is_standard_system) {
+      external_deps = [
+        "c_utils:utils",
+        "hdf_core:libhdf_utils",
+        "hilog:libhilog",
+      ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+  }
+
+  ohos_unittest("hdf_client_wifi") {
+    module_out_path = module_output_path
+    include_dirs = [
+      "$TEST_ROOT_DIR/client/include",
+      "$TEST_ROOT_DIR/hostapd/client/include",
+      "$TEST_ROOT_DIR/hal/include",
+      "$TEST_ROOT_DIR/interfaces/include",
+      "$TEST_ROOT_DIR/wpa/client/include",
+    ]
+    defines = [ "OHOS_ARCH_LITE" ]
+    sources = [
+      "$TEST_ROOT_DIR/client/src/sbuf/sbuf_wpa_cmd_adapter.c",
+      "$TEST_ROOT_DIR/hostapd/client/src/hostapd_client.c",
+      "$TEST_ROOT_DIR/test/unittest/client/hdf_client_test.cpp",
+      "$TEST_ROOT_DIR/wpa/client/src/wpa_client.c",
+    ]
+
+    resource_config_file =
+        "$HDF_CORE_DIR/hdf_core/adapter/uhdf2/test/resource/wlan/ohos_test.xml"
+
+    cflags = configFlag
+    deps = [
+      "$TEST_ROOT_DIR/client:wifi_driver_client",
+      "$TEST_ROOT_DIR/hostapd/client:hostapd_hdi_client",
+      "$TEST_ROOT_DIR/wpa/client:wpa_hdi_client",
+    ]
+    if (is_standard_system) {
+      external_deps = [
+        "c_utils:utils",
+        "hdf_core:libhdf_utils",
+        "hilog:libhilog",
+      ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+  }
+
+  ohos_unittest("hdf_chip_wifi") {
+    module_out_path = module_output_path
+    include_dirs = [ "$TEST_ROOT_DIR/chip/hdi_service" ]
+    sources = [
+      "chip/interface_tool_test.cpp",
+      "chip/wifi_ap_iface_test.cpp",
+      "chip/wifi_chip_modes_test.cpp",
+      "chip/wifi_chip_test.cpp",
+      "chip/wifi_hal_fn.cpp",
+      "chip/wifi_p2p_iface_test.cpp",
+      "chip/wifi_sta_iface_test.cpp",
+      "chip/wifi_test.cpp",
+      "chip/wifi_vendor_hal_list_test.cpp",
+      "chip/wifi_vendor_hal_test.cpp",
+    ]
+
+    cflags = configFlag
+    deps = [ "$TEST_ROOT_DIR/chip/hdi_service:libchip_controller_chip_interface_service_1.0" ]
+    if (is_standard_system) {
+      external_deps = [
+        "c_utils:utils",
+        "drivers_interface_wlan:chip_idl_headers",
+        "hdf_core:libhdf_host",
+        "hdf_core:libhdf_utils",
+        "hilog:libhilog",
+        "init:libbegetutil",
+        "ipc:ipc_single",
+      ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+    "name": "@ohos/drivers_interface_face_auth",
+    "description": "face auth device driver",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/face_auth"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_face_auth",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "features": ["drivers_interface_face_auth_enabled"],
+      "rom": "1000KB",
+      "ram": "1000KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils",
+          "graphic_surface",
+          "drivers_interface_camera"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/face_auth/v2_0:face_auth_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/face_auth/v2_0:libface_auth_proxy_2.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/face_auth"
+            }
+          },
+          {
+            "name": "//drivers/interface/face_auth/v2_0:libface_auth_stub_2.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/face_auth"
+            }
+          },
+          {
+            "name": "//drivers/interface/face_auth/v2_0:face_auth_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/face_auth"
+            }
+          }
+        ]
+      }
+    }
+  }

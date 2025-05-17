@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfPinAuth
+ * @{
+ *
+ * @brief Provides APIs for the pin auth driver.
+ *
+ * The pin auth driver provides a unified interface for the pin auth service to access the pin auth driver.
+ * After obtaining the pin auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the pin auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IExecutorCallback.idl
+ *
+ * @brief Defines the callback for an async API, which can be used to report operation results or
+ * get information of the async API.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.pin_auth.v2_0;
+
+import ohos.hdi.pin_auth.v2_0.PinAuthTypes;
+
+/**
+ * @brief Defines the callback for an async API, which can be used to report operation results or
+ * get information of the async API. See {@link IExecutor}.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+[callback] interface IExecutorCallback {
+    /**
+     * @brief Defines the function for reporting operation results.
+     *
+     * @param result Indicates the result code.
+     * @param extraInfo Indicates extra information to report.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    OnResult([in] int result, [in] unsigned char[] extraInfo);
+    /**
+     * @brief Defines the function for reporting information in process. 
+     *
+     * @param tip Indicates tip code. See {@link FaceTipsCode}.
+     * @param extraInfo Indicates extra information to report.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    OnTip([in] int tip, [in] unsigned char[] extraInfo);
+    /**
+     * @brief Defines the function for getting pin data.
+     *
+     * @param algoParameter is the parameter of the algorithm.
+     * @param authSubType Indicates the pin sub type.
+     * @param algoVersion is the version of the algorithm.
+     * @param challenge is challenge.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     *
+     * @since 3.2
+     * @version 2.0
+     */
+    OnGetData([in] unsigned char[] algoParameter, [in] unsigned long authSubType, [in] unsigned int algoVersion,
+        [in] unsigned char[] challenge);
+    /**
+     * @brief Defines the function for reporting message.
+     *
+     * @param destRole is the role of destination.
+     * @param msg is the message content.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    OnMessage([in] int destRole, [in] unsigned char[] msg);
+}
+/** @} */

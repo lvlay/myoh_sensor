@@ -1,0 +1,353 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiInput
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer input service.
+ *
+ * Using the APIs provided by the Input module, input service developers can implement the following functions:
+ * enabling or disabling input devices, obtaining input events, querying device information, registering callback
+ * functions, and managing the feature status.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IInputInterfaces.idl
+ *
+ * @brief Provides APIs for the input service to perform the following: enabling and disabling input devices,
+ * obtaining input events, querying device information, registering callback functions, and managing the feature status.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the Input module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.input.v1_0;
+
+import ohos.hdi.input.v1_0.IInputCallback;
+import ohos.hdi.input.v1_0.InputTypes;
+
+/**
+ * @brief Provides APIs for the upper-layer input service.
+ *
+ * Using the APIs provided by the Input module, input service developers can implement the following functions:
+ * enabling or disabling input devices, obtaining input events, querying device information, registering callback
+ * functions, and managing the feature status.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+interface IInputInterfaces {
+    /**
+     * @brief Scans all online input devices.
+     *
+     * @param staArr Array for storing input device scanning information, including the device index and
+     * device type. For details, see {@link DevDesc}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ScanInputDevice([out] struct DevDesc[] staArr);
+
+    /**
+     * @brief Opens a specified input device file. 
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    OpenInputDevice([in] unsigned int devIndex);
+
+    /**
+     * @brief Closes a specified input device file. 
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    CloseInputDevice([in] unsigned int devIndex);
+
+    /**
+     * @brief Obtains information about the input device indicated by <b>devIndex</b>.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param devInfo Input device information. For details, see {@link DeviceInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetInputDevice([in] unsigned int devIndex, [out] struct DeviceInfo devInfo);
+
+    /**
+     * @brief Obtains information about all input devices in the device list.
+     *
+     * @param devNum Total number of registered input devices.
+     * @param devList Information about all devices in the device list. For details, see {@link DeviceInfo}.
+     * @param size Number of elements in the <b>devList</b> array.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetInputDeviceList([out] unsigned int devNum, [out] struct DeviceInfo[] devList, [in]unsigned int size);
+
+    /**
+     * @brief Sets the power status of the input device indicated by <b>devIndex</b>.
+     *
+     * When the OS enters the sleep mode or wakes up from the sleep mode, the input service or the power management
+     * module can set the power status of the input device, so that the driver IC of the device enters the
+     * corresponding state.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param status Power status. For example, <b>0</b> indicates the wakeup state, <b>1</b> indicates the suspend
+     * state, <b>2</b> indicates the low power state, and <b>3</b> indicates an unknown power state.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetPowerStatus([in] unsigned int devIndex, [in] unsigned int status);
+
+    /**
+     * @brief Obtains the power status of the input device indicated by <b>devIndex</b>.
+     *
+     * When the OS enters the sleep mode or wakes up from the sleep mode, the input service or the power management
+     * module can obtain the power status of the input device.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param status Power status. For example, <b>0</b> indicates the wakeup state, <b>1</b> indicates the suspend
+     * state, <b>2</b> indicates the low power state, and <b>3</b> indicates an unknown power state.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetPowerStatus([in] unsigned int devIndex, [out] unsigned int status);
+
+    /**
+     * @brief Obtains the type of the input device indicated by <b>devIndex</b>.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param deviceType Device type. For example, <b>0</b> indicates a touchscreen, <b>1</b> indicates a physical key,
+     * <b>2</b> indicates a keyboard, and <b>3</b> indicates a mouse.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetDeviceType([in] unsigned int devIndex, [out] unsigned int deviceType);
+
+    /**
+     * @brief Obtains chip information of the input device indicated by <b>devIndex</b>.
+     *
+     * A product is usually equipped with modules and driver ICs provided by multiple vendors. The input service can
+     * call this function to obtain the chip information if needed.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param chipInfo Chip information.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2 
+     * @version 1.0
+     */
+    GetChipInfo([in] unsigned int devIndex, [out] String chipInfo);
+
+    /**
+     * @brief Obtains the module vendor name of the input device indicated by <b>devIndex</b>.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param vendorName Module vendor name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetVendorName([in] unsigned int devIndex, [out] String vendorName);
+
+    /**
+     * @brief Obtains the driver chip name of the input device indicated by <b>devIndex</b>.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param chipName Driver chip name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetChipName([in] unsigned int devIndex, [out] String chipName);
+
+    /**
+     * @brief Sets the gesture mode of the input device indicated by <b>devIndex</b>.
+     *
+     * The input service can use this function to enable or disable the gesture mode
+     * by setting <b>EnableBit</b> of the gesture mode.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param gestureMode Gesture mode.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetGestureMode([in] unsigned int devIndex, [in] unsigned int gestureMode);
+
+    /**
+     * @brief Conducts a capacitance self-test.
+     *
+     * The capacitance self-test items are defined by the component vendor,
+     * such as the tests on the RawData, short circuit, open circuit, interference, and row/column difference.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param testType Capacitance test type. For example, <b>0</b> indicates the basic capacitance test,
+     * <b>1</b> indicates the full capacitance self-check test, <b>2</b> indicates the MMI capacitance test,
+     * and <b>3</b> indicates the aging capacitance test.
+     * @param result Capacitance test result. The value is <b>SUCC</b> for a successful operation and is an error code
+     * for a failed operation.
+     * @param length Length of the capacitance test result.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RunCapacitanceTest([in] unsigned int devIndex, [in] unsigned int testType, [out] String result, [in] unsigned int length);
+
+    /**
+     * @brief Executes the extra command.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param cmd Extra command data packet, including the command codes and parameters.
+     * For details, see {@link ExtraCmd}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RunExtraCommand([in] unsigned int devIndex, [in] struct ExtraCmd cmd);
+
+    /**
+     * @brief Registers an input event callback to the HDI for the input device indicated by <b>devIndex</b>.
+     *
+     * After this callback is successfully registered, the driver can report the input event data to the input service
+     * through this callback.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     * @param eventPkgCallback Input event callback.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RegisterReportCallback([in] unsigned int devIndex, [in] IInputCallback eventPkgCallback);
+
+    /**
+     * @brief Unregisters the input event callback of the input device indicated by <b>devIndex</b>.
+     *
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    UnregisterReportCallback([in] unsigned int devIndex);
+
+    /**
+     * @brief Registers a hot plug callback to the HDI for input devices.
+     *
+     * All input devices can use this callback to report hot plug events.
+     *
+     * @param hotPlugCallback Hot plug event callback.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RegisterHotPlugCallback([in] IInputCallback hotPlugCallback);
+
+    /**
+     * @brief Unregisters the hot plug callback of input devices.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    UnregisterHotPlugCallback();
+}
+/** @} */

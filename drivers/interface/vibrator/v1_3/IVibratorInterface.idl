@@ -1,0 +1,74 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Vibrator
+ * @{
+ *
+ * @brief Provides a driver for upper-layer vibrator services.
+ *
+ * After obtaining a driver object or agent, a vibrator service get vibrator ability or
+ * set the vibrator effect using the functions provided by the driver object or agent.
+ *
+ * @since 5.0
+ * @version 1.3
+ */
+
+/**
+ * @file IVibratorInterface.idl
+ *
+ * @brief Declares common APIs in the vibrator module. The APIs canObtains information about all the vibrator
+ * that support setting intensity and Start the vibrator according to the incoming vibration effect.
+ *
+ * @since 5.0
+ * @version 1.3
+ */
+
+package ohos.hdi.vibrator.v1_3;
+
+import ohos.hdi.vibrator.v1_3.VibratorTypes;
+import ohos.hdi.vibrator.v1_2.IVibratorInterface;
+
+interface IVibratorInterface extends ohos.hdi.vibrator.v1_2.IVibratorInterface{
+    /**
+     * @brief Controls the vibrator to perform a periodic vibration with the preset effect.
+     *
+     * One-shot vibration is mutually exclusive with periodic vibration. Before using periodic vibration,
+     * exit one-shot vibration.
+     *
+     * @param effectType Indicates the pointer to the preset effect type. It is recommended that the
+     * maximum length be 64 bytes.
+     * @param intensity Indicates amplitude intensity, ranging from 1 to 100.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.3
+     */
+    StartByIntensity([in] String effectType, [in] unsigned short intensity);
+
+    /**
+     * @brief Obtains the vibration wave information.
+     *
+     * @param vibratorId Indicates the vibration index.
+     * @param info Indicates the information.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns negative value if the get failed.
+     *
+     * @since 5.0
+     * @version 1.3
+     */
+    GetAllWaveInfo([in] int vibratorId, [out] struct HdfWaveInformation[] info);
+}

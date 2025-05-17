@@ -1,0 +1,49 @@
+ 
+  {
+    "name": "@ohos/drivers_peripheral_myled",
+    "description": "myled device driver",
+    "version": "4.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/peripheral/myled"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_peripheral_myled",
+      "subsystem": "hdf",
+      "features": [
+      ],
+      "syscap": [],
+      "adapted_system_type": ["standard"],
+      "rom": "675KB",
+      "ram": "7400KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils",
+          "drivers_interface_myled",
+          "hitrace",
+          "hilog_lite"
+        ],
+        "third_party": [
+          "bounds_checking_function"
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/peripheral/myled:myled_entry"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          
+        ]
+      }
+    }
+  }
+  
+  

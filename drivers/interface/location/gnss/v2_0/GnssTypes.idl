@@ -1,0 +1,672 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiGnss
+ * @{
+ *
+ * @brief Provides unified APIs for GNSS services to access GNSS drivers.
+ *
+ * A GNSS service can obtain a GNSS driver object or agent and then call APIs provided by this object or agent to
+ * access GNSS devices, thereby Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, obtain the positioning result, obtain the nmea,
+ * obtain the satellite status information, and obtain the cache location information.
+ *
+ * @since 5.0
+ */
+
+/*
+ * @file GnssTypes.idl
+ *
+ * @brief Defines the data structure used by the GNSS module.
+ *
+ * @since 5.0
+ * @version 2.0
+ */
+
+package ohos.hdi.location.gnss.v2_0;
+
+/*
+ * @brief Defines the GNSS location validity flag.
+ *
+ * @since 5.0
+ */
+enum GnssLocationValidity {
+    GNSS_LOCATION_LAT_VALID = 1,
+    GNSS_LOCATION_LONG_VALID = 2,
+    GNSS_LOCATION_ALTITUDE_VALID = 4,
+    GNSS_LOCATION_SPEED_VALID = 8,
+    GNSS_LOCATION_BEARING_VALID = 16,
+    GNSS_LOCATION_HORIZONTAL_ACCURACY_VALID = 32,
+    GNSS_LOCATION_VERTICAL_ACCURACY_VALID = 64,
+    GNSS_LOCATION_SPEED_ACCURACY_VALID = 128,
+    GNSS_LOCATION_BEARING_ACCURACY_VALID = 256,
+    GNSS_LOCATION_TIME_VALID = 512,
+    GNSS_LOCATION_TIME_SINCE_BOOT_VALID = 1024,
+    GNSS_LOCATION_TIME_UNCERTAINTY_VALID = 2048,
+};
+
+/*
+ * @brief Defines the GNSS working mode.
+ *
+ * Defines the enumerated values of the GNSS working mode.
+ *
+ * @since 5.0
+ */
+enum GnssWorkingMode {
+    /* GNSS standalone (no assistance) */
+    GNSS_WORKING_MODE_STANDALONE = 1,
+
+    /* AGNSS MS-Based mode */
+    GNSS_WORKING_MODE_MS_BASED = 2,
+
+    /* AGPS MS-Assisted mode */
+    GNSS_WORKING_MODE_MS_ASSISTED = 3
+};
+
+/*
+ * @brief Defines the GNSS startup type.
+ *
+ * Defines the enumerated value of the GNSS startup type, which is used to distinguish between common GNSS positioning
+ * and GNSS caching(The bottom-layer buffer location is not reported, location is reported only after the upper-layer
+ * request or the bottom-layer FIFO is full).
+ *
+ * @since 5.0
+ */
+enum GnssStartType {
+    GNSS_START_TYPE_NORMAL = 1,
+    GNSS_START_TYPE_GNSS_CACHE = 2,
+};
+
+/*
+ * @brief Defines the GNSS reference information type.
+ *
+ * The reference information includes the reference time, reference location, and best location.
+ *
+ * @since 5.0
+ */
+enum GnssRefInfoType {
+    GNSS_REF_INFO_TIME = 1,
+    GNSS_REF_INFO_LOCATION = 2,
+    GNSS_REF_INFO_BEST_LOCATION = 3,
+    GNSS_REF_INFO_GNSS_LOCATION_EMERGENCY = 4,
+    GNSS_REF_INFO_BEST_LOCATION_EMERGENCY = 5,
+};
+
+/*
+ * @brief Defines the type of auxiliary data to be deleted.
+ *
+ * @since 5.0
+ */
+enum GnssAuxiliaryDataType {
+    GNSS_AUXILIARY_DATA_EPHEMERIS = 1,
+    GNSS_AUXILIARY_DATA_ALMANAC = 2,
+    GNSS_AUXILIARY_DATA_POSITION = 4,
+    GNSS_AUXILIARY_DATA_TIME = 8,
+    GNSS_AUXILIARY_DATA_IONO = 16,
+    GNSS_AUXILIARY_DATA_UTC = 32,
+    GNSS_AUXILIARY_DATA_HEALTH = 64,
+    GNSS_AUXILIARY_DATA_SVDIR = 128,
+    GNSS_AUXILIARY_DATA_SVSTEER = 256,
+    GNSS_AUXILIARY_DATA_SADATA = 512,
+    GNSS_AUXILIARY_DATA_RTI = 1024,
+    GNSS_AUXILIARY_DATA_CELLDB_INFO = 2048,
+    GNSS_AUXILIARY_DATA_ALL = 65535
+};
+
+/*
+ * @brief Defines the enumerated values of the working status of the GNSS module.
+ *
+ * @since 5.0
+ */
+enum GnssWorkingStatus {
+    /* GNSS status unknown. */
+    GNSS_WORKING_STATUS_NONE = 0,
+
+    /* Navigation started. */
+    GNSS_WORKING_STATUS_SESSION_BEGIN = 1,
+
+    /* Navigation stoped. */
+    GNSS_WORKING_STATUS_SESSION_END = 2,
+
+    /* The GNSS chip is started, but the navigation is not started. */
+    GNSS_WORKING_STATUS_ENGINE_ON = 3,
+
+    /* The GNSS chip is powered off. */
+    GNSS_WORKING_STATUS_ENGINE_OFF = 4
+};
+
+/*
+ * @brief Defines the GNSS capability.
+ *
+ * @since 5.0
+ */
+enum GnssCapabilities {
+    /* GNSS supports MS-Based AGNSS mode */
+    GNSS_CAP_SUPPORT_MSB = 1,
+
+    /* GNSS supports MS-Assisted AGNSS mode */
+    GNSS_CAP_SUPPORT_MSA = 2,
+
+    /* GNSS supports Geofencing  */
+    GNSS_CAP_SUPPORT_GEOFENCING = 4,
+
+    /* GNSS supports Measurements. */
+    GNSS_CAP_SUPPORT_MEASUREMENTS = 8,
+
+    /* GNSS supports Navigation Messages */
+    GNSS_CAP_SUPPORT_NAV_MESSAGES = 16,
+
+    /* GNSS supports location caching */
+    GNSS_CAP_SUPPORT_GNSS_CACHE = 32,
+};
+
+/*
+ * @brief Defines the GNSS satellite type.
+ *
+ * @since 5.0
+ */
+enum ConstellationCategory {
+    CONSTELLATION_CATEGORY_UNKNOWN = 0,
+    CONSTELLATION_CATEGORY_GPS = 1,
+    CONSTELLATION_CATEGORY_SBAS = 2,
+    CONSTELLATION_CATEGORY_GLONASS = 3,
+    CONSTELLATION_CATEGORY_QZSS = 4,
+    CONSTELLATION_CATEGORY_BEIDOU = 5,
+    CONSTELLATION_CATEGORY_GALILEO = 6,
+    CONSTELLATION_CATEGORY_IRNSS = 7,
+    CONSTELLATION_CATEGORY_MAXIMUM = 8,
+};
+
+/*
+ * @brief Indicates the satellite additional information.
+ *
+ * @since 5.0
+ */
+enum SatelliteAdditionalInfo {
+    SATELLITES_ADDITIONAL_INFO_NULL = 0,
+    SATELLITES_ADDITIONAL_INFO_EPHEMERIS_DATA_EXIST = 1,
+    SATELLITES_ADDITIONAL_INFO_ALMANAC_DATA_EXIST = 2,
+    SATELLITES_ADDITIONAL_INFO_USED_IN_FIX = 4,
+    SATELLITES_ADDITIONAL_INFO_CARRIER_FREQUENCY_EXIST = 8,
+};
+
+/*
+ * @brief Defines the type of GNSS NI request.
+ *
+ * @since 5.0
+ */
+enum GnssNiRequestCategory {
+    GNSS_NI_REQUEST_CATEGORY_EMERGENCY_SUPL = 1,
+    GNSS_NI_REQUEST_CATEGORY_VOICE = 2,
+    GNSS_NI_REQUEST_CATEGORY_UMTS_CONTROL_PLANE = 3,
+    GNSS_NI_REQUEST_CATEGORY_UMTS_SUPL = 4,
+};
+
+/*
+ * @brief Defines the GNSS NI response command.
+ *
+ * @since 5.0
+ */
+enum GnssNiResponseCmd {
+    GNSS_NI_RESPONSE_CMD_ACCEPT = 1,
+    GNSS_NI_RESPONSE_CMD_NO_RESPONSE = 2,
+    GNSS_NI_RESPONSE_CMD_REJECT = 3,
+};
+
+/*
+ * @brief Defines the type of GNSS NI notification.
+ *
+ * @since 5.0
+ */
+enum GnssNiNotificationCategory {
+    GNSS_NI_NOTIFICATION_REQUIRE_NOTIFY = 1,
+    GNSS_NI_NOTIFICATION_REQUIRE_VERIFY = 2,
+    GNSS_NI_NOTIFICATION_REQUIRE_PRIVACY_OVERRIDE = 4,
+};
+
+/*
+ * @brief Defines the encoding format of GNSS NI request.
+ *
+ * @since 5.0
+ */
+enum GnssNiRequestEncodingFormat {
+    GNSS_NI_ENCODING_FORMAT_NULL = 1,
+    GNSS_NI_ENCODING_FORMAT_SUPL_GSM_DEFAULT = 2,
+    GNSS_NI_ENCODING_FORMAT_SUPL_UCS2 = 3,
+    GNSS_NI_ENCODING_FORMAT_SUPL_UTF8 = 4,
+};
+
+/*
+ * @brief Defines the satellite status information structure reported by the GNSS chip.
+ *
+ * @since 5.0
+ */
+struct SatelliteStatusInfo {
+    unsigned int satellitesNumber;
+
+    /* Satellite ID number for the satellite. */
+    short[] satelliteIds;
+
+    /* Defines the constellation type of the given satellite. */
+    enum ConstellationCategory[] constellation;
+
+    /* Carrier-to-noise density in dB-Hz. */
+    float[] carrierToNoiseDensitys;
+
+    /* Elevation of SV in degrees. */
+    float[] elevation;
+
+    /* Azimuth of SV in degrees. */
+    float[] azimuths;
+
+    /* Carrier frequency of the signal tracked. */
+    float[] carrierFrequencies;
+
+    unsigned int[] additionalInfo;
+};
+
+/*
+ * @brief Defines basic GNSS configuration information.
+ *
+ * @since 5.0
+ */
+struct GnssBasicConfig {
+    /* Minimus interval between locations in millisecond */
+    unsigned int minInterval;
+
+    enum GnssWorkingMode gnssMode;
+};
+
+/*
+ * @brief Defines the configuration information of the GNSS cache function.
+ *
+ * @since 5.0
+ */
+struct GnssCachingConfig {
+    /* Minimus interval between locations in millisecond */
+    unsigned int interval;
+
+    /* If the value is true, the cached locations are reported
+     * and the AP is woken up after the FIFO is full.
+     */
+    boolean fifoFullNotify;
+};
+
+/*
+ * @brief Defines the GNSS configuration information structure, including common GNSS configuration
+ * parameters and GNSS cache configuration parameters.
+ *
+ * @since 5.0
+ */
+struct GnssConfigPara {
+    struct GnssBasicConfig gnssBasic;
+    struct GnssCachingConfig gnssCaching;
+};
+
+/*
+ * @brief Defines the GNSS reference time.
+ *
+ * @since 5.0
+ */
+struct GnssRefTime {
+    /* UTC time received from the NTP server, Milliseconds since January 1, 1970. */
+    long time;
+
+    /* Time since the system was booted, and include deep sleep. The unit is milliseconds. */
+    long elapsedRealtime;
+
+    /* This is uncertainty of time. The unit is milliseconds. */
+    long uncertaintyOfTime;
+};
+
+/*
+ * @brief Defines the GNSS positioning result structure.
+ *
+ * @since 5.0
+ */
+struct LocationInfo {
+    unsigned int fieldValidity;
+
+    double latitude;
+
+    double longitude;
+
+    /* Altitude in meters. */
+    double altitude;
+
+    /* Speed in meters per second. */
+    float speed;
+
+    /* Heading in degrees. */
+    float bearing;
+
+    /* Horizontal position accuracy in meters. */
+    float horizontalAccuracy;
+
+    /* Vertical position accuracy in meters. */
+    float verticalAccuracy;
+
+    /* Speed accuracy in meter per seconds. */
+    float speedAccuracy;
+
+    /* Bearing accuracy in degrees. */
+    float bearingAccuracy;
+
+    /* Timestamp for the location fix. Number of milliseconds since January 1, 1970. */
+    long timeForFix;
+
+    /* Time since the system was booted, and include deep sleep. The unit is nanosecond. */
+    long timeSinceBoot;
+
+    /* Time uncertainty in nanosecond. */
+    long timeUncertainty;
+};
+
+/*
+ * @brief Defines the GNSS reference information structure, including the reference time and reference location.
+ *
+ * @since 5.0
+ */
+struct GnssRefInfo {
+    enum GnssRefInfoType type;
+    struct GnssRefTime time;
+    struct LocationInfo gnssLocation;
+    struct LocationInfo bestLocation;
+};
+
+
+/*
+ * @brief Defines the GNSS NI notification request structure.
+ *
+ * @since 5.0
+ */
+struct GnssNiNotificationRequest {
+    /* An ID of GNSS NI notifications. */
+    short gnssNiNotificationId;
+
+    /* Category of GNSS NI Request. */
+    enum GnssNiRequestCategory gnssNiRequestCategory;
+
+    /* Category of notification. */
+    int notificationCategory;
+
+    /* Timeout to wait for user response. The unit is seconds. */
+    int requestTimeout;
+
+    /* Default response command when timeout. */
+    int defaultResponseCmd;
+
+    /* Supplicant information. */
+    String supplicantInfo;
+
+    /* Notification message text. */
+    String notificationText;
+
+    /* Supplicant info encoding format. */
+    enum GnssNiRequestEncodingFormat supplicantInfoEncoding;
+
+    /* Notification text encoding format. */
+    enum GnssNiRequestEncodingFormat notificationTextEncoding;
+};
+
+/*
+ * @brief Defines the GNSS measurement information of single satellite.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct GnssMeasurement {
+    /*
+     * Identifies which field is valid.
+     * See GnssMeasurementValidity for the definition of fieldValidFlags.
+     */
+    unsigned int fieldValidflags;
+
+    /*
+     * Satellite ID number.
+     * This is a mandatory value.
+     */
+    short satelliteId;
+
+    /*
+     * Defines the constellation category.
+     * See ConstellationCategory for the definition of constellationCategory.
+     */
+    short constellationCategory;
+
+    /*
+     * Measurement generation time offset in nanoseconds.
+     * This is a mandatory value.
+     * The formula for calculating the measurement time is as follows:
+     *     measurement time = GnssClockInfo::receiverClockTime + timeOffset
+     */
+    double timeOffset;
+
+    /*
+     * Satellite sync state. See SatelliteSyncState for the definition of syncState.
+     * This is a mandatory value.
+     */
+    unsigned int syncState;
+
+    /*
+     * The received satellite Time-of-Week in nanoseconds.
+     */
+    long receivedSatelliteTime;
+
+    /*
+     * Uncertainty of the received satellite Time-of-Week in nanoseconds.
+     */
+    long receivedSatelliteTimeUncertainty;
+
+    /*
+     * Carrier-to-noise density. The unit is dB-Hz.
+     * This is a mandatory value.
+     */
+    double cn0;
+
+    /*
+     * Pseudorange rate. The unit is m/s.
+     */
+    double pseudorangeRate;
+
+    /*
+     * Uncertainty of the pseudorangeRate. The unit is m/s.
+     * This is a mandatory value.
+     */
+    double pseudorangeRateUncertainty;
+
+    /*
+     * Accumulated delta range's state.
+     * See GnssAccumulatedDeltaRangeFlag for the definition.
+     * This is a mandatory value.
+     */
+    unsigned int accumulatedDeltaRangeFlag;
+
+    /*
+     * Accumulated delta range since the last channel reset. The unit is meters.
+     */
+    double accumulatedDeltaRange;
+
+    /*
+     * Uncertainty of the accumulated delta range. The unit is meters.
+     */
+    double accumulatedDeltaRangeUncertainty;
+
+    /*
+     * Carrier frequency at which codes and messages are modulated. The unit is Hz.
+     */
+    float carrierFrequency;
+
+    /*
+     * The count of carrier cycles between satellite and receiver.
+     */
+    long carrierCyclesCount;
+
+    /*
+     * Carrier phase, in the range [0.0, 1.0].
+     */
+    double carrierPhase;
+
+    /*
+     * Uncertainty of the carrierPhase.
+     */
+    double carrierPhaseUncertainty;
+
+    /*
+     * Indicates the 'multipath' flag.
+     * See GnssMultipathFlag for the definition of multipathFlag.
+     */
+    unsigned int multipathFlag;
+
+    /*
+     * Automatic gain control (AGC) level in dB.
+     */
+    double agcGain;
+
+    /*
+     * The category of code that is currently being tracked in the GNSS measurement.
+     * See GnssMeasurementTrackedCodeCategory for the definition of codeCategory.
+     */
+    unsigned int codeCategory;
+
+    /*
+     * Iono-correct value in meters.
+     */
+    double ionoCorrect;
+
+    /*
+     * Trop-correct value in meters.
+     */
+    double tropCorrect;
+
+    /*
+     * Satellite clock bias value in meters.
+     */
+    double satelliteClockBias;
+
+    /*
+     * Satellite clock drift bias value in meters.
+     */
+    double satelliteClockDriftBias;
+};
+
+/*
+ * @brief Definition of the GNSS clock information structure.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct GnssClockInfo {
+    /*
+     * Identifies which field is valid.
+     * See GnssClockValidity for the definition of fieldValidFlags.
+     */
+    unsigned short fieldValidFlags;
+
+    /*
+     * Leap second data.
+     */
+    short leapSecond;
+
+    /*
+     * Indicates the clock time of the GNSS receiver, the unit is nanosecond.
+     * This is a mandatory value.
+     */
+    long receiverClockTime;
+
+    /*
+     * Uncertainty of the receiverClockTime, the unit is nanosecond.
+     */
+    double timeUncertainty;
+
+    /*
+     * The difference between receiverClockTime and the true GPS time since 0000Z, January 6, 1980.
+     * the unit is nanosecond.
+     */
+    long rcvClockFullBias;
+
+    /*
+     * Sub-nanosecond bias of receiverClockTime.
+     */
+    double rcvClockSubBias;
+
+    /*
+     * Uncertainty of the local estimate of GPS time (clock bias 'rcvClockFullBias' and 'rcvClockSubBias' feild)
+     * in nanoseconds.
+     */
+    double biasUncertainty;
+
+    /*
+     * The clock's drift of receiver clock. the unit is nanosecond (per second).
+     */
+    double clockDrift;
+
+    /*
+     * The uncertainty of clockDrift. the unit is nanosecond (per second).
+     */
+    double clockDriftUncertainty;
+
+    /*
+     * Indicates hardware clock discontinuity count.
+     * This is a mandatory value.
+     */
+    unsigned int clockInterruptCnt;
+
+    /*
+     * Indicates clockJump threshold of hardware clock. the unit is nanosecond.
+     * the clock bias ('rcvClockFullBias' + 'rcvClockSubBias' should be less than clockJumpThreshold)
+     */
+    double clockJumpThreshold;
+
+    /*
+     * Indicates clockHWFreBias event, If the crystal oscillator(XO) has a frequency offset exception event,
+     * this enumeration field reports the state.
+     * If this field is frequently reported, check the environment or hardware status of the XO.
+     * See ClockHWFreBiasState for the definition of clockHWFreBiasIndicator.
+     */
+    unsigned int clockHWFreBiasIndicator;
+
+    /*
+     * Indicates clockHWFreDrift event, If the crystal oscillator(XO) has a frequency drift exception event,
+     * this enumeration field reports the state.
+     * If this field is frequently reported, check the environment or hardware status of the XO.
+     * See clockHWFreDriftState for the definition of clockHWFreDriftIndicator.
+     */
+    unsigned int clockHWFreDriftIndicator;
+};
+
+/*
+ * @brief Defines the GNSS measurement information structure.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct GnssMeasurementInfo {
+    struct GnssClockInfo gnssClock;
+
+    /* Time since the system was booted, and include deep sleep. The unit is nanoseconds. */
+    long elapsedRealtime;
+
+    /* This is uncertainty of elapsedRealtime. The unit is nanoseconds. */
+    long uncertainty;
+
+    /* Number of measurements. */
+    int measurementCount;
+
+    /* The array of measurements. */
+    struct GnssMeasurement[] measurements;
+};
+/** @} */

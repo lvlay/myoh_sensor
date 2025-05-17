@@ -1,0 +1,254 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup NNRt
+ * @{
+ *
+ * @brief Provides a unified interface for AI chip drivers to access OpenHarmony.\n
+ * Neural Network Runtime (NNRt) is a cross-chip inference computing runtime environment\n
+ * oriented to the AI field.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+
+/**
+ * @file INnrtDevice.idl
+ *
+ * @brief Defines methods related to chip devices.
+ *
+ * You can use the methods to query chip device information and build AI models.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+
+/**
+ * @brief Defines the package path of the NNRt module.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+package ohos.hdi.nnrt.v2_1;
+
+import ohos.hdi.nnrt.v2_1.NnrtTypes;
+import ohos.hdi.nnrt.v2_1.ModelTypes;
+import ohos.hdi.nnrt.v2_1.IPreparedModel;
+
+/**
+ * @brief Provides methods for device management and model building.
+ *
+ * When multiple devices are registered, ensure that the combination of the device name\n
+ * and vendor name is globally unique.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+interface INnrtDevice {
+    /**
+     * @brief Obtains the device name.
+     *
+     * @param name Device name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetDeviceName([out] String name);
+
+    /**
+     * @brief Obtains the device vendor name.
+     *
+     * @param name Device vendor name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetVendorName([out] String name);
+
+    /**
+     * @brief Obtains the device type.
+     *
+     * @param deviceType Device type. For details, see {@link DeviceType}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetDeviceType([out] enum DeviceType deviceType);
+
+    /**
+     * @brief Obtains the device status.
+     *
+     * @param deviceType Device status. For details, see {@link DeviceStatus}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetDeviceStatus([out] enum DeviceStatus status);
+
+    /**
+     * @brief Obtains the device's support for the operators of the specified AI model.
+     *
+     * @param model AI model. For details, see {@link Model}.
+     * @param ops Operators supported and not supported by the device. The operators are listed in the same\n
+     * sequence as they listed in the API model.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetSupportedOperation([in] struct Model model, [out] boolean[] ops);
+
+    /**
+     * @brief Checks whether the device supports the Float32 model with the Float16 precision.
+     *
+     * @param isSupported Whether the Float16 precision is supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    IsFloat16PrecisionSupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports performance preference settings. For details about the performance\n
+     * preference, see {@link PerformanceMode}.
+     *
+     * @param isSupported Whether performance preference settings are supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    IsPerformanceModeSupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports task priority settings. For details about the priority,\n
+     * see {@link Priority}.
+     *
+     * @param isSupported Whether task priority settings are supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    IsPrioritySupported([out] boolean isSupported);
+
+    /**
+     * @brief Checks whether the device supports dynamic input, which allows a model of different shapes\n
+     * to be used for different operations.
+     *
+     * If dynamic input is supported, <b>-1</b> is added in the shape of the input tensor.
+     *
+     * @param isSupported Whether dynamic input is supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    IsDynamicInputSupported([out] boolean isSupported);
+
+    /**
+     * @brief Builds a model.
+     *
+     * If the AI model supports dynamic input, at least one dimension of the input tensor contains <b>-1</b>.
+     *
+     * @param model Module to build. For details, see {@link Model}.
+     * @param config Model configuration. For details, see {@link ModelConfig}.
+     * @param preparedModel Model object built. For details, see {@link IPreparedModel}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    PrepareModel([in] struct Model model, [in] struct ModelConfig config, [out] IPreparedModel preparedModel);
+
+    /**
+     * @brief Checks whether the device supports caching of the AI models built.
+     *
+     * If yes, <b>PrepareModelFromModelCache()</b> and <b>ExportModelCache()</b> need to be implemented.
+     *
+     * @param isSupported Whether caching of the AI models built is supported.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    IsModelCacheSupported([out] boolean isSupported);
+
+    /**
+     * @brief Loads an AI model from the cache. The AI model is exported by using <b>ExportModelCache()</b>.
+     *
+     * @param modelCache Array of the model files, which are in the same sequence as they exported. For details,\n
+     * see {@link SharedBuffer}.
+     * @param config Configuration for loading the model. For details, see {@link ModelConfig}.
+     * @param preparedModel Model object. For details, see {@link IPreparedModel}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    PrepareModelFromModelCache([in] struct SharedBuffer[] modelCache, [in] struct ModelConfig config,
+                               [out] IPreparedModel preparedModel);
+
+    /**
+     * @brief Loads offline model files from the cache. The offline model is obtained after offline model files\n
+     * are passed by the inference framework to the NNRt module and then parsed by the NNRt module.
+     *
+     * @param offlineModels Array of offline model files. The sequence of array elements depends on the format of\n
+     * the input offline model. For details about the element types, see the definition of SharedBuffer\n
+     * {@link SharedBuffer}.
+     * @param config Configuration for loading the offline model files. For details, see {@link ModelConfig}.
+     * @param preparedModel Model object obtained. For details, see {@link IPreparedModel}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    PrepareOfflineModel([in] struct SharedBuffer[] offlineModels, [in] struct ModelConfig config,
+                        [out] IPreparedModel preparedModel);
+
+    /**
+     * @brief Allocates the shared memory for the device. The shared memory allows quick access to the input\n
+     * and output data for AI inference.
+     *
+     * @param length Length of the shared memory to allocate, in bytes.
+     * @param buffer Information about the shared memory allocated, including the file descriptor and size.\n
+     * For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    AllocateBuffer([in] unsigned int length, [out] struct SharedBuffer buffer);
+
+    /**
+     * @brief Releases the shared memory.
+     *
+     * @param buffer Information about the shared memory allocated, including the file descriptor and size.\n
+     * For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    ReleaseBuffer([in] struct SharedBuffer buffer);
+}
+
+/** @} */

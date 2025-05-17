@@ -1,0 +1,154 @@
+/*
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Vibrator
+ * @{
+ *
+ * @brief Provides a driver for upper-layer vibrator services.
+ *
+ * After obtaining a driver object or agent, a vibrator service get vibrator ability or
+ * set the vibrator effect using the functions provided by the driver object or agent.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @file VibratorTypes.idl
+ *
+ * @brief Declares common APIs in the vibrator module. The APIs canObtains information about all the vibrator
+ * that support setting intensity and Start the vibrator according to the incoming vibration effect.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+
+package ohos.hdi.vibrator.v1_1;
+
+import ohos.hdi.vibrator.v1_1.VibratorTypes;
+
+interface IVibratorInterface {
+    /**
+     * @brief Controls the vibrator to perform a one-shot vibration that lasts for a given duration.
+     *
+     * One-shot vibration is mutually exclusive with periodic vibration. Before using one-shot vibration,
+     * exit periodic vibration.
+     *
+     * @param duration Indicates the duration that the one-shot vibration lasts, in milliseconds.
+      * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    StartOnce([in] unsigned int duration);
+    /**
+     * @brief Controls the vibrator to perform a periodic vibration with the preset effect.
+     *
+     * One-shot vibration is mutually exclusive with periodic vibration. Before using periodic vibration,
+     * exit one-shot vibration.
+     *
+     * @param effectType Indicates the pointer to the preset effect type. It is recommended that the
+     * maximum length be 64 bytes.
+      * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Start([in] String effectType);
+    /**
+     * @brief Stops the vibration.
+     *
+     * Before the vibrator starts, it must stop vibrating in any mode. This function can be used during
+     * and after the vibrating process.
+     *
+     * @param mode Indicates the vibration mode, which can be one-shot or periodic. For details,
+     * see {@link HdfVibratorMode}.
+      * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 2.2
+     * @version 1.0
+     */
+    Stop([in] enum HdfVibratorMode mode);
+    /**
+     * @brief Obtains information about all the vibrator that support setting intensity and frequency in the system.
+     *
+     * @param vibratorInfo Indicates the pointer to the vibration effect, For details, see {@link HdfVibratorInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns negative value if the get failed.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    GetVibratorInfo([out] struct HdfVibratorInfo[] vibratorInfo);
+    /**
+     * @brief Start the vibrator according to the incoming vibration effect.
+     *
+     * @param duration Indicates the duration that the vibration lasts, in milliseconds.
+     *
+     * @param intensity Indicates vibrator intensity in a vibration period.
+     *
+     * @param frequency Indicates vibrator frequency in a vibration period.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns <b>-1</b> if the vibrationPeriod setting is not supported.
+     * @return Returns <b>-2</b> if the intensity setting is not supported.
+     * @return Returns <b>-3</b> if the frequency setting is not supported.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    EnableVibratorModulation([in] unsigned int duration, [in] unsigned short intensity, [in] short frequency);
+    /**
+     * @brief Controls the vibrator to perform a periodic vibration with the custom composite effect.
+     *
+     * @param effect Indicates the pointer to the custom composite effect type. For details,
+     * see {@link HdfCompositeEffect}.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    EnableCompositeEffect([in] struct HdfCompositeEffect effect);
+    /**
+     * @brief Obtains the vibration effect information with the specified effect type.
+     *
+     * @param effectType Indicates the pointer to the preset effect type. It is recommended that the
+     * maximum length be 64 bytes.
+     *
+     * @param effectInfo Indicates the pointer to the vibration effect information. For details,
+     * see {@link HdfEffectInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns negative value if the get failed.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    GetEffectInfo([in] String effectType, [out] struct HdfEffectInfo effectInfo);
+    /**
+     * @brief Obtains whether the vibrator is currently vibrating.
+     *
+     * @param state Indicates current vibration state of the vibrator.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns negative value if the get failed.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    IsVibratorRunning([out] boolean state);
+}

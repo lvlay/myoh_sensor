@@ -1,0 +1,38 @@
+{
+  "name": "@ohos/drivers_peripheral_ril",
+  "description": "ril_hdf",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/ril"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_ril",
+    "subsystem": "hdf",
+    "adapted_system_type": [
+      "standard"
+    ],
+    "rom": "700KB",
+    "ram": "1MB",
+    "deps": {
+      "components": [
+        "c_utils",
+        "drivers_interface_power",
+        "drivers_interface_ril",
+        "hdf_core",
+        "hilog",
+        "ipc",
+        "ril_adapter"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/ril:ril_entry"
+      ],
+      "inner_kits": []
+    }
+  }
+}

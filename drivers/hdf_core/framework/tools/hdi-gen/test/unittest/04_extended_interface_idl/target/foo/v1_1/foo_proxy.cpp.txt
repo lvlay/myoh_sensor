@@ -1,0 +1,162 @@
+#include "v1_1/foo_proxy.h"
+#include <hdf_base.h>
+#include <hdf_log.h>
+#include <hdi_support.h>
+#include <iservmgr_hdi.h>
+#include <message_option.h>
+#include <message_parcel.h>
+#include <string_ex.h>
+
+#define HDF_LOG_TAG    foo_proxy
+
+template<typename ChildType, typename ParentType>
+static sptr<ChildType> CastFromTemplate(const sptr<ParentType> &parent)
+{
+    if (parent == nullptr) {
+        HDF_LOGE("%{public}s:parent is nullptr!", __func__);
+        return nullptr;
+    }
+
+    if (!parent->IsProxy()) {
+        HDF_LOGE("%{public}s:not proxy, not support castfrom!", __func__);
+        return nullptr;
+    }
+
+    sptr<IRemoteObject> remote = OHOS::HDI::hdi_objcast<ParentType>(parent);
+    if (remote == nullptr) {
+        HDF_LOGE("%{public}s:hdi_objcast failed!", __func__);
+        return nullptr;
+    }
+
+    sptr<ChildType> proxy = OHOS::HDI::hdi_facecast<ChildType>(remote);
+    if (proxy == nullptr) {
+        HDF_LOGE("%{public}s:hdi_facecast failed!", __func__);
+        return nullptr;
+    }
+
+    uint32_t serMajorVer = 0;
+    uint32_t serMinorVer = 0;
+    int32_t fooRet = proxy->GetVersion(serMajorVer, serMinorVer);
+    if (fooRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s:get version failed!", __func__);
+        return nullptr;
+    }
+
+    if (serMajorVer != 1) {
+        HDF_LOGE("%{public}s:check version failed! version of service:%u.%u, version of client:1.1", __func__, serMajorVer, serMinorVer);
+        return nullptr;
+    }
+
+    return proxy;
+}
+
+sptr<OHOS::HDI::Foo::V1_1::IFoo> OHOS::HDI::Foo::V1_1::IFoo::Get(bool isStub)
+{
+    return IFoo::Get("foo_service", isStub);
+}
+
+sptr<OHOS::HDI::Foo::V1_1::IFoo> OHOS::HDI::Foo::V1_1::IFoo::Get(const std::string& serviceName, bool isStub)
+{
+    if (isStub) {
+        std::string desc = Str16ToStr8(OHOS::HDI::Foo::V1_1::IFoo::GetDescriptor());
+        void *impl = LoadHdiImpl(desc.c_str(), serviceName == "foo_service" ? "service" : serviceName.c_str());
+        if (impl == nullptr) {
+            HDF_LOGE("failed to load hdi impl %{public}s", desc.data());
+            return nullptr;
+        }
+        return reinterpret_cast<OHOS::HDI::Foo::V1_1::IFoo *>(impl);
+    }
+
+    using namespace OHOS::HDI::ServiceManager::V1_0;
+    auto servMgr = IServiceManager::Get();
+    if (servMgr == nullptr) {
+        HDF_LOGE("%{public}s:get IServiceManager failed!", __func__);
+        return nullptr;
+    }
+
+    sptr<IRemoteObject> remote = servMgr->GetService(serviceName.c_str());
+    if (remote == nullptr) {
+        HDF_LOGE("%{public}s:get remote object failed!", __func__);
+        return nullptr;
+    }
+
+    sptr<OHOS::HDI::Foo::V1_1::IFoo> proxy = new OHOS::HDI::Foo::V1_1::FooProxy(remote);
+    if (proxy == nullptr) {
+        HDF_LOGE("%{public}s:iface_cast failed!", __func__);
+        return nullptr;
+    }
+
+    uint32_t serMajorVer = 0;
+    uint32_t serMinorVer = 0;
+    int32_t fooRet = proxy->GetVersion(serMajorVer, serMinorVer);
+    if (fooRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s:get version failed!", __func__);
+        return nullptr;
+    }
+
+    if (serMajorVer != 1) {
+        HDF_LOGE("%{public}s:check version failed! version of service:%u.%u, version of client:1.1", __func__, serMajorVer, serMinorVer);
+        return nullptr;
+    }
+
+    return proxy;
+}
+
+sptr<OHOS::HDI::Foo::V1_1::IFoo> OHOS::HDI::Foo::V1_1::IFoo::CastFrom(const sptr<OHOS::HDI::Foo::V1_0::IFoo> &parent)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::TestPingV1_1(const std::string& sendMsg, std::string& recvMsg)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::TestGetData(std::string& info)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::Ping(const std::string& sendMsg, std::string& recvMsg)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetData(std::string& info)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::InfoTest(int32_t inParam, double& outParam)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::GetVersion(uint32_t& majorVer, uint32_t& minorVer)
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::TestPingV1_1_(const std::string& sendMsg, std::string& recvMsg,
+     const sptr<IRemoteObject> remote)
+{
+    MessageParcel fooData;
+    MessageParcel fooReply;
+    MessageOption fooOption(MessageOption::TF_SYNC);
+
+    if (!fooData.WriteInterfaceToken(OHOS::HDI::Foo::V1_1::IFoo::GetDescriptor())) {
+        HDF_LOGE("%{public}s: failed to write interface descriptor!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooData.WriteBool(false)) {
+        HDF_LOGE("%{public}s:failed to write flag of memory setting!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooData.WriteCString(sendMsg.c_str())) {
+        HDF_LOGE("%{public}s: write sendMsg failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (remote == nullptr) {
+        HDF_LOGE("%{public}s: invalid remote object!", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    int32_t fooRet = remote->SendRequest(CMD_FOO_TEST_PING_V1_1, fooData, fooReply, fooOption);
+    if (fooRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s failed, error code is %{public}d", __func__, fooRet);
+        return fooRet;
+    }
+
+    const char* recvMsgCp = fooReply.ReadCString();
+    if (recvMsgCp == nullptr) {
+        HDF_LOGE("%{public}s: read recvMsg failed", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+    recvMsg = recvMsgCp;
+
+    return fooRet;
+}
+
+int32_t OHOS::HDI::Foo::V1_1::FooProxy::TestGetData_(std::string& info, const sptr<IRemoteObject> remote)

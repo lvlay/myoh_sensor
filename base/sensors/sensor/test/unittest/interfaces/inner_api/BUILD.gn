@@ -1,0 +1,281 @@
+# Copyright (c) 2021-2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+import("./../../../../sensor.gni")
+
+ohos_unittest("SensorAgentTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [
+    "$SUBSYSTEM_DIR/test/unittest/common/src/system_info.cpp",
+    "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/sensor_agent_test.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+    "$SUBSYSTEM_DIR/test/unittest/common/include",
+    "$SUBSYSTEM_DIR/utils/common/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "access_token:libaccesstoken_sdk",
+    "access_token:libnativetoken_shared",
+    "access_token:libtokensetproc_shared",
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("SensorAlgorithmTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [ "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/sensor_algorithm_test.cpp" ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+    "$SUBSYSTEM_DIR/test/unittest/common/include",
+    "$SUBSYSTEM_DIR/utils/common/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("SensorPowerTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [
+    "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/sensor_power_test.cpp",
+  ]
+
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "access_token:libaccesstoken_sdk",
+    "access_token:libnativetoken_shared",
+    "access_token:libtokensetproc_shared",
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("PostureTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources =
+      [ "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/posture_test.cpp" ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("HeadPostureTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [
+    "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api//head_posture_test.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("Ambientlight1Test") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [ "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api//ambient_light1_test.cpp" ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("DropDetectionTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [ "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api//drop_detection_test.cpp" ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("RPCSensorTest") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [
+    "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/rpc_sensor_test.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+ohos_unittest("Proximity1Test") {
+  module_out_path = "sensor/interfaces/inner_api"
+
+  sources = [
+    "$SUBSYSTEM_DIR/test/unittest/interfaces/inner_api/proximity1_test.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_target",
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "googletest:gmock",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+  ]
+}
+
+group("unittest") {
+  testonly = true
+  deps = [
+    ":Ambientlight1Test",
+    ":DropDetectionTest",
+    ":HeadPostureTest",
+    ":PostureTest",
+    ":Proximity1Test",
+    ":RPCSensorTest",
+    ":SensorAgentTest",
+    ":SensorAlgorithmTest",
+    ":SensorPowerTest",
+  ]
+}

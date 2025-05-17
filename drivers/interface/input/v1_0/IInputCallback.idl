@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdiInput
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer input service.
+ *
+ * Using the APIs provided by the Input module, input service developers can implement the following
+ * functions: enabling or disabling input devices, obtaining input events, querying device information,
+ * registering callback functions, and managing the feature status.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IInputCallback.idl
+ *
+ * @brief Provides data reporting and hot swap event reporting callbacks for the input service.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the Input module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.input.v1_0;
+
+import ohos.hdi.input.v1_0.InputTypes;
+
+/**
+ * @brief Defines the callbacks of the Input module.
+ *
+ * When an input device performs operations such as data reporting, insertion, or removal, the input service
+ * can call the respective callback for data processing.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+[callback] interface IInputCallback {
+    /**
+     * @brief Called to report input event data.
+     *
+     * @param pkgs Input event data reported by the driver. For details, see {@link EventPackage}.
+     * @param devIndex Index of the input device. The value ranges from <b>0</b> to <b>31</b>.
+     * A maximum of 32 input devices are supported.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    EventPkgCallback([in] struct EventPackage[] pkgs, [in] unsigned int devIndex);
+
+    /**
+     * @brief Called to report hot plug events.
+     *
+     * @param event Hot swap event data. For details, see {@link HotPlugEvent}.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    HotPlugCallback([in] struct HotPlugEvent event);
+}
+/** @} */

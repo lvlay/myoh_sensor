@@ -1,0 +1,50 @@
+# Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("./../input.gni")
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("//build/lite/config/test.gni")
+
+  lite_component("hdf_test_input") {
+    # add hdf subsystem unittest
+    if (ohos_build_type == "debug") {
+      if (drivers_peripheral_input_feature_lite_support_test) {
+        deps = [ "unittest:hdf_peripheral_input_test" ]
+      }
+    }
+    features = []
+  }
+} else {
+  import("//build/ohos.gni")
+
+  group("hdf_test_input") {
+    testonly = true
+    deps = [ "benchmarktest:hdf_input_benchmark_test" ]
+
+    if (drivers_peripheral_input_feature_model) {
+      deps += [ "unittest/hdi:hdi_unittest_input" ]
+    }
+    if (drivers_peripheral_input_feature_udriver) {
+      deps += [ "unittest/udriver:input_udriver_unittest" ]
+    }
+    if (drivers_peripheral_input_feature_support_ddk) {
+      deps += [
+        "benchmarktest:hid_ddk_benchmark_test",
+        "fuzztest/hidddk_fuzzer:fuzztest",
+        "unittest/ddk:hid_ddk_unittest",
+      ]
+    }
+  }
+}

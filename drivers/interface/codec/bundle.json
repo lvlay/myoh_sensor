@@ -1,0 +1,87 @@
+{
+  "name": "@ohos/drivers_interface_codec",
+  "description": "codec device driver interface",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/interface/codec"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_interface_codec",
+    "subsystem": "hdf",
+    "syscap": [],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "675KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "c_utils"
+      ],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/interface/codec/v3_0:codec_idl_target",
+        "//drivers/interface/codec/image/v2_0:image_idl_target"
+      ],
+      "test": [
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/interface/codec/v3_0:libcodec_proxy_3.0",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        },
+        {
+          "name": "//drivers/interface/codec/v3_0:codec_idl_headers",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        },
+        {
+          "name": "//drivers/interface/codec/v3_0:libcodec_stub_3.0",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        },
+        {
+          "name": "//drivers/interface/codec/image/v2_0:libimage_proxy_2.0",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        },
+        {
+          "name": "//drivers/interface/codec/image/v2_0:image_idl_headers",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        },
+        {
+          "name": "//drivers/interface/codec/image/v2_0:libimage_stub_2.0",
+          "header": {
+            "header_files": [
+            ],
+            "header_base": "//drivers/interface/codec"
+          }
+        }
+      ]
+    }
+  }
+}

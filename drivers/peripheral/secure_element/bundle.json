@@ -1,0 +1,42 @@
+{
+    "name": "@ohos/drivers_peripheral_secure_element",
+    "description": "secure_element hdf",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/peripheral/secure_element"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_peripheral_secure_element",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "rom": "1000KB",
+      "ram": "1000KB",
+      "features": [
+        "drivers_peripheral_secure_element_use_ca"
+      ],
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils",
+          "init",
+          "drivers_interface_secure_element"
+        ],
+        "third_party": [
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/peripheral/secure_element:secure_element_entry"
+        ],
+        "test": [
+          "//drivers/peripheral/secure_element/test:test_hdf_se_service"
+        ]
+      }
+    }
+}

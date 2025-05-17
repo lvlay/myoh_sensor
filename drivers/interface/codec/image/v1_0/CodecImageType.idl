@@ -1,0 +1,159 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the image Codec module.
+ *
+ * The Codec module provides APIs for image codec, setting codec parameters,
+ * and controlling and transferring image data.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @file CodecImageTypes.idl
+ *
+ * @brief Defines custom data types used in the image Codec module APIs,
+ * including the codec image parameters, types and buffers.
+ *
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the path for the package of the image Codec module APIs.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+package ohos.hdi.codec.image.v1_0;
+
+/**
+ * @brief Defines the image region information.
+ */
+struct CodecImageRegion {
+    unsigned int left;      /**< Distance to the left of the image. */
+    unsigned int right;     /**< Distance to the right of the image. */
+    unsigned int top;       /**< Distance to the top of the image. */
+    unsigned int bottom;    /**< Distance to the bottom of the image. */
+    unsigned int flag;      /**< True is use regionInfo. */
+    unsigned int rsv;       /**< Reserved for extend. */
+};
+
+/**
+ * @brief Enumerates the types of image that can be encoded or decoded
+ */
+enum CodecImageRole {
+    CODEC_IMAGE_JPEG = 0,       /**< Jpeg image. */
+    CODEC_IMAGE_HEIF,           /**< Heif image. */
+    CODEC_IMAGE_INVALID,        /**< Invalid image type. */
+};
+
+/**
+ * @brief Defines the codec image buffer information.
+ */
+struct CodecImageBuffer {
+    unsigned int id;            /**< Buffer ID. */
+    unsigned int size;          /**< Size of buffer. */
+    NativeBuffer buffer;        /**< Buffer handle used for encoding or decoding. For details,
+                                     see {@link NativeBuffer}. */
+    FileDescriptor fenceFd;     /**< Fence file descriptor. */
+    CodecImageRole bufferRole;  /**< Image buffer role, see {@link CodecImageRole}. */
+};
+
+/**
+ * @brief Defines the image codec type.
+ */
+enum CodecImageType {
+    CODEC_IMAGE_TYPE_DECODER = 0,     /**< Image decoder. */
+    CODEC_IMAGE_TYPE_ENCODER,         /**< Image encoder. */
+    CODEC_IMAGE_TYPE_INVALID,         /**< Invalid type. */
+};
+
+/**
+ * @brief Defines the image codec capabilities.
+ */
+struct CodecImageCapability {
+    String name;                        /**< Name of the image codec. */
+    enum CodecImageRole role;           /**< Role of the image codec. */
+    enum CodecImageType type;           /**< Type of the image codec. */
+    unsigned int widthAlignment;        /**< Alignment value of the width. */
+    unsigned int heightAlignment;       /**< Alignment value of the height. */
+    unsigned int maxSample;             /**< Maximum sample. */
+    unsigned int maxWidth;              /**< Maximum width. */
+    unsigned int maxHeight;             /**< Maximum height. */
+    unsigned int minWidth;              /**< Minimum width. */
+    unsigned int minHeight;             /**< Minimum height. */
+    unsigned int maxInst;               /**< Maximum instance. */
+    unsigned int[] supportPixFmts;      /**< Supported PixFormat. For details, see {@link PixFormat}. */
+    boolean isSoftwareCodec;            /**< Whether it is a software codec. */
+};
+
+/**
+ * @brief Defines the jpeg image quant table information.
+ */
+struct CodecJpegQuantTable {
+    unsigned short[] quantVal;          /**< Quant table value. */
+    boolean tableFlag;                  /**< True when quant has been output. */
+};
+
+/**
+ * @brief Defines the jpeg image huff table information.
+ */
+struct CodecJpegHuffTable {
+    unsigned char[] bits;               /**< Bits value, bits[0] is unused. */
+    unsigned char[] huffVal;            /**< Huff table value. */
+    boolean tableFlag;                  /**< True when huff table valid. */
+};
+
+/**
+ * @brief Defines the jpeg image huff table information.
+ */
+struct CodecJpegCompInfo {
+    unsigned int componentId;           /**< CompInfo index in JpegDecInfo. */
+    unsigned int componentIndex;        /**< CompInfo index in JpegDecInfo. */
+    unsigned int hSampFactor;           /**< Horizontal sample factor. */
+    unsigned int vSampFactor;           /**< vertical sample factor. */
+    unsigned int quantTableNo;          /**< Quant table value. */
+    unsigned int dcTableNo;             /**< Dc table index. */
+    unsigned int acTableNo;             /**< Ac table index. */
+    boolean infoFlag;
+};
+
+/**
+ * @brief Defines the jpeg image decode information.
+ */
+struct CodecJpegDecInfo {
+    unsigned int imageWidth;                        /**< Image width. */
+    unsigned int imageHeight;                       /**< Image height. */
+    unsigned int dataPrecision;                     /**< Bit height. */
+    unsigned int numComponents;                     /**< Num of color component in jpeg image. */
+    unsigned int restartInterval;                   /**< MCUs per restart. */
+    boolean arithCode;                              /**< False is Huff coding,
+                                                         true is arithmetic coding. */
+    boolean progressiveMode;                        /**< If SOF specifiy progressive mode. */
+    struct CodecJpegCompInfo[] compInfo;            /**< Jpeg compress information. */
+    struct CodecJpegHuffTable[] dcHuffTbl;          /**< Dc huffman table information. */
+    struct CodecJpegHuffTable[] acHuffTbl;          /**< Ac huffman table information. */
+    struct CodecJpegQuantTable[] quantTbl;          /**< Quant table information. */
+    struct CodecImageRegion region;                 /**< Image region information. */
+    unsigned int sampleSize;                        /**< Image sample size. */
+    unsigned int compressPos;                       /**< The offset of Jpeg compressed data. */
+};

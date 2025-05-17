@@ -1,0 +1,289 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup CHIP
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to manager the wifi chip, init and release the wifi chip, create and remove iface, register callback
+ * get the name and type of the iface, get the support frequencies and set the mode of chip.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @file IConcreteChip.idl
+ *
+ * @brief Provides APIs to concrete the chip, get the specific chip information.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the chip module interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+package ohos.hdi.wlan.chip.v1_0;
+
+import ohos.hdi.wlan.chip.v1_0.ChipTypes;
+import ohos.hdi.wlan.chip.v1_0.IChipIface;
+import ohos.hdi.wlan.chip.v1_0.IConcreteChipCallback;
+
+interface IConcreteChip {
+    /**
+     * @brief Obtains the id of the service.
+     *
+     * @param id Indicates the chip id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetChipId([out] int id);
+
+    /**
+     * @brief Registers the callback information of the corresponding chip service.
+     *
+     * @param chipEventcallback Indicates the event callback of chip service.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RegisterChipEventCallback([in] IConcreteChipCallback chipEventcallback);
+
+    /**
+     * @brief Obtains the modes supported by the chip.
+     *
+     * @param modes Indicates supported mode of the chip.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetChipModes([out] struct UsableMode[] modes);
+
+    /**
+     * @brief Get chip capabilities from wifi driver.
+     *
+     * @param capabilities Indicates the chip capabilities.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetChipCaps([out] unsigned int capabilities);
+
+    /**
+     * @brief Obtains the mode of the chip id.
+     *
+     * @param modeId Indicates the mode of the current chip id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetCurrentMode([out] unsigned int modeId);
+
+    /**
+     * @brief Creates the Ap interface service.
+     *
+     * @param iface Indicates Ap interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    CreateApService([out] IChipIface iface);
+
+    /**
+     * @brief Obtains the name of the Ap interface.
+     *
+     * @param ifnames Indicates Ap interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetApServiceIfNames([out] String[] ifnames);
+
+    /**
+     * @brief Obtains the service of the Ap interface.
+     *
+     * @param ifnames Indicates Ap interface name.
+     * @param iface Indicates the Ap interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetApService([in] String ifname, [out] IChipIface iface);
+
+    /**
+     * @brief Deletes the service of the Ap interface.
+     *
+     * @param ifnames Indicates Ap interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RemoveApService([in] String ifname);
+
+    /**
+     * @brief Creates the P2p interface service.
+     *
+     * @param iface Indicates P2p interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    CreateP2pService([out] IChipIface iface);
+
+    /**
+     * @brief Obtains the name of the P2p interface.
+     *
+     * @param ifnames Indicates P2p interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetP2pServiceIfNames([out] String[] ifnames);
+
+    /**
+     * @brief Obtains the service of the P2p interface.
+     *
+     * @param ifnames Indicates P2p interface name.
+     * @param iface Indicates the P2p interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetP2pService([in] String ifname, [out] IChipIface iface);
+
+    /**
+     * @brief Deletes the service of the P2p interface.
+     *
+     * @param ifnames Indicates P2p interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RemoveP2pService([in] String ifname);
+
+    /**
+     * @brief Creates the Sta interface service.
+     *
+     * @param iface Indicates Sta interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    CreateStaService([out] IChipIface iface);
+
+    /**
+     * @brief Obtains the name of the Sta interface.
+     *
+     * @param ifnames Indicates Sta interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetStaServiceIfNames([out] String[] ifnames);
+
+    /**
+     * @brief Obtains the service of the Sta interface.
+     *
+     * @param ifnames Indicates Sta interface name.
+     * @param iface Indicates the Sta interface service object.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetStaService([in] String ifname, [out] IChipIface iface);
+
+    /**
+     * @brief Deletes the service of the Sta interface.
+     *
+     * @param ifnames Indicates Sta interface name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RemoveStaService([in] String ifname);
+
+    /**
+     * @brief Sets the mode id of chip.
+     *
+     * @param modeId Indicates the id of different mode.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    SetChipMode([in] unsigned int modeId);
+};
+/** @} */

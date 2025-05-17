@@ -1,0 +1,12 @@
+enum {
+    CMD_FOO_PING_4 = 4,
+    CMD_FOO_GET_DATA_5 = 5,
+};
+
+class IFoo : public OHOS::HDI::Foo::V1_0::IFoo {
+    using OHOS::HDI::Foo::V1_0::IFoo::Ping;
+    virtual int32_t Ping(const std::string& sendMsg, std::string& recvMsg, int32_t code) = 0;
+
+    using OHOS::HDI::Foo::V1_0::IFoo::GetData;
+    virtual int32_t GetData(std::string& info, std::string& ver) = 0;
+};

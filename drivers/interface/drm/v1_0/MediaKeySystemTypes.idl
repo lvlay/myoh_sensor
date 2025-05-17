@@ -1,0 +1,142 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiDrm
+ * @
+ * @brief Defines APIs of the Drm module.
+ * The Drm module provides APIs for multimedia Drm.
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @file MediaKeySystemTypes.idl
+ *
+ * @brief Defines the types used in HdiDrm.
+ * @since 4.1
+ * @version 1.0
+ */
+
+package ohos.hdi.drm.v1_0;
+
+enum ContentProtectionLevel {
+    SECURE_UNKNOWN = 0,
+    SW_SECURE_CRYPTO,
+    HW_SECURE_CRYPTO,
+    HW_ENHANCED_SECURE_CRYPTO,
+    HW_SECURE_MAX,
+};
+
+enum MediaKeyRequestType {
+    MEDIA_KEY_REQUEST_TYPE_UNKNOWN = 0,
+    MEDIA_KEY_REQUEST_TYPE_INITIAL,
+    MEDIA_KEY_REQUEST_TYPE_RENEWAL,
+    MEDIA_KEY_REQUEST_TYPE_RELEASE,
+    MEDIA_KEY_REQUEST_TYPE_NONE,
+    MEDIA_KEY_REQUEST_TYPE_UPDATE,
+};
+
+enum EventType {
+    EVENTTYPE_PROVISIONREQUIRED = 0,
+    EVENTTYPE_KEYREQUIRED,
+    EVENTTYPE_KEYEXPIRED,
+    EVENTTYPE_VENDOR_DEFINED,
+    EVENTTYPE_EXPIRATIONUPDATE,
+    EVENTTYPE_KEYCHANGE,
+};
+
+enum CryptoAlgorithmType {
+    ALGTYPE_UNENCRYPTED = 0,
+    ALGTYPE_AES_CTR,
+    ALGTYPE_AES_WV,
+    ALGTYPE_AES_CBC,
+    ALGTYPE_SM4_CBC,
+    ALGTYPE_SM4_CTR,
+};
+
+enum OfflineMediaKeyStatus {
+    OFFLINE_MEDIA_KEY_STATUS_UNKNOWN = 0,
+    OFFLINE_MEDIA_KEY_STATUS_USABLE,
+    OFFLINE_MEDIA_KEY_STATUS_INACTIVE,
+};
+
+enum MediaKeyType {
+    MEDIA_KEY_TYPE_OFFLINE = 0,
+    MEDIA_KEY_TYPE_ONLINE,
+};
+
+enum CertificateStatus {
+    CERT_STATUS_PROVISIONED = 0,
+    CERT_STATUS_NOT_PROVISIONED,
+    CERT_STATUS_EXPIRED,
+    CERT_STATUS_INVALID,
+    CERT_STATUS_UNAVAILABLE,
+};
+
+enum MediaKeySessionKeyStatus {
+    MEDIA_KEY_SESSION_KEY_STATUS_USABLE = 0,
+    MEDIA_KEY_SESSION_KEY_STATUS_EXPIRED,
+    MEDIA_KEY_SESSION_KEY_STATUS_OUTPUT_NOT_ALLOWED,
+    MEDIA_KEY_SESSION_KEY_STATUS_PENDING,
+    MEDIA_KEY_SESSION_KEY_STATUS_INTERNAL_ERROR,
+    MEDIA_KEY_SESSION_KEY_STATUS_USABLE_IN_FUTURE,
+};
+
+struct MediaKeyRequestInfo {
+    enum MediaKeyType mediaKeyType;
+    String mimeType;
+    unsigned char[] initData;
+    Map<String, String> optionalData;
+};
+
+struct MediaKeyRequest {
+    enum MediaKeyRequestType requestType;
+    unsigned char[] data;
+    String defaultUrl;
+};
+
+struct Pattern {
+    unsigned int encryptBlocks;
+    unsigned int skipBlocks;
+};
+
+struct SubSample {
+    unsigned int clearHeaderLen;
+    unsigned int payLoadLen;
+};
+
+struct CryptoInfo {
+    enum CryptoAlgorithmType type;
+    unsigned char[] keyId;
+    unsigned char[] iv;
+    struct Pattern pattern;
+    struct SubSample[] subSamples;
+};
+
+struct DrmBuffer {
+    unsigned int bufferType;
+    FileDescriptor fd;
+    unsigned int bufferLen;
+    /* Reserved */
+    /* Size of buffer allocated. */
+    unsigned int allocLen;
+    /* Size of buffer filled. */
+    unsigned int filledLen;
+    /* Offset of the vaild data from the buffer start. */
+    unsigned int offset;
+    /* Shared memory type like read/write etc.. */
+    unsigned int sharedMemType;
+};

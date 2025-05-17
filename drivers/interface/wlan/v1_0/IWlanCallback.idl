@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup WLAN
+ * @{
+ *
+ * @brief Defines APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IWlanCallback.idl
+ *
+ * @brief Provides callbacks to be invoked when the WLAN driver is restarted, the scan result is returned,
+ * and a Netlink message is received.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.wlan.v1_0;
+
+import ohos.hdi.wlan.v1_0.WlanTypes;
+
+/**
+ * @brief Defines the callbacks of the WLAN module.
+ *
+ * The callback is invoked to continue the subsequent processing when the WLAN module restarts, hotspot scan ends,
+ * or a Netlink message is received.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+[callback] interface IWlanCallback {
+    /**
+     * @brief Called to process the result returned when the WLAN driver restarts.
+     *
+     * @param event Indicates the ID of a driver restart event.
+     * @param code Indicates the result returned when the driver is restarted.
+     * @param ifName Indicates the network interface card (NIC) name.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ResetDriverResult([in] unsigned int event, [in] int code, [in] String ifName);
+
+    /**
+     * @brief Called to process the scan result returned when a scan ends.
+     *
+     * @param event Indicates the ID of a scan result event.
+     * @param scanResult Indicates the scan result.
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ScanResult([in] unsigned int event, [in] struct HdfWifiScanResult scanResult, [in] String ifName);
+
+    /**
+     * @brief Called to process the Netlink message received.
+     *
+     * @param recvMsg Indicates the Netlink message received.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    WifiNetlinkMessage([in] unsigned char[] recvMsg);
+}
+/** @} */

@@ -1,0 +1,59 @@
+{
+  "name": "@ohos/drivers_peripheral_light",
+  "description": "light device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/light"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_light",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_light_feature_model",
+      "drivers_peripheral_light_feature_community",
+      "drivers_peripheral_light_feature_lite_support_test"
+    ],
+    "syscap": [],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "675KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "c_utils",
+        "drivers_interface_light",
+        "hitrace",
+        "hilog_lite"
+      ],
+      "third_party": [
+        "bounds_checking_function"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/light:light_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/light/test:hdf_test_light"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/light/hal:hdi_light",
+          "header": {
+            "header_files": [
+              "light_if.h",
+              "light_type.h"
+            ],
+            "header_base": "//drivers/peripheral/light/interfaces/include"
+          }
+        }
+      ]
+    }
+  }
+}

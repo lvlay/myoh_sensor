@@ -1,0 +1,116 @@
+{
+    "name": "@ohos/drivers_interface_vibrator",
+    "description": "vibrator device driver interface",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/vibrator"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_vibrator",
+      "subsystem": "hdf",
+      "syscap": [],
+      "adapted_system_type": [
+        "standard",
+        "small"
+      ],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "hilog_lite",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/vibrator/v1_1:vibrator_idl_target",
+          "//drivers/interface/vibrator/v1_2:vibrator_idl_target",
+          "//drivers/interface/vibrator/v1_3:vibrator_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/vibrator/v1_1:libvibrator_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_1:libvibrator_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_1:vibrator_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_2:libvibrator_stub_1.2",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_3:libvibrator_proxy_1.3",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_3:libvibrator_stub_1.3",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          },
+          {
+            "name": "//drivers/interface/vibrator/v1_3:vibrator_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/vibrator"
+            }
+          }
+        ]
+      }
+    }
+  }

@@ -1,0 +1,54 @@
+# Copyright (c) 2022 Chipsea Technologies (Shenzhen) Corp., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("./../../../medical_sensor.gni")
+
+ohos_shared_library("libmedical_native") {
+  sources = [
+    "src/medical_client_stub.cpp",
+    "src/medical_data_channel.cpp",
+    "src/medical_service_client.cpp",
+    "src/medical_service_proxy.cpp",
+    "src/my_event_handler.cpp",
+    "src/my_file_descriptor_listener.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/frameworks/native/medical_sensor/include",
+    "$SUBSYSTEM_DIR/interfaces/native/include",
+    "$SUBSYSTEM_DIR/services/medical_sensor/include",
+    "$SUBSYSTEM_DIR/utils/include",
+  ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/services/medical_sensor:libmedical_service",
+    "$SUBSYSTEM_DIR/utils:libmedical_utils",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "eventhandler:libeventhandler",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
+  ]
+
+  part_name = "medical_sensor"
+  subsystem_name = "sensors"
+}
+
+group("medical_native_target") {
+  deps = [ ":libmedical_native" ]
+}

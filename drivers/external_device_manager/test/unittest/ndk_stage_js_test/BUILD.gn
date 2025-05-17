@@ -1,0 +1,58 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+
+module_out_path = "external_device_manager/unittest"
+
+ohos_js_stage_unittest("NdkStageJsTest") {
+  js_build_mode = "debug"
+  hap_profile = "entry/src/main/module.json"
+  deps = [
+    ":ndkstagejstest_js_assets",
+    ":ndkstagejstest_resources",
+  ]
+  ets2abc = true
+  certificate_profile = "signature/openharmony_sx.p7b"
+  hap_name = "NdkStageJsTest"
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+  module_out_path = module_out_path
+  shared_libraries = [
+    "./entry/src/main/cpp:base_ddk_ndk_test",
+    "./entry/src/main/cpp:hid_ddk_ndk_test",
+    "./entry/src/main/cpp:usb_ddk_ndk_test",
+    ":libcppsharedso",
+  ]
+}
+
+ohos_prebuilt_shared_library("libcppsharedso") {
+  source = rebase_path(libcxx_ndk_shared_file)
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+}
+
+ohos_app_scope("ndkstagejstest_app_profile") {
+  app_profile = "AppScope/app.json"
+  sources = [ "AppScope/resources" ]
+}
+
+ohos_js_assets("ndkstagejstest_js_assets") {
+  source_dir = "entry/src/main/ets"
+}
+
+ohos_resources("ndkstagejstest_resources") {
+  sources = [ "entry/src/main/resources" ]
+  deps = [ ":ndkstagejstest_app_profile" ]
+  hap_profile = "entry/src/main/module.json"
+}

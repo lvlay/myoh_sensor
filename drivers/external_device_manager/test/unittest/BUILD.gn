@@ -1,0 +1,148 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+import("//drivers/external_device_manager/extdevmgr.gni")
+module_output_path = "external_device_manager/unittest"
+usb_bus_extension_include_path = "${ext_mgr_path}/services/native/driver_extension_manager/include/bus_extension/usb"
+ohos_unittest("bus_extension_usb_test") {
+  module_out_path = "${module_output_path}"
+  sources = [
+    "bus_extension_usb_test/src/usb_bus_extension_test.cpp",
+    "bus_extension_usb_test/src/usb_ddk_service_mock.cpp",
+    "bus_extension_usb_test/src/usb_driver_info_test.cpp",
+    "bus_extension_usb_test/src/usb_impl_mock.cpp",
+    "bus_extension_usb_test/src/usb_subscriber_test.cpp",
+  ]
+  include_dirs = [
+    "bus_extension_usb_test/include",
+    "${ext_mgr_path}/frameworks/ddk/usb/",
+    "${ext_mgr_path}/interfaces/ddk/usb/",
+    "${usb_bus_extension_include_path}",
+  ]
+  deps = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/bus_extension/usb:driver_extension_usb_bus",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+  external_deps = [
+    "bundle_framework:appexecfwk_base",
+    "cJSON:cjson",
+    "c_utils:utils",
+    "drivers_interface_usb:libusb_ddk_proxy_1.0",
+    "drivers_interface_usb:libusb_proxy_1.0",
+    "hilog:libhilog",
+    "samgr:samgr_proxy",
+  ]
+  configs = [ "${utils_path}:utils_config" ]
+}
+ohos_unittest("driver_extension_controller_test") {
+  module_out_path = "${module_output_path}"
+  sources = [
+    "driver_extension_controller_test/src/driver_extension_controller_test.cpp",
+  ]
+  include_dirs = [ "${ext_mgr_path}/services/native/driver_extension_manager/include/device_manager" ]
+  deps = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/device_manager:driver_extension_device_manager",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+  external_deps = [
+    "ability_runtime:ability_manager",
+    "access_token:libaccesstoken_sdk",
+    "access_token:libnativetoken",
+    "access_token:libtoken_setproc",
+    "c_utils:utils",
+    "hilog:libhilog",
+    "samgr:samgr_proxy",
+  ]
+  configs = [ "${utils_path}:utils_config" ]
+}
+
+ohos_unittest("drivers_pkg_manager_test") {
+  module_out_path = "${module_output_path}"
+  sources = [
+    "drivers_pkg_manager_test/src/driver_pkg_manager_test.cpp",
+    "drivers_pkg_manager_test/src/drv_bundle_callback_test.cpp",
+    "drivers_pkg_manager_test/src/pkg_db_helper_test.cpp",
+  ]
+  include_dirs = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/drivers_pkg_manager",
+    "${usb_bus_extension_include_path}",
+    "${ext_mgr_path}/interfaces/ddk/usb",
+    "${ext_mgr_path}/services/zidl/include",
+  ]
+  deps = [
+    "${ext_mgr_path}/interfaces/innerkits:driver_ext_mgr_client",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+  external_deps = [
+    "ability_base:want",
+    "bundle_framework:appexecfwk_base",
+    "bundle_framework:appexecfwk_core",
+    "c_utils:utils",
+    "common_event_service:cesfwk_core",
+    "common_event_service:cesfwk_innerkits",
+    "drivers_interface_usb:libusb_proxy_1.0",
+    "hilog:libhilog",
+    "init:libbegetutil",
+    "ipc:ipc_core",
+    "ipc:ipc_single",
+    "os_account:os_account_innerkits",
+    "relational_store:native_appdatafwk",
+    "relational_store:native_dataability",
+    "relational_store:native_rdb",
+    "samgr:samgr_proxy",
+  ]
+  configs = [ "${utils_path}:utils_config" ]
+}
+
+ohos_unittest("driver_extension_manager_client_test") {
+  module_out_path = "${module_output_path}"
+
+  sources = [ "driver_extension_manager_client_test/driver_extension_manager_client_test.cpp" ]
+
+  include_dirs = [ "${ext_mgr_path}/services/zidl/include" ]
+
+  deps = [ "${ext_mgr_path}/interfaces/innerkits:driver_ext_mgr_client" ]
+
+  external_deps = [
+    "access_token:libaccesstoken_sdk",
+    "access_token:libnativetoken",
+    "access_token:libtoken_setproc",
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+    "samgr:samgr_proxy",
+  ]
+}
+
+group("external_device_manager_ut") {
+  testonly = true
+  deps = [
+    ":bus_extension_usb_test",
+    ":driver_extension_controller_test",
+    ":driver_extension_manager_client_test",
+    ":drivers_pkg_manager_test",
+    "ddk_base_test:ddk_base_test",
+    "device_manager_js_test:DeviceManagerJsTest",
+    "device_manager_test:device_manager_test",
+    "ndk_permission_js_test:NdkPermissionJsTest",
+    "ndk_stage_js_test:NdkStageJsTest",
+    "permission_js_test:PermissionJsTest",
+    "systemapi_js_test:SystemApiJsTest",
+  ]
+}

@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ohos.hdi.audio.effect.v1_0;
+
+/**
+ * @brief Defines audio effect info for the effect loading.
+ */
+struct EffectInfo {
+    String libName;         /**< assign the effect library name which is used to create contoller */
+    String effectId;        /**< effectId of the effect */
+    int ioDirection;        /**< Identify the direction of the effect */
+};
+
+/**
+ * @brief Defines effect contoller info including which library its belongs to and it's effectId.
+ */
+struct ControllerId {
+    String libName;         /**< assign the effect library name which is used to create contoller */
+    String effectId;        /**< effectId of the effect */
+};
+
+/**
+ * @brief Defines the effect controller descriptor.
+ */
+struct EffectControllerDescriptor {
+    String effectId;                   /**< effectId of the effect controller */
+    String effectName;                 /**< Name of the effect controller */
+    String libName;                    /**< Name of the effect library*/
+    String supplier;                   /**< Name of the effect supplier */
+};
+
+/**
+ * @brief data point type tag, the type is using on demand.
+ */
+enum AudioEffectBufferTag {
+    EFFECT_BUFFER_VOID_TYPE       = 0,      /**< raw audio data point to the start of the buffer */
+    EFFECT_BUFFER_FLOAT_SIGNED_32 = 1 << 0, /**< 32bit float type audio data point to the start of the buffer */
+    EFFECT_BUFFER_SINGED_32       = 1 << 1, /**< 32bit signed type audio data point to the start of the buffer */
+    EFFECT_BUFFER_SIGNED_16       = 1 << 2, /**< 16bit signed type audio data point to the start of the buffer */
+    EFFECT_BUFFER_UNSIGNED_8      = 1 << 3, /**< 8bit unsigned type audio data point to the start of the buffer */
+};
+
+/**
+ * @brief Defines audio effect process in buffer and out buffer.
+ */
+struct AudioEffectBuffer {
+    unsigned int frameCount;   /**< frame count in the frame buffer */
+    int datatag;               /** data point type tag for using simplify see {@link AudioEffectBufferTag} */
+    byte[] rawData;            /**< audio data point to the start of the buffer, the type is defined by datatag*/
+};
+
+/**
+ * @brief Defines effect contoller command index.
+ */
+enum EffectCommandTableIndex {
+    AUDIO_EFFECT_COMMAND_INIT_CONTOLLER, /* Init effect controller */
+    AUDIO_EFFECT_COMMAND_SET_CONFIG,     /* Set configuration */
+    AUDIO_EFFECT_COMMAND_GET_CONFIG,     /* Get configuration */
+    AUDIO_EFFECT_COMMAND_RESET,          /* Reset effect controller */
+    AUDIO_EFFECT_COMMAND_ENABLE,         /* Enable effect proccess */
+    AUDIO_EFFECT_COMMAND_DISABLE,        /* Disable effect proccess */
+    AUDIO_EFFECT_COMMAND_SET_PARAM,      /* Set parameters */
+    AUDIO_EFFECT_COMMAND_GET_PARAM,      /* Get parameters */
+};

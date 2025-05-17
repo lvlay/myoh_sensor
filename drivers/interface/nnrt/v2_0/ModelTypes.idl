@@ -1,0 +1,181 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup NNRt
+ * @{
+ *
+ * @brief Provides a unified interface for AI chip drivers to access OpenHarmony.\n
+ * Neural Network Runtime (NNRt) is a cross-chip inference computing runtime environment oriented to the AI field.
+ *
+ * @since 3.2
+ * @version 2.0
+ */
+
+/**
+ * @file ModelTypes.idl
+ *
+ * @brief Defines AI model structures.
+ *
+ * In {@link PrepareModel}, the AI model is parsed and converted into the structure for inference.\n
+ * Then, model inference is performed in {@link Run}. The process is as follows.
+ * - 1. Write the functions for each operator in the {@link NodeAttrTypes.idl} file and associate\n
+ * each function with a {@link NodeType}.
+ * - 2. The <b>subGraph</b> parameter of {@link Model} is traversed to obtain the operator nodes\n
+ * contained in the subgraph, the input and output tensors of the operator, and the input and output tensors\n
+ * of the entire {@link Model} from <b>nodeIndecies</b> of the subgraph.
+ * - 3. The operator functions are located based on the <b>nodeType</b> parameter of {@link Node} to\n
+ * build the model structure for runtime.
+ * - 4. When the tensors input by the user are passed to the model, the NNRt module performs model inference\n
+ * and the outputs the model inference result.
+ *
+ * @since 3.2
+ * @version 2.0
+ */
+
+/**
+ * @brief Defines the package path of the NNRt module.
+ *
+ * @since 3.2
+ * @version 2.0
+ */
+package ohos.hdi.nnrt.v2_0;
+
+import ohos.hdi.nnrt.v2_0.NnrtTypes;
+
+/**
+ * @brief Defines the tensor structure.
+ *
+ * @since 3.2
+ * @version 2.0
+ */
+struct Tensor {
+    /** Tensor name. */
+    String name;
+    /** Tensor data type. For details, see {@link DataType}. */
+    enum DataType dataType;
+    /** Tensor dimensions. */
+    int[] dims;
+    /** Format of the tensor data. For details, see {@link Format}. */
+    enum Format format;
+    /** Structure used for passing the tensor data during process communication.\n
+      * For details, see {@link SharedBuffer}.
+      */
+    struct SharedBuffer data;
+    /**
+     * Array of quantization parameters of the tensor. For details, see {@link QuantParam}.
+     * If the length is <b>1</b>, all axes share one quantization parameter.
+     * If the length is not <b>1</b>, each quantization parameter in the array corresponds to an axis.
+     */
+    struct QuantParam[] quantParams;
+};
+
+/**
+ * @brief Defines the operator node structure.
+ * 
+ * <b>nodeAttr</b> is a segment of serialized data. Specific parameters can be obtained only by using
+ * the deserialization interface of OpenHarmony HDI.
+ *      The process is as follows:
+ *      - Define the operator parameter structure <b>OP op{}</b>, where <b>OP</b> can be replaced with
+ *      the operator parameter structure defined in {@link NodeAttrTypes.idl} and <b>op</b> is a variable name.
+ *      - Declare `OHOS::MessageParcel data;`, that is, the <b>MessageParcle</b> object used to store deserialized data. 
+ *      - Use <b>data.WriteBuffer (nodeAttr.data(),nodeAttr.size());</b> to write <b>nodeAttr</b> to <b>data</b>.
+ *      - Use <b>(void)OPBlockUnmarshalling(data, op);</b> to deserialize <b>data</b> to the <b>op</b> structure. <br>
+ *      Then, you can view the parameter values of the operator in <b>op</b>.
+ *
+ *      Example:
+ *      If <b>nodeType</b> of an operator is <b>NODE_TYPE_FULL_CONNECTION</b>, the corresponding operator
+ *      parameter structure is {@link FullConnection}.
+ *      The operator has four parameters: <b>hasBias</b>, <b>useAxis</b>, <b>axis</b>, and <b>activationType</b>.<br>
+ *      The invoking process is as follows: <br>
+ *      FullConnection full_connection{};<br>
+ *      OHOS::MessageParcel data;<br>
+ *      data.WriteBuffer(nodeAttr.data(),nodeAttr.size());<br>
+ *      (void)FullConnectionBlockUnmarshalling(data, full_connection);<br>
+ *      Up to now, the four parameters are written into <b>full_connection</b>.
+ * 
+ * @since 3.2
+ * @version 2.0
+ */
+struct Node {
+    /** Operator node name. */
+    String name;
+    /** Operator node type. For details, see {@link NodeType}. */
+    enum NodeType nodeType;
+    /**
+     * Array of the serialized data corresponding to the operator node parameters.
+     */
+    byte[] nodeAttr;
+    /** Subscript of the input node of the operator node. */
+    unsigned int[] inputIndex;
+    /** Subscript of the output node of the operator node. */
+    unsigned int[] outputIndex;
+    /** Quantization parameter of the operator node. For details, see {@link QuantType}. */
+    enum QuantType quantType;
+};
+
+/**
+ * @brief Defines the subgraph structure.
+ *
+ * @since 3.2
+ * @version 2.0
+ */
+struct SubGraph {
+    /** Subgraph name. */
+    String name;
+    /** Indices of the input subgraphs in <b>subGraph</b> of {@link Model}. */
+    unsigned int[] inputIndices;
+    /** Indices of the output subgraphs in <b>subGraph</b> of {@link Model}. */
+    unsigned int[] outputIndices;
+    /** Indices of the operator nodes related to the subgraph in the <b>nodes</b> array of {@link Model}. */
+    unsigned int[] nodeIndices;
+};
+
+/**
+ * @brief Defines the model structure.
+ * 
+ * This structure stores all information required for model inference. Subgraph 0 of each model is the main subgraph.\n
+ * Generally, a model has only one <b>subGraph</b>.
+ * 
+ * @since 3.2
+ * @version 2.0
+ */
+struct Model {
+    /** Model name. */
+    String name;
+    /** 
+     * Index of the input tensor of the model in <b>allTensors</b>.
+     */
+    unsigned int[] inputIndex;
+    /** 
+     * Index of the output tensor of the model in <b>allTensors</b>.
+     */
+    unsigned int[] outputIndex;
+    /** 
+     * Array of all operator nodes in the model. For details, see {@link Node}.
+     */
+    struct Node[] nodes;
+    /** 
+     * Array of all tensors in the model. The array contains input tensors, output tensors, and constant tensors.\n
+     * For details, see {@link Tensor}.
+     */
+    struct Tensor[] allTensors;
+    /** 
+     * Array of all subgraphs in the model. For details, see {@link SubGraph}.
+     */
+    struct SubGraph[] subGraph;
+};
+
+/** @} */

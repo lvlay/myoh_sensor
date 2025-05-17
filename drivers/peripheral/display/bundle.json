@@ -1,0 +1,59 @@
+{
+  "name": "@ohos/drivers_peripheral_display",
+  "description": "display device driver",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/display"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_display",
+    "subsystem": "hdf",
+    "adapted_system_type": ["standard", "small"],
+    "rom": "1260KB",
+    "ram": "7700KB",
+    "features": [
+      "drivers_peripheral_display_community",
+      "drivers_peripheral_display_vdi_default",
+      "drivers_peripheral_display_hicollie_enable"
+    ],
+    "deps": {
+      "components": [
+        "hdf_core",
+        "hilog",
+        "c_utils",
+        "ipc",
+        "drivers_interface_display",
+        "graphic_surface",
+        "init",
+        "hitrace",
+        "libdrm",
+        "hicollie"
+      ],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/display:display_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/display:display_test_entry"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client",
+            "header": {
+              "header_files": [
+                "idisplay_gralloc.h",
+                "parcel_utils.h"
+              ],
+              "header_base": "//drivers/peripheral/display/hdi_service/gralloc/include"
+          }
+        }
+      ]
+    }
+  }
+}

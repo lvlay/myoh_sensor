@@ -1,0 +1,51 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+import("./../../../display_config.gni")
+
+config("module_private_config") {
+  visibility = [ ":*" ]
+}
+
+ohos_static_library("disp_dev_hdi_test_common") {
+  defines = []
+  defines += display_defines
+  sources = [
+    "display_test_utils.cpp",
+    "hdi_composition_check.cpp",
+    "hdi_test_device.cpp",
+    "hdi_test_display.cpp",
+    "hdi_test_layer.cpp",
+  ]
+
+  output_name = "disp_dev_hdi_test_common"
+  cflags = [
+    "-DGRALLOC_GBM_SUPPORT",
+    "-Wno-macro-redefined",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "drivers_interface_display:libdisplay_buffer_hdi_impl",
+    "drivers_interface_display:libdisplay_buffer_stub_1.0",
+    "drivers_interface_display:libdisplay_composer_hdi_impl_1.1",
+    "drivers_interface_display:libdisplay_composer_stub_1.1",
+    "graphic_surface:buffer_handle",
+    "hdf_core:libhdf_utils",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+  ]
+  subsystem_name = "hdf"
+  part_name = "drivers_peripheral_display"
+}

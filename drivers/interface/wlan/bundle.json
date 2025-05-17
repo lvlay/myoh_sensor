@@ -1,0 +1,211 @@
+{
+    "name": "@ohos/drivers_interface_wlan",
+    "description": "wlan device driver interface",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/wlan"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_wlan",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "hdf_core",
+          "hilog",
+          "c_utils",
+          "ipc"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/wlan/v1_1:wlan_idl_target",
+          "//drivers/interface/wlan/v1_2:wlan_idl_target",
+          "//drivers/interface/wlan/v1_3:wlan_idl_target",
+          "//drivers/interface/wlan/wpa/v1_0:wpa_idl_target",
+          "//drivers/interface/wlan/wpa/v1_1:wpa_idl_target",
+          "//drivers/interface/wlan/hostapd/v1_0:hostapd_idl_target",
+          "//drivers/interface/wlan/chip/v1_0:chip_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/wlan/v1_1:libwlan_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_1:wlan_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_1:libwlan_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_2:libwlan_proxy_1.2",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_2:wlan_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_2:libwlan_stub_1.2",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_3:libwlan_proxy_1.3",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_3:wlan_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/v1_3:libwlan_stub_1.3",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_0:libwpa_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_0:wpa_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_0:libwpa_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_1:libwpa_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_1:wpa_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/wpa/v1_1:libwpa_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/wpa"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/hostapd/v1_0:libhostapd_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/hostapd"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/hostapd/v1_0:hostapd_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/hostapd"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/hostapd/v1_0:libhostapd_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/hostapd"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/chip/v1_0:libchip_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/chip"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/chip"
+            }
+          },
+          {
+            "name": "//drivers/interface/wlan/chip/v1_0:libchip_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/wlan/chip"
+            }
+          }
+        ]
+      }
+    }
+  }

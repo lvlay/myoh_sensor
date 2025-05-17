@@ -1,0 +1,79 @@
+{
+    "name": "@ohos/drivers_interface_input",
+    "description": "input device driver interface",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/input"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_input",
+      "subsystem": "hdf",
+      "features": [],
+      "adapted_system_type": ["standard", "small"],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "c_utils",
+          "ipc",
+          "hdf_core",
+          "hilog"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/input/v1_0:input_idl_target",
+          "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/input/v1_0:libinput_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/input"
+            }
+          },
+          {
+            "name": "//drivers/interface/input/v1_0:input_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/input"
+            }
+          },
+          {
+            "name": "//drivers/interface/input/ddk/v1_0:libhid_ddk_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/input/ddk"
+            }
+          },
+          {
+            "name": "//drivers/interface/input/ddk/v1_0:libhid_ddk_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/input/ddk"
+            }
+          },
+          {
+            "name": "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/input/ddk"
+            }
+          }
+        ]
+      }
+    }
+  }

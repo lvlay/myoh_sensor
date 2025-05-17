@@ -1,0 +1,158 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfFaceAuth
+ * @{
+ *
+ * @brief Provides APIs for the face auth driver.
+ *
+ * The face auth driver provides a unified interface for the face auth service to access the face auth driver.
+ * After obtaining the face auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the face auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @file IExecutor.idl
+ *
+ * @brief Defines the APIs of the executors. These APIs can be used to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ */
+
+package ohos.hdi.face_auth.v1_0;
+
+import ohos.hdi.face_auth.v1_0.FaceAuthTypes;
+import ohos.hdi.face_auth.v1_0.IExecutorCallback;
+sequenceable ohos.hdi.camera.v1_0.BufferProducerSequenceable;
+
+/**
+ * @brief Defines the APIs of the executors. These APIs can be used to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+interface IExecutor {
+    /**
+     * @brief Gets executor information.
+     *
+     * @param executorInfo Indicates executor information. See {@link ExecutorInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    GetExecutorInfo([out] struct ExecutorInfo executorInfo);
+    /**
+     * @brief Gets template information.
+     *
+     * @param templateId Indicates the template ID.
+     * @param templateInfo Indicates template information. See {@link TemplateInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     *
+     * @deprecated
+     */
+    GetTemplateInfo([in] unsigned long templateId, [out] struct TemplateInfo templateInfo);
+    /**
+     * @brief Sends parameters to the driver when executor registration is finished.
+     *
+     * @param templateIdList Indicates the templates previously registered to the user auth framework.
+     * @param frameworkPublicKey Indicates the framework public key.
+     * @param extraInfo Indicates the extra information that is sent to the executors.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    OnRegisterFinish([in] unsigned long[] templateIdList, [in] unsigned char[] frameworkPublicKey, [in] unsigned char[] extraInfo);
+    /**
+     * @brief Enrolls templates.
+     *
+     * @param scheduleId Indicates the schedule ID of enrollment.
+     * @param extraInfo Indicates the extra information of enrollment.
+     * @param callbackObj Indicates the callback object of enrollment. See {@link IExecutorCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    Enroll([in] unsigned long scheduleId, [in] unsigned char[] extraInfo, [in] IExecutorCallback callbackObj);
+    /**
+     * @brief Authenticates templates.
+     *
+     * @param scheduleId Indicates the schedule ID of authentication.
+     * @param templateIdList Indicates the templates to authenticate.
+     * @param extraInfo Indicates the extra information of authentication.
+     * @param callbackObj Indicates the callback object of authentication. See {@link IExecutorCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    Authenticate([in] unsigned long scheduleId, [in] unsigned long[] templateIdList, [in] unsigned char[] extraInfo, [in] IExecutorCallback callbackObj);
+    /**
+     * @brief Identifies templates.
+     *
+     * @param scheduleId Indicates the schedule ID of identification.
+     * @param extraInfo Indicates the extra information of identification.
+     * @param callbackObj Indicates the callback object of identification. See {@link IExecutorCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    Identify([in] unsigned long scheduleId, [in] unsigned char[] extraInfo, [in] IExecutorCallback callbackObj);
+    /**
+     * @brief Deletes templates.
+     *
+     * @param templateIdList Indicates the templates to delete.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    Delete([in] unsigned long[] templateIdList);
+    /**
+     * @brief Cancels the enrollment, authentication, or identification operation.
+     *
+     * @param scheduleId Indicates the schedule ID of the operation to cancel.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    Cancel([in] unsigned long scheduleId);
+    /**
+     * @brief Sends a command to the driver.
+     *
+     * @param commandId Indicates the command ID. See {@link CommandId}.
+     * @param extraInfo Indicates the extra information of the command.
+     * @param callbackObj Indicates the callback object of the command. See {@link IExecutorCallback}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    SendCommand([in] int commandId, [in] unsigned char[] extraInfo, [in] IExecutorCallback callbackObj);
+    /**
+     * @brief Set buffer producer.
+     *
+     * @param bufferProducer Indicates bufferProducer set to executor.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value if the operation fails.
+     */
+    SetBufferProducer([in] BufferProducerSequenceable bufferProducer);
+}
+/** @} */

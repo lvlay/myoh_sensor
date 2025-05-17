@@ -1,0 +1,41 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+#
+# HDF is dual licensed: you can use it either under the terms of
+# the GPL, or the BSD license, at your option.
+# See the LICENSE file in the root of this repository for complete details.
+
+import("//build/config/features.gni")
+import("//build/ohos.gni")
+import("//build/test.gni")
+
+module_output_path = "hdf_core/hdf_core/syscall_fuzzer"
+
+hdf_framework_path = "../../../../../framework"
+hdf_uhdf_path = "../../../../../adapter/uhdf2"
+hdf_interfaces_path = "../../../../interfaces"
+
+ohos_fuzztest("SyscallFuzzTest") {
+  module_out_path = module_output_path
+
+  fuzz_config_file =
+      "$hdf_framework_path/test/fuzztest/syscall_fuzzer/syscall_fuzzer"
+
+  include_dirs = [
+    "$hdf_uhdf_path/manager/include",
+    "$hdf_framework_path/core/adapter/syscall/include",
+    "$hdf_interfaces_path/inner_api/osal/shared",
+  ]
+
+  sources = [ "syscall_fuzzer.cpp" ]
+  deps = [ "../../../../../adapter/uhdf2/utils:libhdf_utils" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hilog:libhilog",
+  ]
+}
+
+group("fuzztest") {
+  testonly = true
+  deps = [ ":SyscallFuzzTest" ]
+}

@@ -1,0 +1,126 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiIntelligentVoiceEngine
+ * @{
+ *
+ * @brief Provides unified APIs for intelligent voice framework services to access intelligent voice engine drivers.
+ *
+ * An intelligent voice framework service can obtain an intelligent voice engine driver object or agent and then call APIs provided by this object or agent to
+ * access different types of intelligent voice engine devices based on the intelligent voice engine IDs, thereby obtaining or sending intelligent voice engine information,
+ * creating or releasing an intelligent voice engine adapter, attaching or detaching the intelligent voice engine,
+ * starting or stopping the intelligent voice engine, setting parameter to or getting parameter from the intelligent voice engine, 
+ * writing audio or reading files from the intelligent voice engine, subscribing callback to the intelligent voice engine.
+ *
+ * @since 4.0
+ * @version 1.2
+ */
+
+/**
+ * @file IntellVoiceEngineTypes.idl
+ *
+ * @brief Defines the data used by the intelligent voice engine module, including the upload hdi file and evaluation result information.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+
+package ohos.hdi.intelligent_voice.engine.v1_2;
+
+import ohos.hdi.intelligent_voice.engine.v1_0.IntellVoiceEngineTypes;
+
+/**
+ * @brief Enumerates intelligent voice engine content types.
+ *
+ * @since 4.0
+ * @version 1.2
+ */
+enum ContentType : ohos.hdi.intelligent_voice.engine.v1_0.ContentType {
+    DEFAULT_DSP_MODLE = 0,    /**< Default dsp model */
+    SHORT_WORD_DSP_MODEL = 1,  /**< Short word dsp model */
+};
+
+/**
+ * @brief Enumerates intelligent voice engine message types.
+ *
+ * @since 4.0
+ * @version 1.2
+ */
+enum IntellVoiceEngineMessageType : ohos.hdi.intelligent_voice.engine.v1_0.IntellVoiceEngineMessageType {
+    INTELL_VOICE_ENGINE_MSG_RECONFIRM_RECOGNITION_COMPLETE = 5, /**< Reconfirm recognition complete */
+    INTELL_VOICE_ENGINE_MSG_HEADSET_RECOGNIZE_COMPLETE = 6,     /**< Headset recognize complete */
+};
+
+/**
+ * @brief Enumerates upload hdi file types.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+enum UploadHdiFileType {
+    FILE_TYPE_ENROLL = 0, /**< Enroll file */
+    FILE_TYPE_WAKEUP = 1, /**< Wakeup file */
+};
+
+/**
+ * @brief Enumerates evaluation result code.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+enum EvaluationResultCode {
+    UNKNOWN = 0,                         /**< Unknown */
+    PASS = 1,                            /**< Pass */
+    WORD_EMPTY = 2,                      /**< Word is empty */
+    CHINESE_ONLY = 3,                    /**< Only chinese is supported */
+    INVALID_LENGTH = 4,                  /**< Invalid length */
+    UNUSUAL_WORD = 5,                    /**< Unusual word */
+    CONSECUTIVE_SAME_WORD = 6,           /**< Consecutive same word */
+    TOO_FEW_PHONEMES = 7,                /**< Too few phonemes */
+    TOO_MANY_PHONEMES = 8,               /**< Too many phonemes */
+    COMMON_INSTRUCTION = 9,              /**< Contain common instruction */
+    COMMON_SPOKEN_LANGUAGE = 10,         /**< Contain common spoken language */
+    SENSITIVE_WORD = 11,                 /**< Contain sensitive word */
+    NO_INITIAL_CONSONANT = 12,           /**< Two consecutive words without initial consonant */ 
+    REPEATED_PHONEME = 13,               /**< Contain repeated phoneme */
+};
+
+/**
+ * @brief Defines upload hdi file information.
+ *
+ * The upload hdi file information includes the type, description, content.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+struct UploadHdiFile {
+    UploadHdiFileType type;    /**< upload hdi file type */
+    String filesDescription;   /**< files description */
+    List<Ashmem> filesContent; /**< files content */
+};
+
+/**
+ * @brief Defines evaluation result information.
+ *
+ * The evaluation result information includes the score, result code.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+struct EvaluationResultInfo {
+    int score;                       /**< score */
+    EvaluationResultCode resultCode; /**< result code */
+};

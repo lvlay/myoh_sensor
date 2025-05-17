@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiA2dp
+ * @{
+ *
+ * @brief Provides unified APIs for the A2DP service.
+ *
+ * The Host can use the interface provided by the module to create an audio session,
+ * and exchange data with the audio subsystem.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @file IBluetoothAudioCallback.idl
+ *
+ * @brief Defines the callback function, including the start, suspend, stop operations from audio.
+ *
+ * @since 4.0
+ * @version 2.0
+ */
+
+package ohos.hdi.bluetooth.a2dp.v2_0;
+
+import ohos.hdi.bluetooth.a2dp.v2_0.BluetoothAudioTypes;
+
+/**
+ * @brief Defines the callback function to start, suspend, stop audio render, change current codec.
+ *
+ * @since 4.0
+ * @version 2.0
+ */
+[callback] interface IBluetoothAudioCallback {
+    /**
+     * @brief Start audio render callback function.
+     *
+     * @return Returns <b>0</b> if the result is returned successfully; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 2.0
+     */
+    StartRender();
+
+    /**
+     * @brief Suspend audio render callback function.
+     *
+     * @return Returns <b>0</b> if the result is returned successfully; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 2.0
+     */
+    SuspendRender();
+
+    /**
+     * @brief Stop audio render callback function.
+     *
+     * @return Returns <b>0</b> if the result is returned successfully; returns a negative value otherwise.
+     *
+     * @since 4.0
+     * @version 2.0
+     */
+    StopRender();
+
+    /**
+     * @brief Change the audio encoder callback function.
+     *
+     * @return Returns <b>0</b> if the result is returned successfully; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 2.0
+     */
+     ChangeCodec([in] struct CodecParam codecParam);
+
+    /**
+     * @brief Obtains the last number of output audio frames.
+     *
+     * @param latencyNs Indicates the pointer to the latency.
+     * @param frames Indicates the pointer to the last number of output audio frames.
+     * @param time Indicates the pointer to the timestamp associated with the frame.
+     * @return Returns <b>0</b> if the last number is obtained; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+     GetRenderPosition([out] unsigned long latencyNs, [out] unsigned long frames, [out] struct BluetoothTimeStamp time);
+}

@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file IWlanInterface.idl
+ *
+ * @brief Provides APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to or disconnect from a WLAN hotspot,
+ * set the country code, and manage network devices.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+package ohos.hdi.wlan.v1_2;
+
+import ohos.hdi.wlan.v1_1.IWlanInterface;
+
+interface IWlanInterface extends ohos.hdi.wlan.v1_1.IWlanInterface {
+    /**
+     * @brief Obtain ap current bandwidth.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param bandwidth ap current bandwidth, 1(20M), 2(40M), 4(80M), 8(160M).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    GetApBandwidth([in] String ifName, [out] unsigned char bandwidth);
+
+    /**
+     * @brief reset to factory mac address(permanent hardware address).
+     *
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    ResetToFactoryMacAddress([in] String ifName);
+
+    /**
+     * @brief send action frame to driver.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param freq Indicates the send channel frequency.
+     * @param ifName Indicates the action frame data.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    SendActionFrame([in] String ifName, [in] unsigned int freq, [in] unsigned char[] frameData);
+
+    /**
+     * @brief register action frame receiver.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param txChannel Indicates the data matching action frame.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    RegisterActionFrameReceiver([in] String ifName, [in] unsigned char[] match);
+
+    /**
+     * @brief set power save manager mode.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param frequency Indicates connected ap frequency.
+     * @param mode Indicates power save mode, 3(enable power save), 4(disable power save).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    SetPowerSaveMode([in] String ifName, [in] int frequency, [in] int mode);
+
+    /**
+     * @brief set data packet identification mark rule.
+     *
+     * @param uid Indicates target app uid.
+     * @param protocol Indicates target protocol type, tcp/udp.
+     * @param enable Indicates enable/disable dpi mark rule.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.1
+     * @version 1.2
+     */
+    SetDpiMarkRule([in] int uid, [in] int protocol, [in] int enable);
+}
+/** @} */

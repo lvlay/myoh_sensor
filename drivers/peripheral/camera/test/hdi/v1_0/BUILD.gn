@@ -1,0 +1,156 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("../../../camera.gni")
+camera_test_path = "//drivers/peripheral/camera/test/hdi/"
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/test.gni")
+  import("../../../../../hdf_core/adapter/uhdf/uhdf.gni")
+
+  config("camhdi_at_test_config") {
+    visibility = [ ":*" ]
+    cflags_cc = [
+      "-DGST_DISABLE_DEPRECATED",
+      "-DHAVE_CONFIG_H",
+      "-DCOLORSPACE=\"videoconvert\"",
+      "--coverage",
+    ]
+    ldflags = [ "--coverage" ]
+    cflags_cc += [ "-std=c++17" ]
+  }
+
+  unittest("camera_test_at") {
+    output_extension = "bin"
+    output_dir = "$root_out_dir/test/unittest/hdf"
+    sources = [
+      "$camera_path/../../test/common/callback/src/camera_device_callback.cpp",
+      "$camera_path/../../test/common/callback/src/camera_host_callback.cpp",
+      "$camera_path/../../test/common/callback/src/stream_operator_callback.cpp",
+    ]
+
+    include_dirs = [
+      "$camera_path/../../interfaces/include",
+      "$camera_path/../../interfaces/hdi_passthrough",
+      "$camera_path/../../test/common/callback/include",
+      "$camera_path/include",
+      "$camera_path/../../hdi_service/v1_0/include",
+      "$camera_path/../v4l2/src/stream_operator/stream_tunnel/lite",
+      "$camera_path/device_manager/include/",
+      "$camera_path/device_manager/include/mpi",
+      "$camera_path/utils/event",
+      "$camera_path/../../base",
+      "$camera_path/../../display/interfaces/include",
+
+      #producer
+      "$camera_path/pipeline_core/utils",
+      "$camera_path/pipeline_core/include",
+      "$camera_path/pipeline_core/host_stream/include",
+      "$camera_path/pipeline_core/nodes/include",
+      "$camera_path/pipeline_core/nodes/src/node_base",
+      "$camera_path/pipeline_core/nodes/src/dummy_node",
+      "$camera_path/pipeline_core/pipeline_impl/src/strategy/config",
+      "$camera_path/pipeline_core/pipeline_impl/include",
+      "$camera_path/pipeline_core/pipeline_impl/src",
+      "$camera_path/pipeline_core/pipeline_impl/src/builder",
+      "$camera_path/pipeline_core/pipeline_impl/src/dispatcher",
+      "$camera_path/pipeline_core/pipeline_impl/src/parser",
+      "$camera_path/pipeline_core/pipeline_impl/src/strategy",
+      "$camera_path/pipeline_core/ipp/include",
+    ]
+
+    public_deps = [
+      "$camera_path/../../hdi_service/v1_0:camera_host_service_1.0",
+      "$hdf_uhdf_path/utils:libhdf_utils",
+      "../../../../hdf_core/adapter/uhdf/manager:hdf_core",
+    ]
+    external_deps = [
+      "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
+      "drivers_interface_camera:metadata",
+      "graphic_surface:surface",
+      "hdf_core:hdf_platform",
+      "hdf_core:hdf_posix_osal",
+      "hilog_lite:hilog_shared",
+    ]
+  }
+} else {
+  import("//build/ohos.gni")
+  import("//build/test.gni")
+  import("../../../../../hdf_core/adapter/uhdf2/uhdf.gni")
+
+  module_output_path = "drivers_peripheral_camera/camera"
+
+  config("camhdi_at_test_config") {
+    visibility = [ ":*" ]
+    cflags_cc = [
+      "-DGST_DISABLE_DEPRECATED",
+      "-DHAVE_CONFIG_H",
+      "-DCOLORSPACE=\"videoconvert\"",
+      "--coverage",
+    ]
+    ldflags = [ "--coverage" ]
+  }
+
+  ohos_unittest("camera_test_at") {
+    testonly = true
+    module_out_path = module_output_path
+    sources = [
+      "$camera_test_path/v1_0/src/camera_3a_uttest.cpp",
+      "$camera_test_path/v1_0/src/camera_hal_hisysevent_test.cpp",
+      "$camera_test_path/v1_0/src/device_ability_uttest.cpp",
+      "$camera_test_path/v1_0/src/hdi_device_uttest.cpp",
+      "$camera_test_path/v1_0/src/hdi_host_uttest.cpp",
+      "$camera_test_path/v1_0/src/hdi_stream_uttest.cpp",
+      "$camera_test_path/v1_0/src/ut_common.cpp",
+    ]
+
+    include_dirs = [
+      # common includes
+      "$camera_test_path/v1_0/include",
+      "//third_party/googletest/googletest/include",
+      "$camera_path/../../../display/interfaces/include",
+      "$camera_path/../../../display/hdi_service/gralloc/include",
+      "$camera_path/../../interfaces/include",
+      "$camera_path/include",
+    ]
+
+    deps = [
+      "//third_party/googletest:gmock_main",
+      "//third_party/googletest:gtest",
+      "//third_party/googletest:gtest_main",
+    ]
+
+    if (is_standard_system) {
+      external_deps = [
+        "c_utils:utils",
+        "hdf_core:libhdf_host",
+        "hdf_core:libhdf_ipc_adapter",
+        "hdf_core:libhdf_utils",
+        "hdf_core:libhdi",
+        "hilog:libhilog",
+        "ipc:ipc_single",
+      ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+
+    external_deps += [
+      "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
+      "drivers_interface_camera:libcamera_proxy_1.0",
+      "drivers_interface_camera:metadata",
+      "graphic_surface:surface",
+      "samgr:samgr_proxy",
+    ]
+    public_configs = [ ":camhdi_at_test_config" ]
+  }
+}

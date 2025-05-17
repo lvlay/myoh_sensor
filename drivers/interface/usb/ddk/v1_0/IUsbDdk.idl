@@ -1,0 +1,196 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* *
+ * @addtogroup HdiUsbDdk
+ * @{
+ *
+ * @brief Provides USB DDK APIs to open and close USB interfaces, perform non-isochronous and isochronous\n
+ * data transfer over USB pipes, and implement control transfer and interrupt transfer, etc.
+ * @since 4.0
+ */
+
+/* *
+ * @file IUsbDdk.idl
+ *
+ * @brief Declares the USB DDK APIs used by the USB host to access USB devices.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+package ohos.hdi.usb.ddk.v1_0;
+
+import ohos.hdi.usb.ddk.v1_0.UsbDdkTypes;
+
+/* *
+ * @brief Declares the USB DDK APIs used by the USB host to access USB devices.
+ */
+interface IUsbDdk
+{
+
+    /* *
+     * @brief Initializes the DDK.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    Init();
+
+    /* *
+     * @brief Releases the DDK.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    Release();
+
+    /* *
+     * @brief Obtains the USB device descriptor.
+     *
+     * @param deviceId ID of the device whose descriptor is to be obtained.
+     * @param desc Standard device descriptor defined in the USB protocol.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    GetDeviceDescriptor([in] unsigned long deviceId, [out] struct UsbDeviceDescriptor desc);
+
+    /* *
+     * @brief Obtains the configuration descriptor.
+     *
+     * @param deviceId ID of the device whose configuration descriptor is to be obtained.
+     * @param configIndex Configuration index, which corresponds to <b>bConfigurationValue</b> in the USB protocol.
+     * @param configDesc Configuration descriptor, which includes the standard configuration descriptor defined in the\n
+     * USB protocol and the associated interface descriptor and endpoint descriptor.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    GetConfigDescriptor([in] unsigned long deviceId, [in] unsigned char configIndex, [out] List<unsigned char> configDesc);
+
+    /* *
+     * @brief Claims a USB interface.
+     *
+     * @param deviceId ID of the device to be operated.
+     * @param interfaceIndex Interface index, which corresponds to <b>bInterfaceNumber</b> in the USB protocol.
+     * @param interfaceHandle Interface operation handle. After the interface is claimed successfully, a value will be\n
+     * assigned to this parameter.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    ClaimInterface([in] unsigned long deviceId, [in] unsigned char interfaceIndex, [out] unsigned long interfaceHandle);
+
+    /* *
+     * @brief Releases a USB interface.
+     *
+     * @param interfaceHandle Interface operation handle.
+     *
+     * @return  <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    ReleaseInterface([in] unsigned long interfaceHandle);
+
+    /* *
+     * @brief Activates the alternate setting of the USB interface.
+     *
+     * @param interfaceHandle Interface operation handle.
+     * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
+     * in the USB protocol.
+     * @return  <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    SelectInterfaceSetting([in] unsigned long interfaceHandle, [in] unsigned char settingIndex);
+
+    /* *
+     * @brief Obtains the activated alternate setting of the USB interface.
+     *
+     * @param interfaceHandle Interface operation handle.
+     * @param settingIndex Index of the alternate setting, which corresponds to <b>bAlternateSetting</b>\n
+     * in the USB protocol.
+     *
+     * @return  <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    GetCurrentInterfaceSetting([in] unsigned long interfaceHandle, [out] unsigned char settingIndex);
+
+    /* *
+     * @brief Sends a control read transfer request. This API works in a synchronous manner.
+     *
+     * @param interfaceHandle Interface operation handle.
+     * @param setup Request data, which corresponds to <b>Setup Data</b> in the USB protocol.
+     * @param timeout Timeout duration, in milliseconds.
+     * @param data Data to be transferred.
+     * @return  <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    SendControlReadRequest([in] unsigned long interfaceHandle, [in] struct UsbControlRequestSetup setup, [in] unsigned int timeout, [out] List<unsigned char> data);
+
+    /* *
+     * @brief Sends a control write transfer request. This API works in a synchronous manner.
+     *
+     * @param interfaceHandle Interface operation handle.
+     * @param setup Request data, which corresponds to <b>Setup Data</b> in the USB protocol.
+     * @param timeout Timeout duration, in milliseconds.
+     * @param data Data to be transferred.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    SendControlWriteRequest([in] unsigned long interfaceHandle, [in] struct UsbControlRequestSetup setup, [in] unsigned int timeout, [in] List<unsigned char> data);
+
+    /* *
+     * @brief Sends a pipe request. This API works in a synchronous manner. This API applies to interrupt transfer\n
+     * and bulk transfer.
+     *
+     * @param pipe Pipe used to transfer data.
+     * @param size Buffer size.
+     * @param offset Offset of the used buffer. The default value is 0, indicating that there is no offset\n
+     * and the buffer starts from the specified address.
+     * @param length Length of the used buffer. By default, the value is equal to the size, indicating that\n
+     * the entire buffer is used.
+     * @param transferredLength Length of the transferred data.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    SendPipeRequest([in] struct UsbRequestPipe pipe, [in] unsigned int size, [in] unsigned int offset, [in] unsigned int length, [out] unsigned int transferedLength);
+
+    /* *
+     * @brief Sends a pipe request. This API works in a synchronous manner. This API applies to interrupt transfer\n
+     * and bulk transfer.
+     *
+     * @param pipe Pipe used to transfer data.
+     * @param ashmem Share memory used to transfer data;
+     * @param transferredLength Length of the transferred data;
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 5.0
+     * @version 1.0
+     */
+    SendPipeRequestWithAshmem([in] struct UsbRequestPipe pipe, [in] UsbAshmem ashmem, [out] unsigned int transferredLength);
+
+    /* *
+     * @brief Gets the file descriptor for memory mapping.
+     *
+     * @param deviceId ID of the device to be operated.
+     * @param fd The file descriptor obtained for memory mapping.
+     *
+     * @return <b>0</b> if the operation is successful; a negative value otherwise.
+     * @since 4.0
+     */
+    GetDeviceMemMapFd([in] unsigned long deviceId, [out] FileDescriptor fd);
+}

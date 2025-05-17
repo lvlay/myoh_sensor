@@ -1,0 +1,7 @@
+ 
+package ohos.hdi.myled.v1_0;
+
+interface IMyledInterface {
+    set_led_status([in] int mode);
+}
+  

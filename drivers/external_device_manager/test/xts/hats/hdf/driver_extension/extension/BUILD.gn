@@ -1,0 +1,78 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//build/ohos_var.gni")
+import("//build/test.gni")
+import("//foundation/ability/ability_runtime/ability_runtime.gni")
+import("//test/xts/tools/build/suite.gni")
+
+module_output_path = "hats/driver_extension"
+
+ohos_moduletest_suite("HatsHdfExtensionTest") {
+  module_out_path = module_output_path
+
+  include_dirs = [
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test/libs/system_ability_mock",
+    "${distributedschedule_path}/samgr/interfaces/innerkits/samgr_proxy/include",
+    "../../../../../../external_device_manager/services/native/driver_extension/include",
+  ]
+
+  sources = [
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test/libs/appexecfwk_core/src/appmgr/mock_app_scheduler.cpp",
+    "driver_extension_context_test.cpp",  # add mock file
+  ]
+
+  configs = [
+    "${ability_runtime_services_path}/abilitymgr:abilityms_config",
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test:aafwk_mock_config",
+  ]
+  cflags = []
+  if (target_cpu == "arm") {
+    cflags += [ "-DBINDER_IPC_32BIT" ]
+  }
+  deps = [
+    "${ability_runtime_napi_path}/inner/napi_common:napi_common",
+    "${ability_runtime_native_path}/ability/native:ability_business_error",
+    "${ability_runtime_native_path}/ability/native:abilitykit_native",
+    "${ability_runtime_native_path}/appkit:app_context",
+    "${ability_runtime_services_path}/abilitymgr:abilityms",
+    "${ability_runtime_services_path}/common:perm_verification",
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test/libs/aakit:aakit_mock",
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock",
+    "${ability_runtime_test_path}/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_bundlemgr_mock",
+    "../../../../../../services/native/driver_extension:driver_extension",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+
+  external_deps = [
+    "ability_base:want",
+    "ability_base:zuri",
+    "ability_runtime:ability_context_native",
+    "ability_runtime:ability_manager",
+    "ability_runtime:runtime",
+    "c_utils:utils",
+    "eventhandler:libeventhandler",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
+    "init:libbeget_proxy",
+    "ipc:ipc_core",
+    "relational_store:native_dataability",
+    "relational_store:native_rdb",
+  ]
+
+  if (background_task_mgr_continuous_task_enable) {
+    external_deps += [ "background_task_mgr:bgtaskmgr_innerkits" ]
+  }
+}

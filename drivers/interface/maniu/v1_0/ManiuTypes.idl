@@ -1,0 +1,9 @@
+package ohos.hdi.maniu.v1_0;
+
+struct ManiuEvents {
+
+    int id;
+
+    unsigned int eventType;
+
+};

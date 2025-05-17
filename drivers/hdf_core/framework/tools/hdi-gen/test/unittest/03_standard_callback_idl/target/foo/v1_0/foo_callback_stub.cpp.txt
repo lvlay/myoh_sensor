@@ -1,0 +1,53 @@
+#include "v1_0/foo_callback_stub.h"
+#include <hdf_base.h>
+#include <hdf_log.h>
+
+#define HDF_LOG_TAG    foo_callback_stub
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackStub::OnRemoteRequest(uint32_t code, MessageParcel& data, MessageParcel& reply, MessageOption& option)
+{
+    switch (code) {
+        case CMD_FOO_CALLBACK_GET_VERSION:
+            return FooCallbackStubGetVersion(data, reply, option);
+        case CMD_FOO_CALLBACK_PUSH_DATA:
+            return FooCallbackStubPushData(data, reply, option);
+        default: {
+            HDF_LOGE("%{public}s: cmd %{public}d is not supported", __func__, code);
+            return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+        }
+    }
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackStub::FooCallbackStubPushData(MessageParcel& fooCallbackData, MessageParcel& fooCallbackReply, MessageOption& fooCallbackOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackStub::FooCallbackStubGetVersion(MessageParcel& fooCallbackData, MessageParcel& fooCallbackReply, MessageOption& fooCallbackOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackStub::FooCallbackStubPushData_(MessageParcel& fooCallbackData, MessageParcel& fooCallbackReply, MessageOption& fooCallbackOption, sptr<OHOS::HDI::Foo::V1_0::IFooCallback> impl)
+{
+    if (fooCallbackData.ReadInterfaceToken() != OHOS::HDI::Foo::V1_0::IFooCallback::GetDescriptor()) {
+        HDF_LOGE("%{public}s: interface token check failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    const char* messageCp = fooCallbackData.ReadCString();
+    if (messageCp == nullptr) {
+        HDF_LOGE("%{public}s: read message failed", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+    std::string message = messageCp;
+
+    if (impl == nullptr) {
+        HDF_LOGE("%{public}s: impl is nullptr!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    int32_t fooCallbackRet = impl->PushData(message);
+    if (fooCallbackRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s failed, error code is %{public}d", __func__, fooCallbackRet);
+        return fooCallbackRet;
+    }
+
+    return fooCallbackRet;
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackStub::FooCallbackStubGetVersion_(MessageParcel& fooCallbackData, MessageParcel& fooCallbackReply, MessageOption& fooCallbackOption, sptr<OHOS::HDI::Foo::V1_0::IFooCallback> impl)

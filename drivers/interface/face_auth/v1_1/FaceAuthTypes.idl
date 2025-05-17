@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfFaceAuth
+ * @{
+ *
+ * @brief Provides APIs for the face auth driver.
+ *
+ * The face auth driver provides a unified interface for the face auth service to access the face auth driver.
+ * After obtaining the face auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the face auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @file FaceAuthTypes.idl
+ *
+ * @brief Defines the enumeration and data structure of the face auth driver, including AuthType, ExecutorRole, ExecutorSecureLevel,
+ * CommandId, FaceTipsCode, ExecutorInfo, and TemplateInfo.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.face_auth.v1_1;
+
+/**
+ * @brief Enumerates get Property types.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+enum GetPropertyType : int {
+    /**< Indicates that the property to get is auth sub type. */
+    AUTH_SUB_TYPE = 1,
+    /**< Indicates that the property to get is lockout duration. */
+    LOCKOUT_DURATION = 2,
+    /**< Indicates that the property to get is remain attempts. */
+    REMAIN_ATTEMPTS = 3,
+    /**< Indicates that the property to get is enroll progress. */
+    ENROLL_PROGRESS = 4,
+    /**< Indicates that the property to get is sensor info. */
+    SENSOR_INFO = 5
+};
+
+/**
+ * @brief Indicates executor property.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct Property {
+    /**< Indicates auth sub type. */
+    unsigned long authSubType;
+    /**< Indicates lockout duration. */
+    int lockoutDuration;
+    /**< Indicates remain attempts. */
+    int remainAttempts;
+    /**< Indicates enroll progress. */
+    String enrollmentProgress;
+    /**< Indicates sensor info. */
+    String sensorInfo;
+};
+
+/**
+ * @brief Enumerates sa command ids.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+enum SaCommandId : int {
+    /**< Indicates that the sa command is begin brightness increase. */
+    BEGIN_SCREEN_BRIGHTNESS_INCREASE = 1,
+    /**< Indicates that the sa command is end brightness increase. */
+    END_SCREEN_BRIGHTNESS_INCREASE = 2,
+};
+
+/**
+ * @brief Indicates sa command parameter none.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct SaCommandParamNone {
+};
+
+/**
+ * @brief Indicates sa command parameter.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+union SaCommandParam {
+    /**< Indicates that sa command parameter is none. See {@link SaCommandParamNone}. */
+    struct SaCommandParamNone none;
+};
+
+/**
+ * @brief Indicates sa command.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct SaCommand {
+    /**< Indicates sa command id. See {@link SaCommandId}. */
+    enum SaCommandId id;
+    /**< Indicates sa command parameter. See {@link SaCommandParam}. */
+    union SaCommandParam param;
+};
+
+/**
+ * @brief Enumerates command IDs.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+enum CommandId : int {
+    /**< Indicates the command ID for locking the template. */
+    LOCK_TEMPLATE = 1,
+    /**< Indicates the command ID for unlocking the template. */
+    UNLOCK_TEMPLATE = 2,
+    /**< Indicates the command ID for init algorithm. */
+    INIT_ALGORITHM = 3,
+    /**< The vendor may add a custom command ID after this. */
+    VENDOR_COMMAND_BEGIN = 10000
+};
+/** @} */

@@ -1,0 +1,214 @@
+/*
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup power
+ * @{
+ *
+ * @brief Provides APIs for performing hibernation/wakeup operations, subscribing to the hibernation/wakeup status,
+ * and managing running locks.
+ * 
+ * After obtaining an object or proxy of this module, the power service can invoke related APIs to perform
+ * hibernation/wakeup operations, subscribe to the hibernation/wakeup status, and manage running locks.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+/**
+ * @file IPowerInterface.idl
+ *
+ * @brief Provides APIs for performing hibernation/wakeup operations, subscribing to the hibernation/wakeup status,
+ * and managing running locks.
+ *
+ * 
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+package ohos.hdi.power.v1_1;
+
+import ohos.hdi.power.v1_1.IPowerRunningLockCallback;
+import ohos.hdi.power.v1_1.IPowerHdiCallback;
+import ohos.hdi.power.v1_1.PowerTypes;
+import ohos.hdi.power.v1_1.RunningLockTypes;
+
+/**
+ * @brief Represents APIs for performing hibernation/wakeup operations, subscribing to the hibernation/wakeup status,
+ * and managing running locks.
+ *
+ * 
+ *
+ * @since 3.1
+ */
+interface IPowerInterface {
+    /**
+     * @brief Registers the callback of the hibernation/wakeup status.
+     *
+     * @param ipowerHdiCallback Callback to register.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see IPowerHdiCallback
+     *
+     * @since 3.1
+     */
+    RegisterCallback([in] IPowerHdiCallback ipowerHdiCallback);
+
+    /**
+     * @brief Hibernates a device.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    StartSuspend();
+
+    /**
+     * @brief Wakes up a device.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    StopSuspend();
+
+    /**
+     * @brief Forcibly hibernates a device.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    ForceSuspend();
+
+    /**
+     * @brief Enables the running lock to block device hibernation.
+     *
+     * @param name Name of the running lock.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     * @deprecated
+     */
+    SuspendBlock([in] String name);
+
+    /**
+     * @brief Disables the running lock to unblock device hibernation.
+     *
+     * @param name Name of the running lock.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     * @deprecated
+     */
+    SuspendUnblock([in] String name);
+
+    /**
+     * @brief Obtains the power dump information.
+     *
+     * @param info Power dump information.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    PowerDump([out] String info);
+
+    /**
+     * @brief Holds the running lock to block device hibernation.
+     *
+     * @param info Running lock info.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful; returns <b>HDF_FAILED</b> if the
+     * running lock type conflicts with current lock.
+     *
+     * @since 4.0
+     */
+    HoldRunningLock([in] struct RunningLockInfo info);
+
+    /**
+     * @brief Unholds the running lock to unblock device hibernation.
+     *
+     * @param info Running lock info.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 4.0
+     */
+    UnholdRunningLock([in] struct RunningLockInfo info);
+
+    /**
+     * @brief obtain system wakeup reason.
+     *
+     * @param info wakeup reason info.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 4.1
+     */
+    GetWakeupReason([out] String reason);
+
+    /**
+     * @brief Holds the running lock to block device hibernation.
+     *
+     * @param extra Running lock info.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful; returns <b>HDF_FAILED</b> if the
+     * running lock type conflicts with current lock.
+     *
+     * @since 4.1
+     * @deprecated
+     */
+    HoldRunningLockExt([in] struct RunningLockInfo info, [in] unsigned long lockid, [in] String bundleName);
+
+    /**
+     * @brief Unholds the running lock to unblock device hibernation.
+     *
+     * @param extra Running lock info.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 4.1
+     * @deprecated
+     */
+    UnholdRunningLockExt([in] struct RunningLockInfo info, [in] unsigned long lockid, [in] String bundleName);
+
+    /**
+     * @brief Registers the callback of the running lock status.
+     *
+     * @param iPowerRunningLockCallback Callback to register.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see IPowerRunningLockCallback
+     *
+     * @since 4.1
+     * @deprecated
+     */
+    RegisterRunningLockCallback([in] IPowerRunningLockCallback iPowerRunningLockCallback);
+
+    /**
+     * @brief Unregister the callback of the running lock status.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 4.1
+     * @deprecated
+     */
+    UnRegisterRunningLockCallback();
+}
+/** @} */

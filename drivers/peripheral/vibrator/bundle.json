@@ -1,0 +1,59 @@
+{
+  "name": "@ohos/drivers_peripheral_vibrator",
+  "description": "vibrator device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/vibrator"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_vibrator",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_vibrator_feature_model",
+      "drivers_peripheral_vibrator_feature_community",
+      "drivers_peripheral_vibrator_feature_lite_support_test"
+    ],
+    "syscap": [],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "675KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "c_utils",
+        "hitrace",
+        "drivers_interface_vibrator",
+        "hilog_lite"
+      ],
+      "third_party": [
+        "bounds_checking_function"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/vibrator:vibrator_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/vibrator/test:hdf_test_vibrator"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/vibrator/hal:hdi_vibrator",
+          "header": {
+            "header_files": [
+              "vibrator_if.h",
+              "vibrator_type.h"
+            ],
+            "header_base": "//drivers/peripheral/vibrator/interfaces/include"
+          }
+        }
+      ]
+    }
+  }
+}

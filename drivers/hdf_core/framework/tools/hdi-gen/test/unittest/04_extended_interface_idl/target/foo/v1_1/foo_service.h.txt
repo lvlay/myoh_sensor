@@ -1,0 +1,18 @@
+#ifndef OHOS_HDI_FOO_V1_1_FOOSERVICE_H
+#define OHOS_HDI_FOO_V1_1_FOOSERVICE_H
+
+#include "v1_1/ifoo.h"
+
+class FooService : public OHOS::HDI::Foo::V1_1::IFoo {
+    int32_t TestPingV1_1(const std::string& sendMsg, std::string& recvMsg) override;
+
+    int32_t TestGetData(std::string& info) override;
+
+    int32_t Ping(const std::string& sendMsg, std::string& recvMsg) override;
+
+    int32_t GetData(std::string& info) override;
+
+    int32_t InfoTest(int32_t inParam, double& outParam) override;
+};
+
+#endif // OHOS_HDI_FOO_V1_1_FOOSERVICE_H

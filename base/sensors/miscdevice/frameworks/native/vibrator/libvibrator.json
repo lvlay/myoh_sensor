@@ -1,0 +1,30 @@
+[
+   {
+        "first_introduced": "6",
+        "name": "StartVibrator"
+   },
+   {
+        "name": "StartVibratorOnce"
+   },
+   {
+        "name": "EnableLooping"
+   },
+   {
+        "name": "DisableLooping"
+   },
+   {
+        "name": "StopVibrator"
+   },
+   {
+        "name": "GetDelayTime"
+   },
+   {
+        "name": "PreProcess"
+   },
+   {
+        "name": "FreeVibratorPackage"
+   },
+   {
+        "name": "PlayPattern"
+   }
+]

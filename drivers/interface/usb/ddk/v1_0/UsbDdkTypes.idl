@@ -1,0 +1,127 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* *
+ * @addtogroup HdiUsbDdk
+ * @{
+ *
+ * @brief Provides USB DDK types and declares the macros, enumerated variables, and\n
+ * data structures required by the USB DDK APIs.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @file UsbDdkTypes.idl
+ *
+ * @brief Provides the enumerated variables, structures, and macros used in USB DDK APIs.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+package ohos.hdi.usb.ddk.v1_0;
+
+/* *
+ * @brief Setup data for control transfer. It corresponds to <b>Setup Data</b> in the USB protocol.
+ */
+struct UsbControlRequestSetup {
+     /** Request type, corresponding to bmRequestType in the USB protocol. */
+    unsigned char requestType;
+    /** Request command, corresponding to bRequest in the USB protocol. */
+    unsigned char requestCmd;
+    /** Value corresponding to wValue in the USB protocol. Its meaning varies according to the request. */
+    unsigned short value;
+    /** Index corresponding to wIndex in the USB protocol. It is usually used to transfer the index or offset.\n
+     * Its meaning varies according to the request.
+     */
+    unsigned short index;
+    /** Data length, corresponding to wLength in the USB protocol. If data is transferred,\n
+     * this field indicates the number of transferred bytes.
+     */
+    unsigned short length;
+};
+
+/* *
+ * @brief Standard device descriptor, corresponding to <b>Standard Device Descriptor</b> in the USB protocol.
+ */
+struct UsbDeviceDescriptor {
+    /** Size of the descriptor, in bytes. */
+    unsigned char bLength;
+    /** Descriptor type. */
+    unsigned char bDescriptorType;
+     /** USB protocol release number. */
+    unsigned short bcdUSB;
+    /** Device class code allocated by the USB-IF. */
+    unsigned char bDeviceClass;
+    /** Device subclass code allocated by USB-IF. The value is limited by that of bDeviceClass. */
+    unsigned char bDeviceSubClass;
+    /** Protocol code allocated by USB-IF. The value is limited by that of bDeviceClass and bDeviceSubClass. */
+    unsigned char bDeviceProtocol;
+    /** Maximum packet size of endpoint 0. Only values 8, 16, 32, and 64 are valid. */
+    unsigned char bMaxPacketSize0;
+    /** Vendor ID allocated by USB-IF. */
+    unsigned short idVendor;
+    /** Product ID allocated by the vendor. */
+    unsigned short idProduct;
+    /** Device release number. */
+    unsigned short bcdDevice;
+    /** Index of the string descriptor that describes the vendor. */
+    unsigned char iManufacturer;
+    /** Index of the string descriptor that describes the product. */
+    unsigned char iProduct;
+    /** Index of the string descriptor that describes the device SN. */
+    unsigned char iSerialNumber;
+    /** Configuration quantity. */
+    unsigned char bNumConfigurations;
+};
+
+
+/**
+ * @brief Request pipe.
+ */
+struct UsbRequestPipe {
+   /** Interface operation handle. */
+   unsigned long interfaceHandle;
+   /** Timeout duration, in milliseconds. */
+   unsigned int timeout;
+   /** Endpoint address. */
+   unsigned char endpoint;
+};
+
+/**
+ * @brief Usb Ashmem.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct UsbAshmem {
+    /** File descriptor of the shared memory. */
+    FileDescriptor ashmemFd;
+    /** Buffer address. */
+    unsigned char[] address;
+    /** Buffer size. */
+    unsigned int size;
+    /** Offset of the used buffer. The default value is 0, which indicates that there is no offset\n
+     * and the buffer starts from the specified address.
+     */
+    unsigned int offset;
+    /** Length of the used buffer. By default, the value is equal to the size, which indicates that\n
+     * the entire buffer is used.
+     */
+    unsigned int bufferLength;
+    /** Length of the transferred data. */
+    unsigned int transferredLength;
+};

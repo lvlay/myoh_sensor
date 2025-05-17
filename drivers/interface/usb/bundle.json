@@ -1,0 +1,127 @@
+{
+  "name": "@ohos/drivers_interface_usb",
+  "description": "drivers interface usb",
+  "version": "5.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/interface/usb"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_interface_usb",
+    "subsystem": "hdf",
+    "syscap": [],
+    "adapted_system_type": [
+      "standard",
+      "small"
+    ],
+    "rom": "820KB",
+    "ram": "12200KB",
+    "deps": {
+      "components": [
+        "c_utils",
+        "ipc",
+        "hdf_core",
+        "hilog"
+      ],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/interface/usb/v1_0:usb_idl_target",
+        "//drivers/interface/usb/v1_1:usb_idl_target",
+        "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_target",
+        "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_target"
+      ],
+      "test": [],
+      "inner_kits": [
+        {
+          "name": "//drivers/interface/usb/v1_0:libusb_proxy_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/v1_0:libusb_stub_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/v1_0:usb_idl_headers",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/gadget/mtp/v1_0:libusbfn_mtp_proxy_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/gadget/mtp"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/gadget/mtp/v1_0:libusbfn_mtp_stub_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/gadget/mtp"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/gadget/mtp"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/ddk/v1_0:libusb_ddk_proxy_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/ddk"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/ddk/v1_0:libusb_ddk_stub_1.0",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/ddk"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb/ddk"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/v1_1:libusb_proxy_1.1",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/v1_1:libusb_stub_1.1",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        },
+        {
+          "name": "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
+          "header": {
+            "header_files": [],
+            "header_base": "//drivers/interface/usb"
+          }
+        }
+      ]
+    }
+  }
+}

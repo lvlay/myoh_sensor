@@ -1,0 +1,44 @@
+{
+  "name": "@ohos/drivers_peripheral_motion",
+  "description": "motion device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/motion"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_motion",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_motion_feature_model",
+      "drivers_peripheral_motion_feature_community"
+    ],
+    "syscap": [],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "650KB",
+    "ram": "7600KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "hitrace",
+        "c_utils",
+        "drivers_interface_motion"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/motion:motion_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/motion/test:hdf_test_motion"
+      ],
+      "inner_kits": [
+      ]
+    }
+  }
+}

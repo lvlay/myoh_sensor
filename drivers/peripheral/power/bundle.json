@@ -1,0 +1,51 @@
+{
+    "name": "@ohos/drivers_peripheral_power",
+    "description": "power_hdf",
+    "version": "3.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/peripheral/power"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_peripheral_power",
+      "subsystem": "hdf",
+      "features": [
+        "drivers_peripheral_power_wakeup_cause_path",
+        "drivers_peripheral_power_suspend_with_tag",
+        "drivers_peripheral_power_faster_retry_of_sleep",
+        "drivers_peripheral_power_enable_s4",
+        "drivers_peripheral_power_slower_retry_of_sleep"
+      ],
+      "adapted_system_type": ["standard", "small"],
+      "rom": "981KB",
+      "ram": "6000KB",
+      "deps": {
+        "components": [
+          "c_utils",
+          "config_policy",
+          "drivers_interface_power",
+          "hdf_core",
+          "hilog", 
+          "hisysevent",
+          "libxml2",
+          "ipc"
+        ],
+        "third_party": [
+          "jsoncpp"
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/peripheral/power:power_entry"
+        ],
+        "test": [
+          "//drivers/peripheral/power/test:hdf_test_power"
+        ],
+        "inner_kits": []
+      }
+    }
+  }
+  

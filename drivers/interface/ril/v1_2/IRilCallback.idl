@@ -1,0 +1,144 @@
+/*
+ * Copyright (c) 2023-2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer telephony services,
+ * including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+/**
+ * @file IRilCallback.idl
+ *
+ * @brief Declares callback APIs of the RIL module.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+/**
+ * @brief Defines the path for the package of the RIL module APIs.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+package ohos.hdi.ril.v1_2;
+
+import ohos.hdi.ril.v1_1.IRilCallback;
+import ohos.hdi.ril.v1_2.Types;
+
+/**
+ * @brief Declares callback APIs of the RIL module.
+ *
+ * These APIs provide the callback functions for making calls, sending SMS and MMS messages,
+ * activating SIM cards, and accessing the Internet. The caller needs to implement these callbacks.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+[callback] interface IRilCallback extends ohos.hdi.ril.v1_1.IRilCallback {
+    /**
+     * @brief Callback for reporting resident network.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param plmn resident network.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] ResidentNetworkUpdated([in] struct RilRadioResponseInfo responseInfo, [in] String plmn);
+
+    /**
+     * @brief Callback for the response of Send sim matched operator info.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] SendSimMatchedOperatorInfoResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of cleaning all data connections.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] CleanAllConnectionsResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying nr ssd id information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param nrCellSsbIds is NR cell ssb Id info. For details, see {@link NrCellSsbIds}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] GetNrSsbIdResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct NrCellSsbIds nrCellSsbIds);
+
+    /**
+     * @brief Callback for reporting cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListCurrentInfo_1_2}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] NetworkCurrentCellUpdated_1_2([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo_1_2 cellListCurrentInfo);
+
+    /**
+     * @brief Callback for the response of querying cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListCurrentInfo_1_2}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] GetCurrentCellInfoResponse_1_2([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo_1_2 cellListCurrentInfo);
+
+    /**
+     * @brief Callback for the response of querying neighboring cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListNearbyInfo Neighboring cell information list. For details, see {@link CellListNearbyInfo_1_2}.
+     *
+     * @since 4.1
+     * @version 1.3
+     */
+    [oneway] GetNeighboringCellInfoListResponse_1_2([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListNearbyInfo_1_2 cellListNearbyInfo);
+}
+/** @} */

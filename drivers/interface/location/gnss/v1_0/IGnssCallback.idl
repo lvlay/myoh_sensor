@@ -1,0 +1,142 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiGnss
+ * @{
+ *
+ * @brief Provides unified APIs for GNSS services to access GNSS drivers.
+ *
+ * A GNSS service can obtain a GNSS driver object or agent and then call APIs provided by this object or agent to
+ * access GNSS devices, thereby Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, obtain the positioning result, obtain the nmea,
+ * obtain the satellite status information, and obtain the cache location information.
+ *
+ * @since 3.2
+ */
+
+/*
+ * @file IGnssCallback.idl
+ *
+ * @brief Declares the callbacks for obtain the positioning result, obtain the working status of the GNSS module,
+ * obtain the nmea, obtain GNSS capability, obtain the satellite status information, and obtain the cache location,
+ * and request upper-layer ingest reference information, Request upper-layer to inject PGNSS data.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.location.gnss.v1_0;
+
+import ohos.hdi.location.gnss.v1_0.GnssTypes;
+
+/*
+ * @brief Defines the callbacks for obtain the positioning result, obtain the working status of the GNSS module,
+ * obtain the nmea, obtain GNSS capability, obtain the satellite status information, and obtain the cache location,
+ * and request upper-layer ingest reference information, Request upper-layer to inject PGNSS data.
+ *
+ * @since 3.2
+ */
+[callback] interface IGnssCallback {
+    /*
+     * @brief Location reporting.
+     *
+     * @param location Indicates GNSS location result. For details, see {@link Location}.
+     * @return Returns <b>0</b> If the location reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportLocation([in] struct LocationInfo location);
+
+    /*
+     * @brief Reporting the working status of the GNSS module.
+     *
+     * @param status Indicates the working status of the GNSS module. For details, see {@link GnssWorkingStatus}.
+     * @return Returns <b>0</b> If the reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportGnssWorkingStatus([in] enum GnssWorkingStatus status);
+
+    /*
+     * @brief Reporting NMEA.
+     *
+     * @param timestamp Indicates the timestamp when the NMEA is reported. Milliseconds since January 1, 1970.
+     * @param nmea Indicates NMEA sentences, follows standard NMEA 0183.
+     * @param length Indicates length of NMEA sentences.
+     * @return Returns <b>0</b> If the reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportNmea([in] long timestamp, [in] String nmea, [in] int length);
+
+    /*
+     * @brief GNSS capability reporting.
+     *
+     * @param capabilities Indicates the GNSS capability. For details, see {@link GnssCapabilities}.
+     * @return Returns <b>0</b> If the reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportGnssCapabilities([in] enum GnssCapabilities capabilities);
+
+    /*
+     * @brief Satellite status information reporting.
+     *
+     * @param info Indicates the satellite status information structure reported by the GNSS chip.
+     * For details, see {@link SatelliteStatusInfo}.
+     * @return Returns <b>0</b> If the reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportSatelliteStatusInfo([in] struct SatelliteStatusInfo info);
+
+    /*
+     * @brief Request upper-layer ingest reference information.
+     *
+     * @param type Indicates the GNSS reference information type. For details, see {@link GnssRefInfoType}.
+     * @return Returns <b>0</b> If sending request is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RequestGnssReferenceInfo([in] enum GnssRefInfoType type);
+
+    /*
+     * @brief Request upper-layer to inject PGNSS data.
+     *
+     * @return Returns <b>0</b> If sending request is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RequestPredictGnssData();
+
+    /*
+     * @brief Report all location information cached by the bottom-layer GNSS module to the upper layer.
+     *
+     * @param gnssLocations Indicates all locations of the GNSS chip cache. For details, see {@link Location}.
+     * @return Returns <b>0</b> If the reporting is successful; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ReportCachedLocation([in] struct LocationInfo[] gnssLocations);
+}

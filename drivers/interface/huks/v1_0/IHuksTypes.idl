@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfHuks
+ * @{
+ *
+ * @brief Provides standard driver APIs for the OpenHarmony Universal KeyStore (HUKS).
+ *
+ * The HUKS driver APIs define standard interfaces of the HUKS Core and provide
+ * a unified driver interface for the HUKS service.
+ * You can use these APIs to implement key lifecycle management, including key
+ * generation, key import and export, key operations, key access control, and
+ * key attestation.
+ *
+ * @since 4.0
+ */
+
+ /**
+ * @file IHuksTypes.idl
+ *
+ * @brief Defines the structs used in HUKS driver interfaces.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.huks.v1_0;
+
+/**
+ * @brief Defines the HUKS binary data struct, which encapsulates parameters
+ * such as the key material and key properties.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct HuksBlob {
+    /**
+     * Binary data
+     */
+    unsigned char[] data;
+};
+
+/**
+ * @brief Defines the struct for the parameter set of HUKS key management interfaces.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+struct HuksParamSet {
+    /**
+     * Serialized parameter set. For details about the property set struct,
+     * see the HUKS Device Development.
+     */
+    unsigned char[] data;
+};
+
+/**
+ * @brief Enumerates the decryption scenarios using the chipset key.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+enum HuksChipsetPlatformDecryptScene {
+    /**
+     * Chipset key decryption for trusted applications in a Trusted Execution
+     * Environment (TEE).
+     */
+    HUKS_CHIPSET_PLATFORM_DECRYPT_SCENCE_TA_TO_TA = 1,
+};
+/** @} */

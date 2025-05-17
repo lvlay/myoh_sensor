@@ -1,0 +1,485 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup WLAN
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IWlanInterface.idl
+ *
+ * @brief Provides APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to or disconnect from a WLAN hotspot,
+ * set the country code, and manage network devices.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.wlan.v1_0;
+
+import ohos.hdi.wlan.v1_0.WlanTypes;
+import ohos.hdi.wlan.v1_0.IWlanCallback;
+
+/**
+ * @brief Defines an interface for the upper-layer WLAN service.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+interface IWlanInterface {
+    /**
+     * @brief Creates a channel between the HAL and the WLAN driver and obtains the driver network interface card (NIC)
+     * information. This function must be called after an <b>IWiFi</b> instance is created.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    Start();
+
+    /**
+     * @brief Destroys the channel between the HAL and the WLAN driver. This function must be called before an <b>IWiFi</b>
+     * instance is destroyed.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    Stop();
+
+    /**
+     * @brief Creates a <b>Feature</b> object based on the specified type.
+     *
+     * @param type Indicates the type of the <b>Feature</b> object to create.
+     * @param ifeature Indicates the <b>Feature</b> object created.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    CreateFeature([in] int type, [out] struct HdfFeatureInfo ifeature);
+
+    /**
+     * @brief Destroys a <b>Feature</b> object.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object to destroy.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    DestroyFeature([in] struct HdfFeatureInfo ifeature);
+
+    /**
+     * @brief Obtains information about all STAs connected to this AP. Currently, the STA information contains only the MAC address.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param staInfo Indicates the basic information about the STAs connected to the AP.
+     * @param num Indicates the number of connected STAs.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetAssociatedStas([in] struct HdfFeatureInfo ifeature, [out] struct HdfStaInfo[] staInfo, [out] unsigned int num);
+
+    /**
+     * @brief Obtains the chip ID of the current driver.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param chipId Indicates the chip ID obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */    
+    GetChipId([in] struct HdfFeatureInfo ifeature, [out] unsigned char chipId);
+
+    /**
+     * @brief Obtains the device MAC address.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param mac Indicates the MAC address obtained.
+     * @param len Indicates the length of the MAC address.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetDeviceMacAddress([in] struct HdfFeatureInfo ifeature, [out] unsigned char[] mac, [in] unsigned char len);
+
+    /**
+     * @brief Obtains the <b>Feature</b> object based on the specified NIC name.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param ifeature Indicates the <b>Feature</b> object obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetFeatureByIfName([in] String ifName, [out] struct HdfFeatureInfo ifeature);
+
+    /**
+     * @brief Obtains the type of a <b>Feature</b> object.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param featureType Indicates the type of the <b>Feature</b> object obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetFeatureType([in] struct HdfFeatureInfo ifeature, [out] int featureType);
+
+    /**
+     * @brief Obtains the frequencies supported by the specified frequency band.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param wifiInfo Indicates the frequency band, which can be 2.4 GHz or 5 GHz.
+     * @param freq Indicates the supported frequencies obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetFreqsWithBand([in] struct HdfFeatureInfo ifeature, [in] struct HdfWifiInfo wifiInfo, [out] int[] freq);
+
+    /**
+     * @brief Obtains all the NIC names of a chip.
+     *
+     * @param chipId Indicates the ID of the target chip.
+     * @param ifNames Indicates the NIC names obtained.
+     * @param num Indicates the number of NICs.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetIfNamesByChipId([in] unsigned char chipId, [out] String ifName, [out] unsigned int num);
+
+    /**
+     * @brief Obtains the NIC name based on the <b>Feature</b> object.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetNetworkIfaceName([in] struct HdfFeatureInfo ifeature, [out] String ifName);
+
+    /**
+     * @brief Obtains information about the coexistence of multiple NICs.
+     *
+     * @param combo Indicates the information obtained, for example, different combinations of the AP, STA, and P2P.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetSupportCombo([out] unsigned long combo);
+
+    /**
+     * @brief Obtains the WLAN features supported by the device, regardless of the device status.
+     *
+     * @param supType Indicates the features obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetSupportFeature([out] unsigned char[] supType);
+
+    /**
+     * @brief Registers a callback to listen for asynchronous events.
+     *
+     * @param cbFunc Indicates the callback to register.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RegisterEventCallback([in] IWlanCallback cbFunc, [in] String ifName);
+
+    /**
+     * @brief Unregisters a callback.
+    
+     * @param cbFunc Indicates the callback to unregister.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    UnregisterEventCallback([in] IWlanCallback cbFunc, [in] String ifName);
+
+    /**
+     * @brief Restarts the WLAN driver based on the specified chip ID.
+     *
+     * @param chipId Indicates the ID of the chip whose driver is to be restarted.
+     * @param ifName Indicates the NIC name.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    ResetDriver([in] unsigned char chipId, [in] String ifName);
+
+    /**
+     * @brief Sets a country code. 
+     *
+     * The country code indicates the country where the AP radio is located. It specifies the AP radio features,
+     * including the transmit power and supported channels of the AP, ensuring that radio attributes of APs comply 
+     * with local laws and regulations.
+     * 
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param code Indicates the country code to set.
+     * @param len Indicates the length of the country code.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetCountryCode([in] struct HdfFeatureInfo ifeature, [in] String code, [in] unsigned int len);
+
+    /**
+     * @brief Sets a MAC address for an NIC.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param mac Indicates the MAC address to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetMacAddress([in] struct HdfFeatureInfo ifeature, [in] unsigned char[] mac);
+
+    /**
+     * @brief Scans a single MAC address.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param scanMac Indicates the MAC address to be scanned by the STA.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetScanningMacAddress([in] struct HdfFeatureInfo ifeature, [in] unsigned char[] scanMac);
+
+    /**
+     * @brief Sets the transmit power.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param power Indicates the transmit power to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetTxPower([in] struct HdfFeatureInfo ifeature, [in] int power);
+
+    /**
+     * @brief Obtains network device information, such as the device index, NIC name, and MAC address.
+     *
+     * @param netDeviceInfoResult Indicates the network device information obtained.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetNetDevInfo([out] struct HdfNetDeviceInfoResult netDeviceInfoResult);
+
+    /**
+     * @brief Starts scanning.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param scan Indicates the scan parameters.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    StartScan([in] struct HdfFeatureInfo ifeature, [in] struct HdfWifiScan scan);
+
+    /**
+     * @brief Obtains the power mode in use.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param mode Indicates the power mode obtained. The power mode can be <b>sleeping</b> (running in standby mode),
+     * <b>general</b> (running at normal rated power),
+     * and <b>through-wall</b> (running at the maximum power to improve the signal strength and coverage).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetPowerMode([in] struct HdfFeatureInfo ifeature, [out] unsigned char mode);
+
+    /**
+     * @brief Sets the power mode.
+     *
+     * @param ifeature Indicates the <b>Feature</b> object.
+     * @param mode Indicates the power mode to set. The power mode can be <b>sleeping</b> (running in standby mode),
+     * <b>general</b> (running at normal rated power),
+     * and <b>through-wall</b> (running at the maximum power to improve the signal strength and coverage).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetPowerMode([in] struct HdfFeatureInfo ifeature, [in] unsigned char mode);
+
+    /**
+     * @brief Starts channel measurement.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param measChannelParam Indicates the channel measurement parameters (channel ID and measurement time).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] StartChannelMeas([in] String ifName, [in] struct MeasChannelParam measChannelParam);
+
+    /**
+     * @brief Obtains the channel measurement result.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param measChannelResult Indicates the channel measurement result (including the channel ID, load, and noise).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetChannelMeasResult([in] String ifName, [out] struct MeasChannelResult measChannelResult);
+
+    /**
+     * @brief Sets the projection parameters.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param param Indicates the projection parameters to set.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    SetProjectionScreenParam([in] String ifName, [in] struct ProjectionScreenCmdParam param);
+
+    /**
+     * @brief Sends an I/O control command to the driver.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param cmdId Indicates the ID of the command to send.
+     * @param paramBuf Indicates the command content.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    WifiSendCmdIoctl([in] String ifName, [in] int cmdId, [in] byte[] paramBuf);
+
+    /**
+     * @brief Obtains the STA information of the specified NIC.
+     *
+     * @param ifName Indicates the NIC name.
+     * @param info Indicates the STA information obtained. For details, see {@link WifiStationInfo}.
+     * @param mac Indicates the MAC address of the STA.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    GetStaInfo([in] String ifName, [out] struct WifiStationInfo info, [in] unsigned char[] mac);
+}
+/** @} */

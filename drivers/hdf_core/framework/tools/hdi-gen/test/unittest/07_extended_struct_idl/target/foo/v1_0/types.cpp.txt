@@ -1,0 +1,74 @@
+#include "v1_0/types.h"
+#include <hdf_log.h>
+#include <message_parcel.h>
+#include <securec.h>
+
+bool FooInfoBlockMarshalling(OHOS::MessageParcel& data, const OHOS::HDI::Foo::V1_0::FooInfo& dataBlock)
+
+bool FooInfoBlockUnmarshalling(OHOS::MessageParcel& data, OHOS::HDI::Foo::V1_0::FooInfo& dataBlock)
+
+bool ExtendedFooInfoBlockMarshalling(OHOS::MessageParcel& data, const OHOS::HDI::Foo::V1_0::ExtendedFooInfo& dataBlock)
+{
+    if (!data.WriteUint32(dataBlock.id)) {
+        HDF_LOGE("%{public}s: write dataBlock.id failed!", __func__);
+        return false;
+    }
+
+    if (!data.WriteCString(dataBlock.name.c_str())) {
+        HDF_LOGE("%{public}s: write dataBlock.name failed!", __func__);
+        return false;
+    }
+
+    if (!data.WriteUint64(static_cast<uint64_t>(dataBlock.type))) {
+        HDF_LOGE("%{public}s: write dataBlock.type failed!", __func__);
+        return false;
+    }
+
+    if (!data.WriteUint32(dataBlock.extendedId)) {
+        HDF_LOGE("%{public}s: write dataBlock.extendedId failed!", __func__);
+        return false;
+    }
+
+    if (!data.WriteCString(dataBlock.extendedInfo.c_str())) {
+        HDF_LOGE("%{public}s: write dataBlock.extendedInfo failed!", __func__);
+        return false;
+    }
+    return true;
+}
+
+bool ExtendedFooInfoBlockUnmarshalling(OHOS::MessageParcel& data, OHOS::HDI::Foo::V1_0::ExtendedFooInfo& dataBlock)
+{
+    if (!data.ReadUint32(dataBlock.id)) {
+        HDF_LOGE("%{public}s: read dataBlock.id failed!", __func__);
+        return false;
+    }
+
+    const char* nameCp = data.ReadCString();
+    if (nameCp == nullptr) {
+        HDF_LOGE("%{public}s: read nameCp failed", __func__);
+        return false;
+    }
+    dataBlock.name = nameCp;
+
+    {
+        uint64_t enumTmp = 0;
+        if (!data.ReadUint64(enumTmp)) {
+            HDF_LOGE("%{public}s: write dataBlock.type failed!", __func__);
+            return false;
+        }
+        dataBlock.type = static_cast<enum FooType>(enumTmp);
+    }
+
+    if (!data.ReadUint32(dataBlock.extendedId)) {
+        HDF_LOGE("%{public}s: read dataBlock.extendedId failed!", __func__);
+        return false;
+    }
+
+    const char* extendedInfoCp = data.ReadCString();
+    if (extendedInfoCp == nullptr) {
+        HDF_LOGE("%{public}s: read extendedInfoCp failed", __func__);
+        return false;
+    }
+    dataBlock.extendedInfo = extendedInfoCp;
+    return true;
+}

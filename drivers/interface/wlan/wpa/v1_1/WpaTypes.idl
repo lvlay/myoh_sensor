@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup WPA
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+ /**
+ * @file WpaTypes.idl
+ *
+ * @brief Defines data types related to the WLAN module.
+ *
+ * The WLAN module data includes the {@code Feature} object information, station (STA) information,
+ * scan information, and network device information.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+package ohos.hdi.wlan.wpa.v1_1;
+
+/**
+ * @brief Defines p2p group info parameter.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct HdiP2pGroupInfoStartedParam {
+    int isGo;
+    int isPersistent;
+    int frequency;
+    unsigned char[] groupIfName;
+    unsigned char[] ssid;
+    unsigned char[] psk;
+    unsigned char[] passphrase;
+    unsigned char[] goDeviceAddress;
+    unsigned char[] goRandomDeviceAddress;
+};

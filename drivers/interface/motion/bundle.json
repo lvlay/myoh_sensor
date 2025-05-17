@@ -1,0 +1,90 @@
+{
+    "name": "@ohos/drivers_interface_motion",
+    "description": "motion device driver interface",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/motion"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_motion",
+      "subsystem": "hdf",
+      "syscap": [],
+      "adapted_system_type": [
+        "standard",
+        "small"
+      ],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/motion/v1_0:motion_idl_target",
+          "//drivers/interface/motion/v1_1:motion_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/motion/v1_0:libmotion_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          },
+          {
+            "name": "//drivers/interface/motion/v1_0:libmotion_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          },
+          {
+            "name": "//drivers/interface/motion/v1_0:motion_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          },
+          {
+            "name": "//drivers/interface/motion/v1_1:libmotion_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          },
+          {
+            "name": "//drivers/interface/motion/v1_1:libmotion_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          },
+          {
+            "name": "//drivers/interface/motion/v1_1:motion_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/motion"
+            }
+          }
+        ]
+      }
+    }
+  }

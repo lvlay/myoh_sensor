@@ -1,0 +1,124 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* *
+ * @addtogroup HdiUsb
+ * @{
+ *
+ * @brief Provides unified APIs for usb services to access usb drivers.
+ *
+ * A usb service can obtain a usb driver object or agent and then call APIs provided by this object or agent to
+ * access different types of usb devices based on the usb IDs, thereby obtaining usb information,
+ * subscribing to or unsubscribing from usb data, enabling or disabling a usb,
+ * setting the usb data reporting mode, and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 5.0
+ */
+
+/* *
+ * @file IUsbInterface.idl
+ *
+ * @brief Declares the APIs provided by the usb module for obtaining usb information, subscribing to or
+ * unsubscribing from usb data, enabling or disabling a usb, setting the usb data reporting mode,
+ * and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 5.0
+ * @version 1.1
+ */
+
+package ohos.hdi.usb.v1_1;
+
+import ohos.hdi.usb.v1_1.UsbTypes;
+import ohos.hdi.usb.v1_0.UsbTypes;
+import ohos.hdi.usb.v1_0.IUsbdSubscriber;
+import ohos.hdi.usb.v1_0.IUsbdBulkCallback;
+import ohos.hdi.usb.v1_0.IUsbInterface;
+
+/* *
+ * @brief Defines the functions for performing basic operations on usb.
+ *
+ * The operations include obtaining usb information, subscribing to or unsubscribing from usb data,
+ * enabling or disabling a usb, setting the usb data reporting mode, and setting usb options such as
+ * the accuracy and measurement range.
+ */
+interface IUsbInterface extends ohos.hdi.usb.v1_0.IUsbInterface{
+
+    /* *
+     * @brief Obtain the activation information of the USB device interface.
+     *
+     * @param dev Indicates the USB device address.
+     * @param interfaceid Indicates the interface ID of the USB device.
+     * @param unactivated Indicates whether the interface unactivated.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 5.0
+     */
+    GetInterfaceActiveStatus ([in] struct UsbDev dev, [in] unsigned char interfaceid, [out] boolean unactivated );
+
+    /* *
+     * @brief Obtains USB device speed.
+     *
+     * @param dev Indicates the USB device address.
+     * @param speed Indicates the USB device speed.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 5.0
+     */
+    GetDeviceSpeed ([in] struct UsbDev dev, [out] unsigned char speed );
+
+    /* *
+     * @brief Obtains the file descriptor.
+     *
+     * @param dev Indicates the USB device address.
+     * @param fd USB device file descriptor
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 5.0
+     * @version 1.0
+     */
+    GetDeviceFileDescriptor([in] struct UsbDev dev, [out] FileDescriptor fd);
+
+    /* *
+     * @brief Reads data on a specified endpoint during bulk transfer. The endpoint must be in the data reading
+     * direction. You can specify a timeout duration if needed.
+     *
+     * @param dev Indicates the USB device address.
+     * @param pipe Indicates the pipe of the USB device.
+     * @param timeout Indicates the timeout duration.
+     * @param length the maximum number of bytes to receive into the data buffer.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 5.0
+     * @version 1.0
+     */
+    BulkTransferReadwithLength([in] struct UsbDev dev, [in] struct UsbPipe pipe, [in] int timeout, [in] int length, [out] unsigned char[] data);
+
+    /* *
+     * @brief Performs control transfer for endpoint 0 of the device. The data transfer direction is determined by the
+     * request type. If the result of <b>requestType</b>&
+     * <b>USB_ENDPOINT_DIR_MASK</b> is <b>USB_DIR_OUT</b>, the endpoint is in the data writing direction; if the result
+     * is <b>USB_DIR_IN</b>, the endpoint is in the data reading direction.
+     *
+     * @param dev Indicates the USB device address.
+     * @param ctrl Indicates the control data packet structure.
+     * @param data Indicates the read data.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 5.0
+     * @version 1.0
+     */
+    ControlTransferReadwithLength([in] struct UsbDev dev, [in] struct UsbCtrlTransferParams ctrl, [out] unsigned char[] data);
+}

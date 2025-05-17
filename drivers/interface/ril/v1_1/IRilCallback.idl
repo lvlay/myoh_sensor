@@ -1,0 +1,1765 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer telephony services,
+ * including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+
+/**
+ * @file IRilCallback.idl
+ *
+ * @brief Declares callback APIs of the RIL module.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+
+/**
+ * @brief Defines the path for the package of the RIL module APIs.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+package ohos.hdi.ril.v1_1;
+
+import ohos.hdi.ril.v1_1.Types;
+
+/**
+ * @brief Declares callback APIs of the RIL module.
+ *
+ * These APIs provide the callback functions for making calls, sending SMS and MMS messages,
+ * activating SIM cards, and accessing the Internet. The caller needs to implement these callbacks.
+ *
+ * @since 3.2
+ * @version 1.1
+ */
+[callback] interface IRilCallback {
+    /**
+     * @brief Callback used to report the emergency call number.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param emergencyInfoList Emergency call number list. For details, see {@link EmergencyInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallEmergencyNotice([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct EmergencyInfoList emergencyInfoList);
+
+    /**
+     * @brief Callback for reporting call status updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallStateUpdated([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting the call ringback tone.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param ringbackVoice Ringback tone information. For details, see {@link RingbackVoice}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallRingbackVoiceNotice([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct RingbackVoice ringbackVoice);
+
+    /**
+     * @brief Callback for reporting the Single Radio Voice Call Continuity (SRVCC) status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param srvccStatus SRVCC status. For details, see {@link SrvccStatus}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallSrvccStatusNotice([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SrvccStatus srvccStatus);
+
+    /**
+     * @brief Callback for reporting USSD service information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param ussdNoticeInfo USSD service information. For details, see {@link UssdNoticeInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallUssdNotice([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct UssdNoticeInfo ussdNoticeInfo);
+
+    /**
+     * @brief Callback for reporting supplementary service information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param ssNoticeInfo Supplementary service information. For details, see {@link SsNoticeInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallSsNotice([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SsNoticeInfo ssNoticeInfo);
+
+    /**
+     * @brief Callback for reporting the Reverse Single Radio Voice Call Continuity (RSRVCC) status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallRsrvccStatusNotify([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting the emergency call number list.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetEmergencyCallListResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the emergency call number list.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param emergencyInfoList Emergency call number list. For details, see {@link EmergencyInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetEmergencyCallListResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct EmergencyInfoList emergencyInfoList);
+
+    /**
+     * @brief Callback for the response of querying the call status information list.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param callList Call status information list. For details, see {@link CallInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallListResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CallInfoList callList);
+
+    /**
+     * @brief Callback for the response of making a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] DialResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for ending a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] HangupResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for rejecting a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] RejectResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for answering a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] AnswerResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for holding a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] HoldCallResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for unholding a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnHoldCallResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for switching a call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SwitchCallResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for querying the CLIP service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param getClipResult CLIP result. For details, see {@link GetClipResult}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetClipResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct GetClipResult getClipResult);
+
+    /**
+     * @brief Callback for setting the CLIP service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetClipResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for combining calls into a conference call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CombineConferenceResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for separating calls from a conference call.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SeparateConferenceResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for ending the call is in the foreground and resuming the call in the background.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CallSupplementResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for querying the call waiting information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param callWaitResult Call waiting result. For details, see {@link CallWaitResult}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallWaitingResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CallWaitResult callWaitResult);
+
+    /**
+     * @brief Callback for setting the call waiting information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCallWaitingResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for querying call forwarding information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cFQueryList Call forwarding query information list.
+     * For details, see {@link CallForwardQueryInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallTransferInfoResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CallForwardQueryInfoList cFQueryList);
+
+    /**
+     * @brief Callback for the response of setting call forwarding information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCallTransferInfoResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying call restriction information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param result Call restriction result. For details, see {@link CallRestrictionResult}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallRestrictionResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CallRestrictionResult result);
+
+    /**
+     * @brief Callback for the response of setting call restriction information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCallRestrictionResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying CLIR service information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param getClirResult CLIR result. For details, see {@link GetClirResult}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetClirResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct GetClirResult getClirResult);
+
+    /**
+     * @brief Callback for the response of setting CLIR service information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetClirResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of enabling DTMF.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] StartDtmfResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of sending DTMF.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SendDtmfResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of stopping DTMF sending.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] StopDtmfResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the call preference mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param mode CallPreference mode.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallPreferenceModeResponse([in] struct RilRadioResponseInfo responseInfo, [in] int mode);
+
+    /**
+     * @brief Callback for the response of setting the call preference mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCallPreferenceModeResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting the USSD service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetUssdResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of close unfinished USSD.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] CloseUnFinishedUssdResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the USSD service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cusd USSD service information.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetUssdResponse([in] struct RilRadioResponseInfo responseInfo, [in] int cusd);
+
+    /**
+     * @brief Callback for the response of setting the mute mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetMuteResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the mute status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param mute Mute status. The value <b>0</b> indicates the unmuted state, and the value <b>1</b>
+     * indicates the muted state.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetMuteResponse([in] struct RilRadioResponseInfo responseInfo, [in] int mute);
+
+    /**
+     * @brief Callback for the response of querying the call failure cause.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param callFail Call failure cause.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCallFailReasonResponse([in] struct RilRadioResponseInfo responseInfo, [in] int callFail);
+
+    /**
+     * @brief Callback for the response of setting the call restriction password.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetBarringPasswordResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting the VoNR switch.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] SetVonrSwitchResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting status updates such as data service connection or disconnection.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param dataCallResultList List of data service activation results. For details, see {@link DataCallResultList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] PdpContextListUpdated([in] struct RilRadioResponseInfo responseInfo, [in] struct DataCallResultList dataCallResultList);
+
+    /**
+     * @brief Reporting the data link capability.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param capability Data link capability.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] DataLinkCapabilityUpdated([in] struct RilRadioResponseInfo responseInfo, [in] struct DataLinkCapability capability);
+
+    /**
+     * @brief Callback for the response of activating the data service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param setupDataCallResultInfo Data service activation result. For details, see {@link SetupDataCallResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] ActivatePdpContextResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SetupDataCallResultInfo setupDataCallResultInfo);
+
+    /**
+     * @brief Callback for the response of disconnecting the data service.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] DeactivatePdpContextResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the PDP context list.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param dataCallResultList List of data service activation results. For details, see {@link DataCallResultList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetPdpContextListResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct DataCallResultList dataCallResultList);
+
+    /**
+     * @brief Callback for the response of setting the initial default access point name (APN).
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetInitApnInfoResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the current data link bandwidth information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param dataLinkBandwidthInfo Data link bandwidth information. For details, see {@link DataLinkBandwidthInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetLinkBandwidthInfoResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct DataLinkBandwidthInfo dataLinkBandwidthInfo);
+
+    /**
+     * @brief Callback for the response of get link capability.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param capability Data link capability.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] GetLinkCapabilityResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct DataLinkCapability capability);
+
+    /**
+     * @brief Callback for the response of setting the rule for reporting the data link bandwidth information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetLinkBandwidthReportingRuleResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of enabling the data service for a SIM card slot.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetDataPermittedResponse([in] struct RilRadioResponseInfo responseInfo);
+
+     /**
+      * @brief Callback for reporting the radio status.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param state Radio status. The value <b>0</b> indicates OFF, and the value <b>1</b> indicates ON.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] RadioStateUpdated([in] struct RilRadioResponseInfo responseInfo, [in] int state);
+
+     /**
+      * @brief Callback for reporting the change of the radio access technology.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param voiceRadioTechnology New radio access technology of the CS domain.
+      * For details, see {@link VoiceRadioTechnology}.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] VoiceRadioTechUpdated([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct VoiceRadioTechnology voiceRadioTechnology);
+
+    /**
+     * @brief Reporting the dsds mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param state Dsds mode.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] DsdsModeUpdated([in] struct RilRadioResponseInfo responseInfo, [in] int state);
+
+     /**
+      * @brief Callback for the response indicating that the mobile phone is powering off.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] ShutDownResponse([in] struct RilRadioResponseInfo responseInfo);
+
+     /**
+      * @brief Callback for the response of setting the modem status.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] SetRadioStateResponse([in] struct RilRadioResponseInfo responseInfo);
+
+     /**
+      * @brief Callback for the response of querying the modem status.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] GetRadioStateResponse([in] struct RilRadioResponseInfo responseInfo,[in] int state);
+
+     /**
+      * @brief Callback for the response of querying the international mobile equipment identity (IMEI).
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param imei IMEI of the device.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] GetImeiResponse([in] struct RilRadioResponseInfo responseInfo, [in] String imei);
+
+     /**
+      * @brief Callback for the response of querying the mobile equipment identifier (MEID).
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param meid MEID of the device.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] GetMeidResponse([in] struct RilRadioResponseInfo responseInfo, [in] String meid);
+
+     /**
+      * @brief Callback for the response of querying the radio access technology of the CS domain.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param VoiceRadioTechnology Voice radio access technology. For details, see {@link VoiceRadioTechnology}.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] GetVoiceRadioTechnologyResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct VoiceRadioTechnology voiceRadioTechnology);
+
+     /**
+      * @brief Callback for the response of querying the baseband version.
+      *
+      * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+      * For details, see {@link RilRadioResponseInfo}.
+      * @param basebandVersion Baseband version.
+      *
+      * @since 3.2
+      * @version 1.1
+      */
+    [oneway] GetBasebandVersionResponse([in] struct RilRadioResponseInfo responseInfo, [in] String basebandVersion);
+
+    /**
+     * @brief Callback for reporting SIM card status updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStateUpdated([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting the STK <b>SessionEnd</b> instruction.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkSessionEndNotify([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting STK <b>Proactive</b> instructions.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkProactiveNotify([in] struct RilRadioResponseInfo responseInfo, [in] String response);
+
+    /**
+     * @brief Callback for reporting STK <b>Alpha</b> instructions.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkAlphaNotify([in] struct RilRadioResponseInfo responseInfo, [in] String response);
+
+    /**
+     * @brief Callback for reporting STK events.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkEventNotify([in] struct RilRadioResponseInfo responseInfo, [in] String response);
+
+    /**
+     * @brief Callback for reporting STK <b>CallSetup</b> instructions.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkCallSetupNotify([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting the SIM card status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimRefreshNotify([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting STK Radio protocol updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimRadioProtocolUpdated([in] struct RilRadioResponseInfo responseInfo, [in] struct RadioProtocol radioProtocol);
+
+    /**
+     * @brief Callback for the response of querying SIM card data.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param result I/O response result of the SIM card. For details, see {@link IccIoResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetSimIOResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct IccIoResultInfo result);
+
+    /**
+     * @brief Callback for the response of obtaining the SIM card status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param CardStatusInfo SIM card status. For details, see {@link CardStatusInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetSimStatusResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct CardStatusInfo result);
+
+    /**
+     * @brief Callback for the response of obtaining the IMSI of a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param response IMSI of the SIM card.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetImsiResponse([in] struct RilRadioResponseInfo responseInfo, [in] String response);
+
+    /**
+     * @brief Callback for the response of obtaining the SIM card lock status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param simLockStatus SIM card lock status. For details, see {@link simLockStatus}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetSimLockStatusResponse([in] struct RilRadioResponseInfo responseInfo, [in] int simLockStatus);
+
+    /**
+     * @brief Callback for the response of setting the SIM card lock status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetSimLockResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of changing the SIM card password.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] ChangeSimPasswordResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of unlocking with the PIN.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnlockPinResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of unlocking with the PUK.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnlockPukResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of unlocking with PIN2.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnlockPin2Response([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of unlocking with PUK2.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnlockPuk2Response([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for the response of activating or deactivating the SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetActiveSimResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of sending the STK <b>TerminalResponse</b> instruction.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkSendTerminalResponseResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of sending the STK <b>Envelope</b> instruction.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkSendEnvelopeResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of sending the STK <b>CallSetup</b> instruction.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkSendCallSetupRequestResultResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying whether the STK is ready.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimStkIsReadyResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the protocol stack of the primary and secondary SIM cards.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param RadioProtocol Radio protocol. For details, see {@link RadioProtocol}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetRadioProtocolResponse([in] struct RilRadioResponseInfo responseInfo,[in] struct RadioProtocol radioProtocol);
+
+    /**
+     * @brief Callback for the response of setting the protocol stack of the primary and secondary SIM cards.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param RadioProtocol Radio protocol. For details, see {@link RadioProtocol}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetRadioProtocolResponse([in] struct RilRadioResponseInfo responseInfo,[in] struct RadioProtocol radioProtocol);
+
+    /**
+     * @brief Callback for the response of opening the logical channel for APDU transmission.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param OpenLogicalChannelResponse Response of opening the logical channel.
+     * For details, see {@link OpenLogicalChannelResponse}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimOpenLogicalChannelResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct OpenLogicalChannelResponse pOpenLogicalChannelResponse);
+
+    /**
+     * @brief Callback for the response of closing the logical channel for APDU transmission.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimCloseLogicalChannelResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of transmitting APDU over a logical channel.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param result Data transmission result. For details, see {@link IccIoResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimTransmitApduLogicalChannelResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct IccIoResultInfo result);
+
+    /**
+     * @brief Callback for the response of transmitting APDU over a basic channel.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param result Indicates the data transmission result. For details, see {@link IccIoResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimTransmitApduBasicChannelResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct IccIoResultInfo result);
+
+    /**
+     * @brief Callback for the response of SIM card authentication.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param result SIM card authentication result. For details, see {@link IccIoResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SimAuthenticationResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct IccIoResultInfo result);
+
+    /**
+     * @brief Callback for the response of SIM card unlocking.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param LockStatusResp SIM card lock status response. For details, see {@link LockStatusResp}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UnlockSimLockResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct LockStatusResp lockStatus);
+
+    /**
+     * @brief Callback for reporting network registration status updates of the CS domain.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param csRegStatusInfo Network registration status of the CS domain. For details, see {@link CsRegStatusInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkCsRegStatusUpdated([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CsRegStatusInfo csRegStatusInfo);
+
+    /**
+     * @brief Callback for reporting network registration status updates of the PS domain.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param psRegStatusInfo Network registration status of the PS domain. For details, see {@link PsRegStatusInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkPsRegStatusUpdated([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct PsRegStatusInfo psRegStatusInfo);
+
+    /**
+     * @brief Callback for reporting signal strength updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param rssi Signal strength. For details, see {@link Rssi}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SignalStrengthUpdated([in] struct RilRadioResponseInfo responseInfo, [in] struct Rssi rssi);
+
+    /**
+     * @brief Callback for reporting NITZ time zone updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param timeZoneStr NITZ time zone.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkTimeZoneUpdated([in] struct RilRadioResponseInfo responseInfo, [in] String timeZoneStr);
+
+    /**
+     * @brief Callback for reporting NITZ time updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param timeStr NITZ time.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkTimeUpdated([in] struct RilRadioResponseInfo responseInfo, [in] String timeStr);
+
+    /**
+     * @brief Callback for reporting physical channel configuration updates.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param channelConfigInfoList Channel configuration information list. For details, see {@link ChannelConfigInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkPhyChnlCfgUpdated([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct ChannelConfigInfoList channelConfigInfoList);
+
+    /**
+     * @brief Callback for reporting cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListCurrentInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NetworkCurrentCellUpdated([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo cellListCurrentInfo);
+
+    /**
+     * @brief Callback for reporting cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListCurrentInfo_1_1}.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] NetworkCurrentCellUpdated_1_1([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo_1_1 cellListCurrentInfo);
+
+    /**
+     * @brief Callback for querying the signal strength.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param rssi Signal strength. For details, see {@link Rssi}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetSignalStrengthResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct Rssi rssi);
+
+    /**
+     * @brief Callback for the response of obtaining the network registration status of the CS domain.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param csRegStatusInfo Network registration status of the CS domain. For details, see {@link CsRegStatusInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCsRegStatusResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CsRegStatusInfo csRegStatusInfo);
+
+    /**
+     * @brief Callback for the response of obtaining the network registration status of the PS domain.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param psRegStatusInfo Network registration status of the PS domain. For details, see {@link PsRegStatusInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetPsRegStatusResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct PsRegStatusInfo psRegStatusInfo);
+
+    /**
+     * @brief Callback for the response of querying the carrier name.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param psRegStatusInfo Carrier information. For details, see {@link OperatorInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetOperatorInfoResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct OperatorInfo psRegStatusInfo);
+
+    /**
+     * @brief Callback for the response of querying available network information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param availableNetworkList Available network list. For details, see {@link AvailableNetworkList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetNetworkSearchInformationResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct AvailableNetworkList availableNetworkList);
+
+    /**
+     * @brief Callback for the response of querying the network selection mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param setNetworkModeInfo Network modes available for selection. For details, see {@link SetNetworkModeInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetNetworkSelectionModeResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SetNetworkModeInfo setNetworkModeInfo);
+
+    /**
+     * @brief Callback for the response of setting the network selection mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetNetworkSelectionModeResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying neighboring cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListNearbyInfo Neighboring cell information list. For details, see {@link CellListNearbyInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetNeighboringCellInfoListResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListNearbyInfo cellListNearbyInfo);
+
+    /**
+     * @brief Callback for the response of querying cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListNearbyInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCurrentCellInfoResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo cellListCurrentInfo);
+
+    /**
+     * @brief Callback for the response of querying cell information.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellListCurrentInfo Cell information list. For details, see {@link CellListCurrentInfo_1_1}.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] GetCurrentCellInfoResponse_1_1([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CellListCurrentInfo_1_1 cellListCurrentInfo);
+
+    /**
+     * @brief Callback for the response of setting the preferred network type.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetPreferredNetworkResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the preferred network type.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param preferredNetworkTypeInfo Preferred network type information. For details, see {@link PreferredNetworkTypeInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetPreferredNetworkResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct PreferredNetworkTypeInfo preferredNetworkTypeInfo);
+
+    /**
+     * @brief Callback for the response of querying the physical channel configuration.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param channelConfigInfoList Physical channel configuration information list. For details, see {@link ChannelConfigInfoList}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetPhysicalChannelConfigResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct ChannelConfigInfoList channelConfigInfoList);
+
+    /**
+     * @brief Callback for the response of enabling or disabling cell location update.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetLocateUpdatesResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting a notification filter.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetNotificationFilterResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting the device status.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetDeviceStateResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for reporting new GSM SMS message notifications.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param smsMessageInfo SMS message information. For details, see {@link SmsMessageInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NewSmsNotify([in] struct RilRadioResponseInfo responseInfo, [in] struct SmsMessageInfo smsMessageInfo);
+
+    /**
+     * @brief Callback for reporting new CDMA SMS message notifications.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param smsMessageInfo SMS message information. For details, see {@link SmsMessageInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NewCdmaSmsNotify([in] struct RilRadioResponseInfo responseInfo,[in] struct SmsMessageInfo smsMessageInfo);
+
+    /**
+     * @brief Callback for reporting SMS status notifications.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param smsMessageInfo SMS message information. For details, see {@link SmsMessageInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SmsStatusReportNotify([in] struct RilRadioResponseInfo responseInfo, [in] struct SmsMessageInfo smsMessageInfo);
+
+    /**
+     * @brief Callback for reporting storage of new SMS message in a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param recordNumber Number of SMS messages in the SIM card.
+     * @param indicationType Notification type. For details, see {@link HRilNotiType}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] NewSmsStoredOnSimNotify([in] struct RilRadioResponseInfo responseInfo, [in] int recordNumber,
+        [in] int indicationType);
+
+    /**
+     * @brief Callback for reporting cell broadcast configuration.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellBroadConfigReportInfo Cell broadcast information. For details, see {@link CBConfigReportInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CBConfigNotify([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CBConfigReportInfo cellBroadConfigReportInfo);
+
+    /**
+     * @brief Callback for the response of sending a GSM SMS message.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param sendSmsResultInfo SMS message sending result. For details, see {@link SendSmsResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SendGsmSmsResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct SendSmsResultInfo sendSmsResultInfo);
+
+    /**
+     * @brief Callback for the response of sending a CDMA SMS message.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param sendSmsResultInfo SMS message sending result. For details, see {@link SendSmsResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SendCdmaSmsResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SendSmsResultInfo sendSmsResultInfo);
+
+    /**
+     * @brief Callback for the response of writing GSM SMS messages to a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] AddSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of deleting GSM SMS messages from a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] DelSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of updating the GSM SMS messages in a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UpdateSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of writing CDMA SMS messages to a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] AddCdmaSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of deleting CDMA SMS messages from a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] DelCdmaSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of updating the CDMA SMS messages in a SIM card.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] UpdateCdmaSimMessageResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of setting an SMSC address.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetSmscAddrResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the SMSC address.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @param serviceCenterAddress SMSC address. For details, see {@link ServiceCenterAddress}.
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetSmscAddrResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct ServiceCenterAddress serviceCenterAddress);
+
+    /**
+     * @brief Callback for the response of activating GSM cell broadcast.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCBConfigResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the GSM cell broadcast configuration.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cellBroadcastInfo GSM cell broadcast configuration information. For details, see {@link CBConfigInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCBConfigResponse([in] struct RilRadioResponseInfo responseInfo, [in] struct CBConfigInfo cellBroadcastInfo);
+
+    /**
+     * @brief Callback for the response of activating CDMA cell broadcast.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SetCdmaCBConfigResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of querying the CDMA cell broadcast configuration.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param cdmaCBConfigInfo CDMA cell broadcast configuration information. For details, see {@link CdmaCBConfigInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] GetCdmaCBConfigResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct CdmaCBConfigInfo cdmaCBConfigInfo);
+
+    /**
+     * @brief Callback for the response of sending a long GSM SMS message.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     * @param sendSmsResultInfo SMS message sending result. For details, see {@link SendSmsResultInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SendSmsMoreModeResponse([in] struct RilRadioResponseInfo responseInfo,
+        [in] struct SendSmsResultInfo sendSmsResultInfo);
+
+    /**
+     * @brief Callback for the response of acknowledging the receipt of a new SMS message.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID.
+     * For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] SendSmsAckResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of a common error.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details, see {@link RilRadioResponseInfo}.
+     *
+     * @since 3.2
+     * @version 1.1
+     */
+    [oneway] CommonErrorResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of rrc connect state.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param state Rrc connection state.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] GetRrcConnectionStateResponse([in] struct RilRadioResponseInfo responseInfo, [in] int state);
+
+    /**
+     * @brief Callback for the response of set nr option mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] SetNrOptionModeResponse([in] struct RilRadioResponseInfo responseInfo);
+
+    /**
+     * @brief Callback for the response of get nr option mode.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param mode Nr option mode.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] GetNrOptionModeResponse([in] struct RilRadioResponseInfo responseInfo, [in] int mode);
+
+    /**
+     * @brief Reporting the rrc connection state.
+     *
+     * @param responseInfo Common response information, such as the card slot ID and request sequence ID. For details,
+     * see {@link RilRadioResponseInfo}.
+     * @param state Rrc connection state.
+     *
+     * @since 4.0
+     * @version 1.2
+     */
+    [oneway] GetRrcConnectionStateUpdated([in] struct RilRadioResponseInfo responseInfo, [in] int state);
+}
+/** @} */

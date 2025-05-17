@@ -1,0 +1,1661 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer
+ * telephony services, including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IRil.idl
+ *
+ * @brief Declares the request API of the RIL module.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the path for the package of the RIL module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.ril.v1_0;
+import ohos.hdi.ril.v1_0.IRilCallback;
+import ohos.hdi.ril.v1_0.Types;
+
+/**
+ * @brief Declares the request API of the RIL module.
+ *
+ * Request APIs are called to make calls, send SMS and MMS messages, activate SIM cards, 
+ * and access the Internet.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+interface IRil {
+     /**
+      * @brief Sets an IRil callback.
+      *
+      * @param rilCallback Callback to set. For details, see {@link IRilCallback}.
+      *
+      * @return Returns <b>0</b> if the operation is successful.
+      * @return Returns a non-0 value if the operation fails.
+      *
+      * @since 3.2
+      * @version 1.0
+      */
+    [oneway] SetCallback([in] IRilCallback rilCallback);
+
+    /**
+     * @brief Sets the emergency call number.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param emergencyInfoList Emergency call number list. For details, see {@link EmergencyInfoList}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetEmergencyCallList([in] int slotId, [in] int serialId, [in] struct EmergencyInfoList emergencyInfoList);
+
+    /**
+     * @brief Obtains the emergency number.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetEmergencyCallList([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the call status list.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallList([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Makes a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dialInfo Dialing information. For details, see {@link DialInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] Dial([in] int slotId, [in] int serialId, [in] struct DialInfo dialInfo);
+
+    /**
+     * @brief Rejects a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] Reject([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Ends a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param callId Call ID.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] Hangup([in] int slotId, [in] int serialId, [in] int callId);
+
+    /**
+     * @brief Answers a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] Answer([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Holds a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] HoldCall([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Unholds a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnHoldCall([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Switches a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SwitchCall([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Combines calls into a conference call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param callType Call type. Currently, the value can only be <b>0</b> (voice call).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] CombineConference([in] int slotId, [in] int serialId, [in] int callType);
+
+    /**
+     * @brief Separates calls from a conference call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param callId Call ID.
+     * @param callType Call type. Currently, the value can only be <b>0</b> (voice call).
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SeparateConference([in] int slotId, [in] int serialId, [in] int callId, [in] int callType);
+
+    /**
+     * @brief Obtains the call waiting status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallWaiting([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the call waiting information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param activate Whether to enable or disable call waiting. The value <b>0</b> means to 
+     * disable the call waiting function, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCallWaiting([in] int slotId, [in] int serialId, [in] int activate);
+
+    /**
+     * @brief Obtains the call forwarding information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param reason Call forwarding type. The value <b>0</b> indicates unconditional call forwarding, 
+     * <b>1</b> indicates call forwarding when the user is busy, <b>2</b> indicates call forwarding 
+     * when the user does not reply, and <b>3</b> indicates call forwarding when the user is unreachable.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallTransferInfo([in] int slotId, [in] int serialId, [in] int reason);
+
+    /**
+     * @brief Sets the call forwarding status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param callForwardSetInfo Call forwarding information. For details, see {@link CallForwardSetInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCallTransferInfo([in] int slotId, [in] int serialId,
+        [in] struct CallForwardSetInfo callForwardSetInfo);
+
+    /**
+     * @brief Obtains the call restriction information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param fac Object for call restriction.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallRestriction([in] int slotId, [in] int serialId, [in] String fac);
+
+    /**
+     * @brief Sets the call restriction information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param callRestrictionInfo Call restriction information. For details, see {@link CallRestrictionInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCallRestriction([in] int slotId, [in] int serialId,
+        [in] struct CallRestrictionInfo callRestrictionInfo);
+
+    /**
+     * @brief Obtains the calling line identification presentation (CLIP) information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetClip([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the CLIP information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param action Whether to enable or disable the CLIP function. The value <b>0</b> means to 
+     * disable the CLIP function, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetClip([in] int slotId, [in] int serialId, [in] int action);
+
+    /**
+     * @brief Obtains the calling line identification restriction (CLIR) information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetClir([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the CLIR information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param action Whether to enable or disable the CLIR function. The value <b>0</b> means to 
+     * disable the CLIR function, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetClir([in] int slotId, [in] int serialId, [in] int action);
+
+    /**
+     * @brief Sets the call preference mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param mode Call preference mode. The value <b>1</b> indicates that only the CS domain is used for calls. 
+     * The value <b>2</b> indicates that the CS domain is preferred for calls. The value <b>3</b> indicates 
+     * that the IP multimedia system (IMS) is preferred for calls. The value <b>4</b> indicates that only the 
+     * IMS is used for calls.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCallPreferenceMode([in] int slotId, [in] int serialId, [in] int mode);
+
+    /**
+     * @brief Obtains the call preference mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallPreferenceMode([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets unstructured supplementary service data (USSD) information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param str USSD information. The value contains a maximum of 160 characters.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetUssd([in] int slotId, [in] int serialId, [in] String str);
+
+    /**
+     * @brief Obtains the USSD information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetUssd([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the mute mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param mute Whether to enable the mute function. The value <b>0</b> means to 
+     * disable the mute function, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetMute([in] int slotId, [in] int serialId, [in] int mute);
+
+    /**
+     * @brief Obtains the mute mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetMute([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the call failure cause.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCallFailReason([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Holds and resumes a call.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param type Type of ending calls. The value <b>0</b> indicates that the call is ended directly, 
+     * the value <b>1</b> indicates that the call is ended in the foreground and background, 
+     * the value <b>2</b> indicates that the call is ended in the foreground and resumed in the background, 
+     * and the value <b>3</b> indicates that all calls are ended.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] CallSupplement([in] int slotId, [in] int serialId, [in] int type);
+
+    /**
+     * @brief Sends dual tone multi-frequency (DTMF).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dtmfInfo DTMF information. For details, see {@link DtmfInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendDtmf([in] int slotId, [in] int serialId, [in] struct DtmfInfo dtmfInfo);
+
+    /**
+     * @brief Enables DTMF.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dtmfInfo DTMF information. For details, see {@link DtmfInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] StartDtmf([in] int slotId, [in] int serialId, [in] struct DtmfInfo dtmfInfo);
+
+    /**
+     * @brief Disables DTMF.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dtmfInfo DTMF information. For details, see {@link DtmfInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] StopDtmf([in] int slotId, [in] int serialId, [in] struct DtmfInfo dtmfInfo);
+
+    /**
+     * @brief Sets the call barring password.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param setBarringInfo Call barring information. For details, see {@link SetBarringInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetBarringPassword([in] int slotId, [in] int serialId, [in] struct SetBarringInfo setBarringInfo);
+
+    /**
+     * @brief Activates the packet data protocol (PDP) context.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataCallInfo Data service information. For details, see {@link DataCallInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] ActivatePdpContext([in] int slotId, [in] int serialId, [in] struct DataCallInfo dataCallInfo);
+
+    /**
+     * @brief Deactivates the PDP context.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param uniInfo Common information. For details, see {@link UniInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] DeactivatePdpContext([in] int slotId, [in] int serialId, [in] struct UniInfo uniInfo);
+
+    /**
+     * @brief Obtains the PDP context list.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param uniInfo Common information. For details, see {@link UniInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetPdpContextList([in] int slotId, [in] int serialId, [in] struct UniInfo uniInfo);
+
+    /**
+     * @brief Sets the initial default network access technology (APN).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataProfileDataInfo PDP context information. For details, see {@link DataProfileDataInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetInitApnInfo([in] int slotId, [in] int serialId, [in] struct DataProfileDataInfo dataProfileDataInfo);
+
+    /**
+     * @brief Obtains the current link information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cid PDP context ID.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetLinkBandwidthInfo([in] int slotId, [in] int serialId, [in] int cid);
+
+    /**
+     * @brief Sets the rule for reporting the data link bandwidth information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataLinkBandwidthReportingRule Data link bandwidth reporting rule. 
+     * For details, see {@link DataLinkBandwidthReportingRule}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetLinkBandwidthReportingRule([in] int slotId, [in] int serialId,
+        [in] struct DataLinkBandwidthReportingRule dataLinkBandwidthReportingRule);
+
+    /**
+     * @brief Enables the data service of a SIM card slot.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataPermitted Whether to enable the data service. The value <b>0</b> means to 
+     * disable the data service, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetDataPermitted([in] int slotId, [in] int serialId, [in] int dataPermitted);
+
+    /**
+     * @brief Sets the PDP context information for the data service.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataProfilesInfo PDP context list. For details, see {@link DataProfilesInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetDataProfileInfo([in] int slotId, [in] int serialId, [in] struct DataProfilesInfo dataProfilesInfo);
+
+    /**
+     * @brief Sends the data service performance mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataPerformanceInfo Data service performance mode. For details, see {@link DataPerformanceInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendDataPerformanceMode([in] int slotId, [in] int serialId, [in] struct DataPerformanceInfo dataPerformanceInfo);
+
+    /**
+     * @brief Sends the data service sleep mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param dataSleepInfo Data service sleep mode. For details, see {@link DataSleepInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendDataSleepMode([in] int slotId, [in] int serialId, [in] struct DataSleepInfo dataSleepInfo);
+
+    /**
+     * @brief Sets the modem status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param fun Function mode. The value <b>0</b> indicates the minimum mode, <b>1</b> indicates the online mode, 
+     * and <b>4</b> indicates the offline mode. Other modes are chip-specific.
+     * @param rst Whether to enable automatic reset of the modem. The value <b>0</b> means to disable automatic reset, 
+     * and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetRadioState([in] int slotId, [in] int serialId, [in] int fun, [in] int rst);
+
+    /**
+     * @brief Obtains the modem status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetRadioState([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the international mobile equipment identity (IMEI).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetImei([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the mobile equipment identifier (MEID).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetMeid([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the radio access technology of the CS domain.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetVoiceRadioTechnology([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the baseband version.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetBasebandVersion([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sends a mobile phone power-off message to the modem.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] ShutDown([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains SIM card data.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param SimIoRequestInfo SIM card data request information. For details, see {@link SimIoRequestInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetSimIO([in] int slotId, [in] int serialId, [in] struct SimIoRequestInfo simIO);
+
+    /**
+     * @brief Obtains the SIM card status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetSimStatus([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the international mobile subscriber identity (IMSI) of the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetImsi([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the SIM card lock status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param SimLockInfo SIM card lock information. For details, see {@link SimLockInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetSimLockStatus([in] int slotId, [in] int serialId, [in] struct SimLockInfo simLockInfo);
+
+    /**
+     * @brief Sets the SIM card lock.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param SimLockInfo SIM card lock information. For details, see {@link SimLockInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetSimLock([in] int slotId, [in] int serialId, [in] struct SimLockInfo simLockInfo);
+
+    /**
+     * @brief Changes the SIM card password.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param simPassword SIM card password. For details, see {@link SimPasswordInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] ChangeSimPassword([in] int slotId, [in] int serialId, [in] struct SimPasswordInfo simPassword);
+
+    /**
+     * @brief Sets the PIN for unlocking.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param pin PIN used for unlocking.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnlockPin([in] int slotId, [in] int serialId, [in] String pin);
+
+    /**
+     * @brief Sets the PUK for unlocking.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param puk PUK used for unlocking.
+     * @param pin PIN used for unlocking.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnlockPuk([in] int slotId, [in] int serialId, [in] String puk, [in] String pin);
+
+    /**
+     * @brief Sets the PIN2 for unlocking.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param pin2 PIN2 used for unlocking.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnlockPin2([in] int slotId, [in] int serialId, [in] String pin2);
+
+    /**
+     * @brief Sets the PUK2 for unlocking.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param puk2 PUK2 used for unlocking.
+     * @param pin2 PIN2 used for unlocking.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnlockPuk2([in] int slotId, [in] int serialId, [in] String puk2, [in] String pin2);
+
+    /**
+     * @brief Specifies whether to activate a SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param index Index value.
+     * @param enable Whether to enable the SIM card. The value <b>0</b> means to activate the SIM card, 
+     * and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetActiveSim([in] int slotId, [in] int serialId, [in] int index, [in] int enable);
+
+    /**
+     * @brief Sends the <b>TerminalResponse</b> instruction of the SIM application toolkit (STK).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param strCmd String text of the instruction.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimStkSendTerminalResponse([in] int slotId, [in] int serialId, [in] String strCmd);
+
+    /**
+     * @brief Sends the <b>Envelope</b> instruction of the STK.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param strCmd String text of the instruction.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimStkSendEnvelope([in] int slotId, [in] int serialId, [in] String strCmd);
+
+    /**
+     * @brief Sends the <b>CallSetup</b> instruction of the STK.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param accept Whether to accept the <b>CallSetup</b> request. The value <b>0</b> means not to accept the request, 
+     * and the value <b>1</b> means the opposite. 
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimStkSendCallSetupRequestResult([in] int slotId, [in] int serialId, [in] int accept);
+
+    /**
+     * @brief Checks whether the STK is in the <b>Ready</b> state.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimStkIsReady([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the protocol stack of the primary and secondary SIM cards.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetRadioProtocol([in] int slotId,[in] int serialId);
+
+    /**
+     * @brief Sets the protocol stack for the primary and secondary SIM cards.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param radioProtocol Radio protocol information. For details, see {@link RadioProtocol}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetRadioProtocol([in] int slotId,[in] int serialId,[in] struct RadioProtocol radioProtocol);
+
+    /**
+     * @brief Opens the logical channel of the application protocol data unit (APDU).
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param appID Application ID.
+     * @param p2 Parameter 2 of the AT instruction code.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimOpenLogicalChannel([in] int slotId, [in] int serialId, [in] String appID, [in] int p2);
+
+    /**
+     * @brief Closes the logical channel of the APDU.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param channelId ID of the logical channel to be closed.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimCloseLogicalChannel([in] int slotId, [in] int serialId, [in] int channelId);
+
+    /**
+     * @brief Transmits APDU data over the logical channel. The logical channel is opened and closed by the application.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param apduSimIO SIM card data request transmitted through the logical channel of the APDU. 
+     * For details, see {@link ApduSimIORequestInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimTransmitApduLogicalChannel([in] int slotId, [in] int serialId,
+        [in] struct ApduSimIORequestInfo apduSimIO);
+
+    /**
+     * @brief Transmits APDU data over the basic channel. The basic channel is the channel opened by default.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param apduSimIO SIM card data request transmitted through the logical channel of the APDU. 
+     * For details, see {@link ApduSimIORequestInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimTransmitApduBasicChannel([in] int slotId, [in] int serialId,
+        [in] struct ApduSimIORequestInfo apduSimIO);
+
+    /**
+     * @brief Performs SIM card authentication.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param simAuthInfo SIM card authentication request. For details, see {@link SimAuthenticationRequestInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SimAuthentication([in] int slotId, [in] int serialId,
+        [in] struct SimAuthenticationRequestInfo simAuthInfo);
+
+    /**
+     * @brief Unlocks a SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param lockType Lock type. For details, see 3GPP TS 22.022 [33].
+     * @param key Password used for unlocking. For details, see 3GPP TS 22.022 [33].
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UnlockSimLock([in] int slotId, [in] int serialId, [in] int lockType, [in] String key);
+
+    /**
+     * @brief Obtains the signal strength.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetSignalStrength([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the registration status of the CS domain.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCsRegStatus([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the registration status of the packet switched (PS) domain.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetPsRegStatus([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the carrier name.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetOperatorInfo([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains information about available networks.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetNetworkSearchInformation([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the network selection mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetNetworkSelectionMode([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the network selection mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param networkModeInfo Network selection mode. For details, see {@link SetNetworkModeInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetNetworkSelectionMode([in] int slotId, [in] int serialId,
+        [in] struct SetNetworkModeInfo networkModeInfo);
+
+    /**
+     * @brief Obtains information about neighboring cells.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetNeighboringCellInfoList([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains cell information.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCurrentCellInfo([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the preferred network type.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param preferredNetworkType Preferred network type. For details, see {@link PreferredNetworkTypeInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetPreferredNetwork([in] int slotId, [in] int serialId, [in] int preferredNetworkType);
+
+    /**
+     * @brief Obtains the preferred network type.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetPreferredNetwork([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Obtains the physical channel configuration.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetPhysicalChannelConfig([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sets the cell location update notification mode.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param mode Notification mode. For details, see {@link RilRegNotifyMode}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetLocateUpdates([in] int slotId, [in] int serialId, [in] enum RilRegNotifyMode mode);
+
+    /**
+     * @brief Sets the filter of notifications reported by the modem.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param newFilter Notificaiton filter. Binary flag bits are used to indicate different notification types. 
+     * The value <b>0</b> indicates that the filter is disabled, <b>1</b> indicates the signal strength, 
+     * <b>2</b> indicates the network registration status, <b>4</b> indicates the data connection status, 
+     * <b>8</b> indicates the link capacity, and <b>16</b> indicates the physical channel configuration.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetNotificationFilter([in] int slotId, [in] int serialId, [in] int newFilter);
+
+    /**
+     * @brief Sets the device status.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param deviceStateType Device status type. The value <b>0</b> indicates the power saving mode, 
+     * <b>1</b> indicates the charging mode, and <b>2</b> indicates the low data mode.
+     * @param deviceStateOn Whether to enable the device status switch. The value <b>0</b> means to 
+     * disable the switch, and the value <b>1</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetDeviceState([in] int slotId, [in] int serialId, [in] int deviceStateType, [in] int deviceStateOn);
+
+    /**
+     * @brief Sends Global System for Mobile Communications (GSM) SMS messages.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param gsmSmsMessageInfo GSM SMS message information. For details, see {@link GsmSmsMessageInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendGsmSms([in] int slotId, [in] int serialId, [in] struct GsmSmsMessageInfo gsmSmsMessageInfo);
+
+    /**
+     * @brief Sends Code Division Multiple Access (CDMA) SMS messages.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cdmaSmsMessageInfo CDMA SMS message information. For details, see {@link SendCdmaSmsMessageInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendCdmaSms([in] int slotId, [in] int serialId, [in] struct SendCdmaSmsMessageInfo cdmaSmsMessageInfo);
+
+    /**
+     * @brief Writes GSM SMS messages to the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param gsmSmsMessageInfo GSM SMS message information. For details, see {@link SmsMessageIOInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] AddSimMessage([in] int slotId, [in] int serialId, [in] struct SmsMessageIOInfo gsmSmsMessageInfo);
+
+    /**
+     * @brief Deletes GSM SMS messages from the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param index Message index.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] DelSimMessage([in] int slotId, [in] int serialId, [in] int index);
+
+    /**
+     * @brief Updates GSM SMS messages in the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param gsmSmsMessageInfo GSM SMS message information. For details, see {@link SmsMessageIOInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UpdateSimMessage([in] int slotId, [in] int serialId, [in] struct SmsMessageIOInfo gsmSmsMessageInfo);
+
+    /**
+     * @brief Writes CDMA SMS messages to the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cdmaSmsMessageInfo CDMA SMS message information. For details, see {@link SmsMessageIOInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] AddCdmaSimMessage([in] int slotId, [in] int serialId, [in] struct SmsMessageIOInfo cdmaSmsMessageInfo);
+
+    /**
+     * @brief Deletes CDMA SMS messages from the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param index Message index.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] DelCdmaSimMessage([in] int slotId, [in] int serialId, [in] int index);
+
+    /**
+     * @brief Updates CDMA SMS messages in the SIM card.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cdmaSmsMessageInfo CDMA SMS message information. For details, see {@link SmsMessageIOInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] UpdateCdmaSimMessage([in] int slotId, [in] int serialId, [in] struct SmsMessageIOInfo cdmaSmsMessageInfo);
+
+    /**
+     * @brief Sets a Short Message Service Center (SMSC) address.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param serviceCenterAddress SMSC address. For details, see {@link ServiceCenterAddress}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetSmscAddr([in] int slotId, [in] int serialId, [in] struct ServiceCenterAddress serviceCenterAddress);
+
+    /**
+      * @brief Obtains the short message center (SMC) address.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetSmscAddr([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Activates GSM cell broadcast.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cellBroadcastInfo GSM cell broadcast configuration information. 
+     * For details, see {@link CBConfigInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCBConfig([in] int slotId, [in] int serialId, [in] struct CBConfigInfo cellBroadcastInfo);
+
+    /**
+     * @brief Obtains the GSM cell broadcast configuration.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCBConfig([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Activates CDMA cell broadcast.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param cdmaCBConfigInfoList CDMA cell broadcast configuration list. For details, see {@link CdmaCBConfigInfoList}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SetCdmaCBConfig([in] int slotId, [in] int serialId, [in] struct CdmaCBConfigInfoList cdmaCBConfigInfoList);
+
+    /**
+     * @brief Obtains the CDMA cell broadcast configuration.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] GetCdmaCBConfig([in] int slotId, [in] int serialId);
+
+    /**
+     * @brief Sends a long GSM SMS message.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param gsmSmsMessageInfo GSM SMS message information. For details, see {@link GsmSmsMessageInfo}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendSmsMoreMode([in] int slotId, [in] int serialId, [in] struct GsmSmsMessageInfo gsmSmsMessageInfo);
+
+    /**
+     * @brief Sends an SMS message acknowledgement.
+     *
+     * @param slotId Card slot ID.
+     * @param serialId Serial ID of a request.
+     * @param modeData Processing mode of received SMS messages. For details, see {@link ModeData}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendSmsAck([in] int slotId, [in] int serialId, [in] struct ModeData modeData);
+
+    /**
+     * @brief Sends a acknowledgement to the RIL.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    [oneway] SendRilAck();
+}
+/** @} */

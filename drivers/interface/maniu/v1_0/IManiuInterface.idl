@@ -1,0 +1,15 @@
+package ohos.hdi.maniu.v1_0;
+
+import ohos.hdi.maniu.v1_0.ManiuTypes;
+
+import ohos.hdi.maniu.v1_0.IManiuCallback;
+
+interface IManiuInterface {
+
+    Func1([in] int id);
+
+    Func2([in] int data);
+
+    FuncRegister([in] int id, [in] IManiuCallback callbackObj);
+
+}

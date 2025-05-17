@@ -1,0 +1,3393 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer telephony services, 
+ * including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file Types.idl
+ *
+ * @brief Declares data types used by the Hardware Driver Interfaces (HDIs) of the Ril module.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the path for the package of the Ril module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.ril.v1_0;
+
+/**
+ * @brief Enumerates emergency call types.
+ */
+enum EccType {
+    /**
+     * Default
+     */
+    TYPE_CATEGORY = 0,
+
+     /**
+     * Police 
+     */
+    TYPE_POLICE = 1,
+
+     /**
+     * Ambulance
+     */
+    TYPE_AMBULANCE = 2,
+
+     /**
+     * Fire alarm
+     */
+    TYPE_FIRE = 4,
+
+     /**
+     * Marine police
+     */
+    TYPE_SEA = 8,
+
+     /**
+     * Mountain rescue
+     */
+    TYPE_MOUNTAIN = 16,
+};
+
+/**
+ * @brief Specifies whether a number is valid when there is a card or no card.
+ */
+enum SimpresentType {
+    /**
+     * Valid when there is no card
+     */
+    TYPE_NO_CARD = 0,
+
+    /**
+     * Valid when there is a card
+     */
+    TYPE_HAS_CARD = 1,
+};
+
+/**
+ * @brief Specifies whether a number is valid for all states or only for the abnormal service state of 
+ * the circuit switched (CS) domain.
+ */
+enum AbnormalServiceType {
+    /**
+     * Vaild for all states
+     */
+    TYPE_ALL = 0,
+
+    /**
+     * Valid only for the abnormal service state of the CS domain
+     */
+    TYPE_ONLY_CS = 1,
+};
+
+/**
+ * @brief Enumerates Ril error codes.
+ */
+enum RilErrType {
+    /**
+     * Call success
+     */
+    NONE = 0,
+
+    /**
+     * Common error
+     */
+    RIL_ERR_GENERIC_FAILURE = 1,
+
+    /**
+     * Invalid parameters
+     */
+    RIL_ERR_INVALID_PARAMETER = 2,
+
+    /**
+     * Memory fully loaded
+     */
+    RIL_ERR_MEMORY_FULL = 3,
+
+    /**
+     * Command sending failed
+     */
+    RIL_ERR_CMD_SEND_FAILURE = 4,
+
+    /**
+     * Command connection terminated
+     */
+    RIL_ERR_CMD_NO_CARRIER = 5,
+
+    /**
+     * Invalid response
+     */
+    RIL_ERR_INVALID_RESPONSE = 6,
+
+    /**
+     * Status repeated
+     */
+    RIL_ERR_REPEAT_STATUS = 7,
+
+    /**
+     * Network search in progress
+     */
+    RIL_ERR_NETWORK_SEARCHING = 8,
+
+    /**
+     * Network search interrupted
+     */
+    RIL_ERR_NETWORK_SEARCHING_INTERRUPTED = 9,
+
+    /**
+     * Modem shut down
+     */
+    RIL_ERR_MODEM_DEVICE_CLOSE = 10,
+
+    /**
+     * SIM card not inserted
+     */
+    RIL_ERR_NO_SIMCARD_INSERTED = 11,
+
+    /**
+     * PIN required
+     */
+    RIL_ERR_NEED_PIN_CODE = 12,
+
+    /**
+     * PUK required
+     */
+    RIL_ERR_NEED_PUK_CODE = 13,
+
+    /**
+     * Network search timed out
+     */
+    RIL_ERR_NETWORK_SEARCH_TIMEOUT = 14,
+
+    /**
+     * Incorrect PIN or PUK
+     */
+    RIL_ERR_PINPUK_PASSWORD_NOCORRECT = 15,
+
+    /**
+     * Modem parameter error
+     */
+    RIL_ERR_INVALID_MODEM_PARAMETER = 50,
+
+    /**
+     * IPC error
+     */
+    RIL_ERR_HDF_IPC_FAILURE = 300,
+
+    /**
+     * Null pointer
+     */
+    RIL_ERR_NULL_POINT = 301,
+
+    /**
+     * Vendor library not implemented
+     */
+    RIL_ERR_VENDOR_NOT_IMPLEMENT = 302
+};
+
+/**
+ * @brief Enumerates response types.
+ */
+enum RilResponseTypes {
+    /**
+     * Request response
+     */
+    RIL_RESPONSE_REQUEST = 0,
+
+    /**
+     * Notification response
+     */
+    RIL_RESPONSE_NOTICE = 1,
+
+    /**
+     * Acknowledgment request response
+     */
+    RIL_RESPONSE_REQUEST_ACK = 2,
+
+    /**
+     * Response to a request that must be acknowledged
+     */
+    RIL_RESPONSE_REQUEST_MUST_ACK = 3,
+
+    /**
+     * Response to a notification that must be acknowledged
+     */
+    RIL_RESPONSE_NOTICE_MUST_ACK = 4,
+};
+
+/**
+ * @brief Enumerates RIL system service states.
+ */
+enum RilSrvStatus {
+   /**
+    * No service
+    */
+    RIL_NO_SRV_SERVICE = 0,
+
+    /**
+     * Restricted service 
+     */
+    RIL_RESTRICTED_SERVICE = 1,
+
+    /**
+     * Valid service
+     */
+    RIL_SERVICE_VALID = 2,
+
+    /**
+     * Restricted regional service
+     */
+    RIL_REGIONAL_SERVICE = 3,
+
+    /**
+     * Power saving
+     */
+    RIL_ENERGY_SAVING_SERVICE = 4,
+};
+
+/**
+ * @brief Enumerates system service domains.
+ */
+enum RilSrvDomain {
+    /**
+     * No service
+     */
+    RIL_NO_DOMAIN_SERVICE = 0,
+
+    /**
+     * Circuit switched (CS) service only
+     */
+    RIL_CS_SERVICE = 1,
+
+    /**
+     * Packet switched (PS) service only
+     */
+    RIL_PS_SERVICE = 2,
+
+    /**
+     * CS and PS services
+     */
+    RIL_CS_PS_SERVICE = 3,
+
+    /**
+     * CS and PS services not registered
+     */
+    RIL_CS_PS_SEARCHING = 4,
+
+    /**
+     * CDMA not supported
+     */
+    RIL_CDMA_NOT_SUPPORT = 255,
+};
+
+/**
+ * @brief Enumerates roaming states.
+ */
+enum RilRoamStatus {
+    /**
+     * Non-roaming state
+     */
+    RIL_NO_ROAM = 0,
+    /**
+     * Roaming state
+     */
+    RIL_ROAMING = 1,
+    /**
+     * Unknown
+     */
+    RIL_ROAM_UNKNOWN = 2,
+};
+
+/**
+ * @brief Enumerates SIM card lock states.
+ */
+enum RilSimLockStatus {
+    /**
+     * Not locked by CardLock
+     */
+    RIL_SIM_CARD_UNLOCK = 0,
+
+    /**
+     * Locked by CardLock
+     */
+    RIL_SIM_CARD_LOCK = 1,
+};
+
+/**
+ * @brief Enumerates system modes.
+ */
+enum RilSysMode {
+    /**
+     * Service not exist
+     */
+    RIL_NO_SYSMODE_SERVICE = 0,
+
+    /**
+     * Global System for Mobile Communications (GSM)
+     */
+    RIL_GSM_MODE = 1,
+
+    /**
+     * Code Division Multiple Access (CDMA)
+     */
+    RIL_CDMA_MODE = 2,
+
+    /**
+     * Wideband Code Division Multiple Access (WCDMA)
+     */
+    RIL_WCDMA_MODE = 3,
+
+    /**
+     * Time Division-Synchronous Code Division Multiple Access (TD-SCDMA)
+     */
+    RIL_TDSCDMA_MODE = 4,
+
+    /**
+     * Global Microwave Access Interoperability (WiMAX)
+     */
+    RIL_WIMAX_MODE = 5,
+
+    /**
+     * Long Term Evolution (LTE)
+     */
+    RIL_LTE_MODE = 6,
+
+    /**
+     * Carrier Aggregation (CA)
+     */
+    RIL_LTE_CA_MODE = 7,
+
+    /**
+     * 5G New Radio (NR)
+     */
+    RIL_NR_MODE = 8,
+};
+
+/**
+ * @brief Enumerates voice access technologies.
+ */
+enum RilRadioTech {
+    /**
+     * Invalid
+     */
+    RADIO_TECHNOLOGY_INVALID = 65535,
+
+    /**
+     * Unknown
+     */
+    RADIO_TECHNOLOGY_UNKNOWN = 0,
+
+    /**
+     * GSM
+     */
+    RADIO_TECHNOLOGY_GSM = 1,
+
+    /**
+     * 1x Radio Transmission Technology (1XRTT)
+     */
+    RADIO_TECHNOLOGY_1XRTT = 2,
+
+    /**
+     * WCDMA
+     */
+    RADIO_TECHNOLOGY_WCDMA = 3,
+
+    /**
+     * High Speed Packet Access (HSPA)
+     */
+    RADIO_TECHNOLOGY_HSPA = 4,
+
+    /**
+     * High Speed Downlink Packet Access (HSPAP)
+     */
+    RADIO_TECHNOLOGY_HSPAP = 5,
+
+    /**
+     * TD-SCDMA
+     */
+    RADIO_TECHNOLOGY_TD_SCDMA = 6,
+
+    /**
+     * Evolution Data Only (EV-DO)
+     */
+    RADIO_TECHNOLOGY_EVDO = 7,
+
+    /**
+     * Evolved High Speed Packet Data Network (EHRPD)
+     */
+    RADIO_TECHNOLOGY_EHRPD = 8,
+
+    /**
+     * LTE
+     */
+    RADIO_TECHNOLOGY_LTE = 9,
+
+    /**
+     * CA
+     */
+    RADIO_TECHNOLOGY_LTE_CA = 10,
+
+    /**
+     * Industrial Wireless Local Area Network (IWLAN)
+     */
+    RADIO_TECHNOLOGY_IWLAN = 11,
+
+    /**
+     * NR
+     */
+    RADIO_TECHNOLOGY_NR = 12,
+};
+
+/**
+ * @brief Enumerates SIM card states.
+ */
+enum RilSimStatus {
+    /**
+     * Invalid USIM card
+     */
+    RIL_USIM_INVALID = 0,
+
+    /**
+     * Valid USIM card
+     */
+    RIL_USIM_VALID = 1,
+
+    /**
+     * Invalid USIM card in the CS domain
+     */
+    RIL_USIM_CS_INVALID = 2,
+
+    /**
+     * Invalid USIM card in the PS domain
+     */
+    RIL_USIM_PS_INVALID = 3,
+
+    /**
+     * Invalid USIM card in the CS and PS domains
+     */
+    RIL_USIM_CS_PS_INVALID = 4,
+
+    /**
+     * Emulation SIM card
+     */
+    RIL_ROM_SIM = 240,
+
+    /**
+     * USIM card not exist
+     */
+    RIL_NO_USIM = 255,
+};
+
+/**
+ * @brief Enumerates network registration states.
+ */
+enum RilRegStatus {
+    /**
+     * Not registered. The mobile terminal (MT) does not search for or register with a new carrier
+     */
+    NO_REG_MT_NO_SEARCH = 0,
+
+    /**
+     * Registered with the home network
+     */
+    REG_MT_HOME = 1,
+
+    /**
+     * Not registered. The MT is searching for and registering with a new carrier.
+     */
+    NO_REG_MT_SEARCHING = 2,
+
+    /**
+     * Registration rejected
+     */
+    REG_MT_REJECTED = 3,
+
+    /**
+      * Unknown state
+     */
+    REG_MT_UNKNOWN = 4,
+
+    /**
+     * Registered with the roaming network
+     */
+    REG_MT_ROAMING = 5,
+
+    /**
+     * Emergency mode
+     */
+    REG_MT_EMERGENCY = 6,
+};
+
+/**
+ * @brief Enumerates cell connection states.
+ */
+enum RilCellConnectionStatus {
+    /**
+     * Unknown connection state
+     */
+    RIL_SERVING_CELL_UNKNOWN = 0,
+
+    /**
+     * Primary connection state
+     */
+    RIL_SERVING_CELL_PRIMARY = 1,
+
+    /**
+     * Secondary connection state
+     */
+    RIL_SERVING_CELL_SECONDARY = 2,
+};
+
+/**
+ * @brief Enumerates notification modes.
+ */
+enum RilRegNotifyMode {
+    /**
+     * Notification disabled
+     */
+    REG_NOT_NOTIFY = 0,
+
+    /**
+     * Notification on network registration status changes
+     */
+    REG_NOTIFY_STAT_ONLY = 1,
+
+    /**
+     * Notification on cell information changes
+     */
+    REG_NOTIFY_STAT_LAC_CELLID = 2,
+};
+
+/**
+ * @brief Enumerates radio protocol phases.
+ */
+enum RadioProtocolPhase {
+    /**
+     # Initialization
+     */
+    RADIO_PROTOCOL_PHASE_INITIAL,
+
+    /**
+     * Check
+     */
+    RADIO_PROTOCOL_PHASE_CHECK,
+
+    /**
+     * Update
+     */
+    RADIO_PROTOCOL_PHASE_UPDATE,
+
+    /**
+     * Notification
+     */
+    RADIO_PROTOCOL_PHASE_NOTIFY,
+
+    /**
+     * End
+     */
+    RADIO_PROTOCOL_PHASE_COMPLETE,
+};
+
+/**
+ * @brief Enumerates radio protocol states.
+ */
+enum RadioProtocolStatus {
+    /**
+     * No state
+     */
+    RADIO_PROTOCOL_STATUS_NONE,
+
+    /**
+     * Success
+     */
+    RADIO_PROTOCOL_STATUS_SUCCESS,
+
+    /**
+     * Failed
+     */
+    RADIO_PROTOCOL_STATUS_FAIL,
+};
+
+/**
+ * @brief Defines the emergency call number.
+ */
+struct EmergencyCall {
+    /**
+     * Number index
+     */
+    int index;
+
+    /**
+     * Total number
+     */
+    int total;
+
+    /**
+     * Emergency number
+     */
+    String eccNum;
+
+    /**
+     * Mobile country code
+     */
+    String mcc;
+
+    /**
+     * Enumerates emergency call types. For details, see {@link EccType}.
+     */
+    enum EccType eccType;
+
+    /**
+     * Whether a number is valid when there is a card or no card. For details, see {@link SimpresentType}.
+     */
+    enum SimpresentType simpresent;
+
+    /**
+     * Whether a number is valid for all states or only for the abnormal service state of the CS domain. 
+     * For details, see {@link AbnormalService}.
+     */
+    enum AbnormalServiceType abnormalService;
+};
+
+/**
+ * @brief Defines the emergency call number list.
+ */
+struct EmergencyInfoList {
+    /**
+     * Total number
+     */
+    int callSize;
+
+    /**
+     * Number list ID
+     */
+    int flag;
+
+    /**
+     * Number list
+     *
+     */
+    List<struct EmergencyCall> calls;
+};
+
+/**
+ * @brief Defines the common response information.
+ */
+struct RilRadioResponseInfo {
+    /**
+     * Card slot ID
+     */
+    int slotId;
+
+    /**
+     * Response flag
+     */
+    int flag;
+
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Error code
+     */
+    enum RilErrType error;
+
+    /**
+     * Response type. For details, see {@link RilResponseTypes}.
+     */
+    enum RilResponseTypes type;
+};
+
+/**
+ * @brief Defines the data service activation result.
+ */
+struct SetupDataCallResultInfo {
+    /**
+     * Activation result ID
+     */
+    int flag;
+
+    /**
+     * Reason code of the data service activation failure. For details, see 3GPP TS 24.008.
+     */
+    int reason;
+
+    /**
+     * Number of data service activation retry times
+     */
+    int retryTime;
+
+    /**
+     * Packet Data Protocol (PDP) context ID
+     */
+    int cid;
+
+    /**
+     * Whether the activation is successful. The value 0 indicates that the activation fails, 
+     * and the value 1 indicates that the activation is successful.
+     */
+    int active;
+
+    /**
+     * Maximum number of data units
+     */
+    int maxTransferUnit;
+
+    /**
+     * Data unit ID
+     */
+    int pduSessionId;
+
+    /**
+     * Data service type. The value default indicates the default data service, 
+     * and the value mms indicates the MMS data service.
+     */
+    String type;
+
+    /**
+     * Network port name
+     */
+    String netPortName;
+
+    /**
+     * Network address
+     */
+    String address;
+
+    /**
+     * IP address of the primary DNS server
+     */
+    String dns;
+
+    /**
+     * IP address of the secondary DNS server.
+     */
+    String dnsSec;
+
+    /**
+     * Gateway address
+     */
+    String gateway;
+
+    /**
+     * IP address of the primary Proxy-Call Session Control Function (P-CSCF)
+     */
+    String pCscfPrimAddr;
+
+    /**
+     * IP address of the secondary P-CSCF
+     */
+    String pCscfSecAddr;
+};
+
+/**
+ * @brief Defines the list of data service activation results.
+ */
+struct DataCallResultList {
+    /**
+     * Number of data service activation results
+     */
+    int size;
+
+    /**
+     * List of data service activation results
+     */
+    List<struct SetupDataCallResultInfo> dcList;
+};
+
+/**
+ * @brief Defines PDP context information.
+ */
+struct DataProfileDataInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Data service type. The value 0 indicates the default data service, 
+     * and the value 1 indicates the MMS data service.
+     */
+    int profileId;
+
+    /**
+     * Authentication mode:
+     *- 0: no authentication 
+     *- 1: Password Authentication Protocol (PAP)
+     *- 2: Challenge Handshake Authentication Protocol (CHAP)
+     */
+    int authenticationType;
+
+    /**
+     * Access point name
+     */
+    String apn;
+
+    /**
+     * Protocol version
+     */
+    String protocol;
+
+    /**
+     * Roaming protocol version
+     */
+    String roamingProtocol;
+
+    /**
+     * Username
+     */
+    String userName;
+
+    /**
+     * Password
+     */
+    String password;
+};
+
+/**
+ * @brief Defines the PDP context list.
+ */
+struct DataProfilesInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Number of PDP contexts
+     */
+    int profilesSize;
+
+    /**
+     * Roaming or not
+     */
+    boolean isRoaming;
+
+    /**
+     * PDP context list
+     */
+    List<struct DataProfileDataInfo> profiles;
+};
+
+/**
+ * @brief Defines the data service information.
+ */
+struct DataCallInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Radio access technology. For details, see {@link RilRadioTech}.
+     */
+    int radioTechnology;
+
+    /**
+     * Whether the PDP context is set for the modem
+     */
+    boolean modemCognitive;
+
+    /**
+     * Whether roaming is allowed. The value true indicates that roaming is allowed, 
+     * and the value false indicates the opposite.
+     */
+    boolean roamingAllowed;
+
+    /**
+     * Whether the user is roaming. The value true indicates that the user is roaming, 
+     * and the value false indicates the opposite.
+     */
+    boolean isRoaming;
+
+    /**
+     * PDP context information
+     */
+    struct DataProfileDataInfo dataProfileInfo;
+};
+
+/**
+ * @brief Defines the network bandwidth information.
+ */
+struct DataLinkBandwidthInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * PDP context ID
+     */
+    int cid;
+
+    /**
+     * Quality of Service (QoS) class
+     */
+    int qi;
+
+    /**
+     * Downlink GBR
+     */
+    int dlGfbr;
+
+    /**
+     * Uplink GBR
+     */
+    int ulGfbr;
+
+    /**
+     * Downlink MBR
+     */
+    int dlMfbr;
+
+    /**
+     * Uplink MBR
+     */
+    int ulMfbr;
+
+    /**
+     * Uplink aggregate maximum bit rate (AMBR)
+     */
+    int ulSambr;
+
+    /**
+     * Downlink AMBR
+     */
+    int dlSambr;
+
+    /**
+     * Time unit
+     */
+    int averagingWindow;
+};
+
+/**
+ * @brief Defines the network bandwidth reporting rule.
+ */
+struct DataLinkBandwidthReportingRule {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Radio access technology. For details, see {@link RilRadioTech}.
+     */
+    int rat;
+
+    /**
+     * Delay time
+     */
+    int delayMs;
+
+    /**
+     * Uplink delay
+     */
+    int delayUplinkKbps;
+
+    /**
+     * Downlink delay
+     */
+    int delayDownlinkKbps;
+
+    /**
+     * Maximum number of uplink parameters
+     */
+    int maximumUplinkKbpsSize;
+
+    /**
+     * Maximum number of downlink parameters
+     */
+    int maximumDownlinkKbpsSize;
+
+    /**
+     * Maximum uplink parameter list
+     */
+    List<int> maximumUplinkKbps;
+
+    /**
+     * Maximum downlink parameter list
+     */
+    List<int> maximumDownlinkKbps;
+};
+
+/**
+ * @brief Defines the data service performance mode.
+ */
+struct DataPerformanceInfo {
+    /**
+     * Enabling the performance mode 
+     */
+    int performanceEnable;
+
+    /**
+     * Forcibly enabling the performance mode 
+     */
+    int enforce;
+};
+
+/**
+ * @brief Defines the sleep mode for data services.
+ */
+struct DataSleepInfo {
+    /**
+     * Enabling sleep mode
+     */
+    int sleepEnable;
+};
+
+/**
+ * @brief Defines the common information.
+ */
+struct UniInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * GSM index
+     */
+    int gsmIndex;
+
+    /**
+     * Common information ID
+     */
+    boolean flag;
+
+    /**
+     * Parameter 1
+     */
+    int arg1;
+
+    /**
+     * Parameter 2
+     */
+    int arg2;
+
+    /**
+     * String
+     */
+    String strTmp;
+};
+
+/**
+ * @brief Defines the radio access technology of the CS domain.
+ */
+struct VoiceRadioTechnology {
+
+    /**
+     * System service status
+     */
+    enum RilSrvStatus srvStatus;
+
+    /**
+     * System service domain
+     */
+    enum RilSrvDomain srvDomain;
+
+    /**
+     * Roaming status
+     */
+    enum RilRoamStatus roamStatus;
+
+    /**
+     * SIM card status
+     */
+    enum RilSimStatus simStatus;
+
+    /**
+     * SIM card lock status
+     */
+    enum RilSimLockStatus lockStatus;
+
+    /**
+     * System mode
+     */
+    enum RilSysMode sysMode;
+
+    /**
+     * String corresponding to the system mode
+     */
+    String sysModeName;
+
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    enum RilRadioTech actType;
+
+    /**
+     * String corresponding to the radio access technology type
+     */
+    String actName;
+
+    /**
+     * Radio access technology ID
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines the dialing information.
+ */
+struct DialInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * CLIR mode:
+     *- 0: default
+     *- 1: enable
+     *- 2: disable
+     */
+    int clir;
+
+    /**
+     * Phone number
+     */
+    String address;
+};
+
+/**
+ * @brief Defines the call status information.
+ */
+struct CallInfo {
+    /**
+     * Call ID
+     */
+    int index;
+
+    /**
+     * Call direction. The value 0 indicates the calling party, and the value 1 indicates the called party.
+     */
+    int dir;
+
+    /**
+     * Call status:
+     *- 0: activated state
+     *- 1: call hold state
+     *- 2: calling party, dialing state
+     *- 3: calling party, ringback tone state
+     *- 4: called party, incoming call state
+     *- 5: called party, call waiting state
+     *- 6: disconnected state
+     *- 7: disconnecting state
+     *- 8: idle state
+     */
+    int state;
+
+    /**
+     * Call mode:
+     *- 0: voice call
+     *- 1: data call
+     *- 2: fax
+     */
+    int mode;
+
+    /**
+     * Multi-party call status:
+     *- 0: not a multi-party call
+     *- 1: a multi-party call
+     */
+    int mpty;
+
+    /**
+     * Call domain of the voice call:
+     *- 0: CS domain 
+     *- 1: IP multimedia system (IMS) domain
+     */
+    int voiceDomain;
+
+    /**
+     * Call type. Currently, the value can only be 0, indicating a voice call.
+     */
+    int callType;
+
+    /**
+     * Code address type:
+     *-129: common number
+     *- 145: international number
+     */
+    int type;
+
+    /**
+     * Phone number
+     */
+    String number;
+
+    /**
+     * Name of a phone number in the phonebook
+     */
+    String alpha;
+};
+
+/**
+ * @brief Defines the call status information list.
+ */
+struct CallInfoList {
+    /**
+     * Total number
+     */
+    int callSize;
+
+    /**
+     * ID of the call status information list
+     */
+    int flag;
+
+    /**
+     * Call status information list
+     */
+    List<struct CallInfo> calls;
+};
+
+/**
+ * @brief Obtains the call line identifier presentation (CLIP) result.
+ */
+struct GetClipResult {
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Action of enabling or disabling CLIP
+     */
+    int action;
+
+    /**
+     * CLIP subscription status:
+     *- 0: CLIP not provided
+     *- 1: CLIP provided
+     *- 2: unknown (network cause)
+     */
+    int clipStat;
+};
+
+/**
+ * @brief Obtains the calling line identification restriction (CLIR) result.
+ */
+struct GetClirResult {
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Action of enabling or disabling CLIR
+     */
+    int action;
+
+    /**
+     * CLIR subscription status:
+     *- 0: CLIR not provided
+     *- 1: CLIR provided in permanent mode
+     *- 2: unknown (network cause)
+     *- 3: CLIR temporarily restricted
+     *- 4: CLIR temporarily allowed
+     */
+    int clirStat;
+};
+
+/**
+ * @brief Defines the call waiting result.
+ */
+struct CallWaitResult {
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Call waiting status:
+     *- 0: not activated
+     *- 1: activated
+     */
+    int status;
+
+    /**
+     * Service class. For details, see 3GPP TS 27.007.
+     */
+    int classCw;
+};
+
+/**
+ * @brief Defines the call restriction information.
+ */
+struct CallRestrictionInfo {
+    /**
+     * Operation mode:
+     *- 0: deactivation
+     *- 1: activation
+     */
+    int mode;
+
+    /**
+     * Operation object
+     */
+    String fac;
+
+    /**
+     * Password
+     */
+    String password;
+};
+
+/**
+ * @brief Defines the call restriction result.
+ */
+struct CallRestrictionResult {
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Service status:
+     *- 0: not activated
+     *- 1: activated
+     */
+    int status;
+
+    /**
+     * Service class. For details, see 3GPP TS 27.007.
+     */
+    int classCw;
+};
+
+/**
+ * @brief Defines the call forwarding information.
+ */
+struct CallForwardSetInfo {
+    /**
+     * Call forwarding type:
+     *- 0: call forwarding unconditional
+     *- 1: call forwarding on busy
+     *- 2: call forwarding on no reply
+     *- 3: call forwarding not reachable (no network service, or power-off)
+     *- 4: any call forwarding
+     *- 5: any call forwarding conditional
+     */
+    int reason;
+
+    /**
+     * Call forwarding operation mode:
+     *- 0: deactivation
+     *- 1: activation
+     *- 2: status query
+     *- 3: registration
+     *- 4: deletion
+     */
+    int mode;
+
+    /**
+     * Service class. For details, see 3GPP TS 27.007.
+     */
+    int classx;
+
+    /**
+     * Phone number
+     */
+    String number;
+};
+
+/**
+ * @brief Defines the call forwarding query result.
+ */
+struct CallForwardQueryResult {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Status:
+     *- 0: not activated
+     *- 1: activated
+     */
+    int status;
+
+    /**
+     * Service class. For details, see 3GPP TS 27.007.
+     */
+    int classx;
+
+    /**
+     * Number type:
+     *-129: common number
+     *- 145: international number
+     */
+    int type;
+
+    /**
+     * Call forwarding type:
+     *- 0: call forwarding unconditional
+     *- 1: call forwarding on busy
+     *- 2: call forwarding on no reply
+     *- 3: call forwarding not reachable (no network service or power-off)
+     *- 4: any call forwarding
+     *- 5: any call forwarding conditional
+     */
+    int reason;
+
+    /**
+     * Waiting time
+     */
+    int time;
+
+    /**
+     * Phone number
+     */
+    String number;
+};
+
+/**
+ * @brief Defines the list of call forwarding information.
+ */
+struct CallForwardQueryInfoList {
+    /**
+     * Total number
+     */
+    int callSize;
+
+    /**
+     * ID of the call forwarding query result
+     */
+    int flag;
+
+    /**
+     * Call forwarding query result
+     *
+     */
+    List<struct CallForwardQueryResult> calls;
+};
+
+/**
+ * @brief Defines the Unstructured Supplementary Data Service (USSD) information.
+ */
+struct UssdNoticeInfo {
+    /**
+     * USSD type:
+     *- 0: The network does not require a response from the client.
+     *- 1: The network requires a response from the client.
+     *- 2: The USSD session is released by the network.
+     *- 3: Another local client has responded to the request.
+     *- 4: The operation is not supported.
+     *- 5: A network timeout occurred.
+     */
+    int type;
+
+    /**
+     * USSD string
+     */
+    String message;
+};
+
+/**
+ * @brief Defines the supplementary service information.
+ */
+struct SsNoticeInfo {
+    /**
+     * Service type:
+     *- 0: call forwarding unconditional
+     *- 1: call forwarding on busy
+     *- 2: call forwarding on no reply
+     *- 3: call forwarding not reachable (no network service, or power-off)
+     */
+    int serviceType;
+
+    /**
+     * Request type:
+     *- 0: deactivation
+     *- 1: activated
+     *- 2: status query
+     *- 3: registration
+     *- 4: deletion
+     */
+    int requestType;
+
+    /**
+     * Service class. For details, see 3GPP TS 27.007.
+     */
+    int serviceClass;
+
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+};
+
+/**
+ * @brief Defines the Single Radio Voice Call Continuity (SRVCC) status information.
+ */
+struct SrvccStatus {
+    /**
+     * SRVCC status:
+     *- 0: started
+     1: success
+     *- 2: failed
+     *- 3: cancelled
+     */
+    int status;
+};
+
+/**
+ * @brief Defines the ringback tone information.
+ */
+struct RingbackVoice {
+    /**
+     * Ringback tone type:
+     *- 0: network ringback tone
+     *- 1: local ringback tone
+     */
+    int status;
+};
+
+/**
+ * @brief Defines the dual tone multi-frequency (DTMF) information.
+ */
+struct DtmfInfo {
+    /**
+     * Call ID
+     */
+    int callId;
+
+    /**
+     * Duration for playing the DTMF tone
+     */
+    int onLength;
+
+    /**
+     * Interval for sending DTMF signals
+     */
+    int offLength;
+
+    /**
+     * DTMF string length
+     */
+    int stringLength;
+
+    /**
+     * DTMF keyword
+     */
+    String dtmfKey;
+};
+
+/**
+ * @brief Defines the call restriction password.
+ */
+struct SetBarringInfo {
+    /**
+     * Operation object
+     */
+    String fac;
+
+    /**
+     * Old password
+     */
+    String oldPassword;
+
+    /**
+     * New password
+     */
+    String newPassword;
+};
+
+/**
+ * @brief Defines the SIM card status information.
+ */
+struct CardStatusInfo {
+    /**
+     * SIM card index
+     */
+    int index;
+
+    /**
+     * SIM card type:
+     *- 0: unknown
+     *- 1: common SIM card
+     *- 2: USIM, supporting 4G
+     */
+    int simType;
+
+   /**
+     * SIM card status:
+     *- -1: unknown
+     *- 0: SIM card not inserted
+     *- 1: SIM card detected normally
+     *- 2: PIN required
+     *- 3: PUK required
+     *- 4: PIN2 required
+     *- 5: PUK2 required
+     */
+    int simState;
+};
+
+/**
+ * @brief Defines the SIM data request information.
+ */
+struct SimIoRequestInfo {
+    /**
+     * Command sent from the mobile equipment (ME) to the SIM card. For details, see GSM 51.011[28].
+     */
+    int command;
+
+    /**
+     * Identifier of the basic data file on the SIM card
+     */
+    int fileId;
+
+    /**
+     * Command parameter 1 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     */
+    int p1;
+
+    /**
+     * Command parameter 2 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     */
+    int p2;
+
+    /**
+     * Command parameter 3 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     */
+    int p3;
+
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Data to be written into the SIM card
+     */
+    String data;
+
+    /**
+     * SIM card file path. For details, see ETSI TS 102 221 [60].
+     */
+    String path;
+
+    /**
+     * PIN2
+     */
+    String pin2;
+
+    /**
+     * App ID
+     */
+    String aid;
+};
+
+/**
+ * @brief Defines the response to the SIM data request.
+ */
+struct IccIoResultInfo {
+    /**
+     * Status word 1 of the SIM card, which is returned by the SIM card after command execution
+     */
+    int sw1;
+
+    /**
+     * Status word 2 of the SIM card, which is returned by the SIM card after command execution
+     */
+    int sw2;
+
+    /**
+     * Response information
+     */
+    String response;
+};
+
+/**
+ * @brief Defines the SIM card lock information.
+ */
+struct SimLockInfo {
+    /**
+     * Service type. The value is the sum of integers that represent the service type. The default value is 255.
+     *- 1: telephony service
+     *- 2: data service
+     *- 4: fax service
+     *- 8: SMS service
+     *- 16: data circuit sync
+     *- 32: data circuit async
+     *- 64: dedicated packet access
+     *- 128: dedicated portable device (PAD) access
+     */
+    int classx;
+
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * SIM lock type:
+     *- AO: barring of all outgoing calls
+     *- OI: barring of all outgoing international calls
+     *- OX: barring of all outgoing international calls except those directed to the home country
+     *- AI: barring of all incoming calls
+     *- IR: barring of all incoming calls when roaming outside the home location
+     *- AB: barring of all services (applicable only when the mode is greater than or equal to 0)
+     *- AG: barring of the outgoing call service (applicable only when the mode is greater than or equal to 0)
+     *- AC: barring of the incoming call service (applicable only when the mode is greater than or equal to 0)
+     *- FD: fixed dialing number (FDN)
+     *- PN: network locking
+     *- PU: subnet locking
+     *- PP: SP locking
+     */
+    String fac;
+
+    /**
+     * Mode:
+     *- 0: deactivation (When fac is set to PN, PU, or PP, the operation is equivalent to unlocking.)
+     *- 1: activation (When fac is set to PN, PU, or PP, activation is not supported.)
+     *- 2: query
+     */
+    int mode;
+
+    /**
+     * SIM card lock status.
+     * It indicates the activation status of the first three layers of locks when fac is set to PN, PU, or PP.
+     *- 0: not activated
+     *- 1: activated
+     */
+    int status;
+
+    /**
+     * Password text
+     */
+    String passwd;
+};
+
+/**
+ * @brief Defines the SIM card password information.
+ */
+struct SimPasswordInfo {
+    /**
+     * SIM lock type:
+     *- AO: barring of all outgoing calls
+     *- OI: barring of all outgoing international calls
+     *- OX: barring of all outgoing international calls except those directed to the home country
+     *- AI: barring of all incoming calls
+     *- IR: barring of all incoming calls when roaming outside the home location
+     *- AB: barring of all services (applicable only when the mode is greater than or equal to 0)
+     *- AG: barring of the outgoing call service (applicable only when the mode is greater than or equal to 0)
+     *- AC: barring of the incoming call service (applicable only when the mode is greater than or equal to 0)
+     *- FD: fixed dialing number (FDN)
+     *- PN: network locking
+     *- PU: subnet locking
+     *- PP: SP locking
+     */
+    String fac;
+
+    /**
+     * Old password text
+     */
+    String oldPassword;
+
+    /**
+     * New password text
+     */
+    String newPassword;
+
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Maximum password length
+     */
+    int passwordLength;
+};
+
+/**
+ * @brief Defines the maximum number of SIM password attempts.
+ */
+struct SimPinInputTimes {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Number of remaining password attempts
+     */
+    int times;
+
+    /**
+     * Number of remaining PUK attempts
+     */
+    int pukTimes;
+
+    /**
+     * Number of remaining PIN attempts
+     */
+    int pinTimes;
+
+    /**
+     * Number of remaining PUK2 attempts
+     */
+    int puk2Times;
+
+    /**
+     * Number of remaining PIN2 attempts
+     */
+    int pin2Times;
+
+    /**
+     * Request fields, for example:
+     * SIM PIN2: SIM card PIN2 request
+     */
+    String code;
+};
+
+/**
+ * @brief Defines the APDU data transmission request information.
+ */
+struct ApduSimIORequestInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Channel ID
+     */
+    int channelId;
+
+    /**
+     * APDU instruction type. For details, see ETSI 102 221 [55].
+     */
+    int type;
+
+    /**
+     * APDU instruction. For details, see ETSI 102 221 [55].
+     */
+    int instruction;
+
+    /**
+     * Command parameter 1 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     */
+    int p1;
+
+    /**
+     * Command parameter 2 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     */
+    int p2;
+
+    /**
+     * Command parameter 3 of the SIM data request. For details, see 3GPP TS 51.011[28].
+     * If p3 is a negative value, a 4-byte APDU is sent to the SIM card.
+     */
+    int p3;
+
+    /**
+     * Data to be transmitted
+     */
+    String data;
+};
+
+/**
+ * @brief Defines the SIM card authentication request information.
+ */
+struct SimAuthenticationRequestInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * App ID
+     */
+    String aid;
+
+    /**
+     * Authentication data
+     */
+    String authData;
+};
+
+/**
+ * @brief Defines the response to the request for enabling the logical channel of the APDU.
+ */
+struct OpenLogicalChannelResponse {
+    /**
+     * Status word 1 of the SIM card, which is returned as a response to the SIM data request
+     */
+    int sw1;
+
+    /**
+     * Status word 2 of the SIM card, which is returned by the SIM card after command execution
+     */
+    int sw2;
+
+    /**
+     * ID of the opened logical channel
+     */
+    int channelId;
+
+    /**
+     * Response information
+     */
+    String response;
+};
+
+/**
+ * @brief Defines the response to the request for unlocking the SIM card.
+ */
+struct LockStatusResp {
+    /**
+     * Query result. For details, see {@link RilErrType}.
+     */
+    int result;
+
+    /**
+     * Number of remaining attempts
+     */
+    int remain;
+};
+
+/**
+ * @brief Defines the protocol stack information of the primary and secondary SIM cards.
+ */
+struct RadioProtocol {
+    /**
+     * Card slot ID
+     */
+    int slotId;
+
+    /**
+     * Session ID
+     */
+    int sessionId;
+
+    /**
+     * Radio protocol parameters. For details, see {@link RadioProtocolPhase}.
+     */
+    enum RadioProtocolPhase phase;
+
+    /**
+     * Radio protocol technology:
+     *- 1: GSM
+     *- 2: 1XRTT
+     *- 4: WCDMA
+     *- 8: HSPA
+     *- 16: HSPAP
+     *- 32: TDSCDMA
+     *- 64: EV-DO
+     *- 128: EHRPD
+     *- 256: LTE
+     *- 512: LTE_CA
+     *- 1024: IWLAN
+     *- 2048: NR
+     */
+    int technology;
+
+    /**
+     * Modem ID, corresponding to slotId at the bottom layer
+     */
+    int modemId;
+
+    /**
+     * Radio protocol status. For details, see {@link RadioProtocolStatus}.
+     */
+    enum RadioProtocolStatus status;
+};
+
+/**
+ * @brief Defines the GSM received signal strength indicator.
+ */
+struct GsmRssi {
+    /**
+     * Received signal strength. The value ranges from 0 to 31.
+     */
+    int rxlev;
+
+    /**
+     * Bit error rate, which ranges from 0 to 7
+     */
+    int ber;
+};
+
+/**
+ * @brief Defines the CDMA received signal strength indicator.
+ */
+struct CdmaRssi {
+    /**
+     * Absolute value of the signal strength. The value is the actual signal strength multiplied by -1.
+     */
+    int absoluteRssi;
+
+    /**
+     * Ratio of the received energy of the pseudo-noise (PN) code chip to the total received power spectral density
+     */
+    int ecno;
+};
+
+/**
+ * @brief Defines the WCDMA received signal strength indicator.
+ */
+struct WcdmaRssi {
+    /**
+     * Signal received strength, which ranges from 0 to 99
+     */
+    int rxlev;
+
+    /**
+     * Ratio of the received energy per PN code chip to the total received power spectral density
+     */
+    int ecio;
+
+    /**
+     * Received signal code power, which ranges from 0 to 96
+     */
+    int rscp;
+
+    /**
+     * Bit error rate, which ranges from 0 to 7
+     */
+    int ber;
+};
+
+/**
+ * @brief Defines the LTE signal strength.
+ */
+struct LteRssi {
+    /**
+     * Signal received strength, which ranges from 0 to 99
+     */
+    int rxlev;
+
+    /**
+     * Reference signal received quality, which ranges from 0 to 33
+     */
+    int rsrq;
+
+    /**
+     * Received signal code power, which ranges from 0 to 97.
+     */
+    int rsrp;
+
+    /**
+     * Signal to interference plus noise ratio, which ranges from 0 to 251 (applicable only to the LTE mode)
+     */
+    int snr;
+};
+
+/**
+ * @brief Defines the TD-SCDMA signal strength.
+ */
+struct TdScdmaRssi {
+    /**
+     * Received signal code power
+     */
+    int rscp;
+};
+
+/**
+ * @brief Defines the NR signal strength.
+ */
+struct NrRssi {
+    /**
+     * Received signal code power
+     */
+    int rsrp;
+
+    /**
+     * Received signal quality
+     */
+    int rsrq;
+
+    /**
+     * Signal to interference plus noise ratio
+     */
+    int sinr;
+};
+
+/**
+ * @brief Defines the received signal strength information.
+ */
+struct Rssi {
+    /**
+     * GSM signal strength. For details, see {@link GsmRssi}.
+     */
+    struct GsmRssi gw;
+
+    /**
+     * CDMA signal strength. For details, see {@link CdmaRssi}.
+     */
+    struct CdmaRssi cdma;
+
+    /**
+     * WCDMA signal strength. For details, see {@link WcdmaRssi}.
+     */
+    struct WcdmaRssi wcdma;
+
+    /**
+     * LTE signal strength. For details, see {@link LteRssi}.
+     */
+    struct LteRssi lte;
+
+    /**
+     * TD-SCDMA signal strength. For details, see {@link TdScdmaRssi}.
+     */
+    struct TdScdmaRssi tdScdma;
+
+    /**
+     * NR signal strength. For details, see {@link NrRssi}.
+     */
+    struct NrRssi nr;
+};
+
+/**
+ * @brief Defines the registration status information of the CS domain.
+ */
+struct CsRegStatusInfo {
+    /**
+     * Notification type:
+     *- 0: notification disabled
+     *- 1: notification using format 1, which is defined by the chip
+     *- 2: notification using format 2, which is defined by the chip
+     */
+    int notifyType;
+
+    /**
+     * Registration status. For details, see {@link RilRegStatus}.
+     */
+    enum RilRegStatus regStatus;
+
+    /**
+     * Location area code
+     */
+    int lacCode;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    enum RilRadioTech radioTechnology;
+
+    /**
+     * Flag used by the network search management module in the response
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines the registration status information of the PS domain.
+ */
+struct PsRegStatusInfo {
+    /**
+     * Notification type:
+     *- 0: notification disabled
+     *- 1: notification using format 1, which is defined by the chip
+     *- 2: notification using format 2, which is defined by the chip
+     */
+    int notifyType;
+
+    /**
+     * Registration status. For details, see {@link RilRegStatus}.
+     */
+    enum RilRegStatus regStatus;
+
+    /**
+     * Location area code
+     */
+    int lacCode;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    enum RilRadioTech radioTechnology;
+
+    /**
+     * Whether the NR mode is available
+     */
+    boolean isNrAvailable;
+
+    /**
+     * Whether ENDC is available
+     */
+    boolean isEnDcAvailable;
+
+    /**
+     * Whether DCNR is restricted
+     */
+    boolean isDcNrRestricted;
+};
+
+/**
+ * @brief Defines the carrier information.
+ *
+ */
+struct OperatorInfo {
+    /**
+     * Long carrier name of the registered network
+     */
+    String longName;
+
+    /**
+     * Short carrier name of the registered network
+     */
+    String shortName;
+
+    /**
+     * Carrier ID
+     */
+    String numeric;
+};
+
+/**
+ * @brief Defines the available network information.
+ */
+struct AvailableNetworkInfo {
+    /**
+     * Long name of the registered network in alphanumeric format
+     */
+    String longName;
+
+    /**
+     * Short name of the registered network in alphanumeric format
+     */
+    String shortName;
+
+    /**
+     * Available network ID
+     */
+    String numeric;
+
+    /**
+     * Network status. For details, see {@link RilRegStatus}.
+     */
+    int status;
+
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    int rat;
+};
+
+/**
+ * @brief Defines the available network list.
+ */
+struct AvailableNetworkList {
+    /**
+     * Number
+     */
+    int itemNum;
+
+    /**
+     * Available network list
+     */
+    List<struct AvailableNetworkInfo> availableNetworkInfo;
+
+    /**
+     * Network list flag
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines the network mode information.
+ */
+struct SetNetworkModeInfo {
+    /**
+     * Network mode. For details, see {@link PreferredNetworkTypeInfo}.
+     */
+    int selectMode;
+
+    /**
+     * Carrier
+     */
+    String oper;
+
+    /**
+     * Flag
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines the GSM cell information.
+ */
+struct CellListRatGsm {
+    /**
+     * Cell band information
+     */
+    int band;
+
+    /**
+     * Absolute RF channel number of the broadcast control channel (BCCH) carrier, which ranges from 0 to 1023
+     */
+    int arfcn;
+
+    /**
+     * Base transceiver station identity code 
+     */
+    int bsic;
+
+    /**
+     * Cell information ID
+     */
+    int cellId;
+
+    /**
+     * Location area code, which ranges from 0 to 0xFFFF
+     */
+    int lac;
+
+    /**
+     * Signal received strength, which ranges from -120 to 37
+     */
+    int rxlev;
+};
+
+/**
+ * @brief Defines the LTE cell information.
+ */
+struct CellListRatLte {
+    /**
+     * Absolute RF channel number of the BCCH carrier, which ranges from 0 to 1023
+     */
+    int arfcn;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Signal received power, which ranges from -140 to -44
+     */
+    int rsrp;
+
+    /**
+     * Signal received quality, which ranges from -19 to -3
+     */
+    int rsrq;
+
+    /**
+     * Signal received strength, which ranges from -120 to 37
+     */
+    int rxlev;
+};
+
+/**
+ * @brief Defines the WCDMA cell information.
+ */
+struct CellListRatWcdma {
+    /**
+     * Absolute RF channel number of the BCCH carrier, which ranges from 0 to 16383
+     */
+    int arfcn;
+
+    /**
+     * Primary scrambling code, which ranges from 0 to 511
+     */
+    int psc;
+
+    /**
+     * Received signal code power, which ranges from -120 to 25
+     */
+    int rscp;
+
+    /**
+     * Ratio of the power of each modulation bit to the noise spectral density, which ranges from -25 to 0
+     */
+    int ecno;
+};
+
+/**
+ * @brief Defines the CDMA cell information.
+ */
+struct CellListRatCdma {
+    /**
+     * System ID
+     */
+    int systemId;
+
+    /**
+     * Network ID
+     */
+    int networkId;
+
+    /**
+     * Basic ID
+     */
+    int baseId;
+
+    /**
+     * Zone ID
+     */
+    int zoneId;
+
+    /**
+     * PN pilot sequence
+     */
+    int pilotPn;
+
+    /**
+     * Pilot signal strength
+     */
+    int pilotStrength;
+
+    /**
+     * Channel
+     */
+    int channel;
+
+    /**
+     * Longitude
+     */
+    int longitude;
+
+    /**
+     * Latitude
+     */
+    int latitude;
+};
+
+/**
+ * @brief Defines the TD-SCDMA cell information.
+ */
+struct CellListRatTdscdma {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int arfcn;
+
+    /**
+     * Synchronization flag
+     */
+    int syncId;
+
+    /**
+     * Super cell
+     */
+    int sc;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Location area code, which ranges from 0 to 0xFFFF
+     */
+    int lac;
+
+    /**
+     * Received signal code power
+     */
+    int rscp;
+
+    /**
+     * Discontinuous reception cycle
+     */
+    int drx;
+
+    /**
+     * Routing area code
+     */
+    int rac;
+
+    /**
+     * Super cell ID
+     */
+    int cpid;
+};
+
+/**
+ * @brief Defines the NR cell information.
+ */
+struct CellListRatNr {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int nrArfcn;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Type allocation code
+     */
+    int tac;
+
+    /**
+     * NR cell ID
+     */
+    int nci;
+};
+
+/**
+ * @brief Defines cell information for different network modes.
+ */
+union ServiceCellParas {
+    /**
+     * GSM cell information. For details, see {@link CellListRatGsm}.
+     */
+    struct CellListRatGsm gsm;
+
+    /**
+     * LTE cell information. For details, see {@link CellListRatLte}.
+     */
+    struct CellListRatLte lte;
+
+    /**
+     * WCDMA cell information. For details, see {@link CellListRatWcdma}.
+     */
+    struct CellListRatWcdma wcdma;
+
+    /**
+     * CDMA cell information. For details, see {@link CellListRatCdma}.
+     */
+    struct CellListRatCdma cdma;
+
+    /**
+     * TD-SCDMA cell information. For details, see {@link CellListRatTdscdma}.
+     */
+    struct CellListRatTdscdma tdscdma;
+
+    /**
+     * NR cell information. For details, see {@link CellListRatNr}.
+     */
+    struct CellListRatNr nr;
+};
+
+/**
+ * @brief Defines the neighboring cell information.
+ */
+struct CellNearbyInfo {
+    /**
+     * Access technology type:
+     *- 0: unknown
+     *- 1: GSM
+     *- 2: CDMA
+     *- 3: WCDMA
+     *- 4: TD-SCDMA
+     *- 5: LTE
+     *- 6: NR
+     */
+    int ratType;
+
+    /**
+     * Cell information for different network modes
+     */
+    union ServiceCellParas serviceCells;
+};
+
+/**
+ * @brief Defines the neighboring cell list.
+ */
+struct CellListNearbyInfo {
+    /**
+     * Number
+     */
+    int itemNum;
+
+    /**
+     * Neighboring cell list
+     */
+    List<struct CellNearbyInfo> cellNearbyInfo;
+};
+
+/**
+ * @brief Defines the GSM cellular information.
+ */
+struct CellRatGsm {
+    /**
+     * Cell band information
+     */
+    int band;
+
+    /**
+     * Absolute RF channel number of the BCCH carrier, which ranges from 0 to 1023
+     */
+    int arfcn;
+
+    /**
+     * Base transceiver station identity code 
+     */
+    int bsic;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Location area code, which ranges from 0 to 0xFFFF
+     */
+    int lac;
+
+    /**
+     * Signal received strength, which ranges from -120 to 37
+     */
+    int rxlev;
+
+    /**
+     * Signal received quality, which ranges from 0 to 7
+     */
+    int rxQuality;
+
+    /**
+     * Timing advance, which ranges from 0 to 63
+     */
+    int ta;
+};
+
+/**
+ * @brief Defines the LTE cellular information.
+ */
+struct CellRatLte {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int arfcn;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Type allocation code
+     */
+    int tac;
+
+    /**
+     * Signal received power, which ranges from -140 to -44
+     */
+    int rsrp;
+
+    /**
+     * Signal received quality, which ranges from -19 to -3
+     */
+    int rsrq;
+
+    /**
+     * Received signal strength in dbm, which ranges from -90 to -25
+     */
+    int rssi;
+};
+
+/**
+ * @brief Defines the WCDMA cellular information.
+ */
+struct CellRatWcdma {
+    /**
+     * Absolute RF channel number of the BCCH carrier, which ranges from 0 to 16383
+     */
+    int arfcn;
+
+    /**
+     * Primary scrambling code, which ranges from 0 to 511
+     */
+    int psc;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Location area code, which ranges from 0 to 0xFFFF
+     */
+    int lac;
+
+    /**
+     * Signal received power in dBm, which ranges from -140 to -44
+     */
+    int rscp;
+
+    /**
+     * Signal received strength, which ranges from -19 to -3
+     */
+    int rxlev;
+
+    /**
+     * Received signal strength in dbm, which ranges from -90 to -25
+     */
+    int ecno;
+
+    /**
+     * Discontinuous reception cycle, which ranges from 6 to 9
+     */
+    int drx;
+
+    /**
+     * UMTS Terrestrial Radio Access Network (UTRAN) registration zone ID
+     */
+    int ura;
+};
+
+/**
+ * @brief Defines the CDMA cellular information.
+ */
+struct CellRatCdma {
+    /**
+     * System ID
+     */
+    int systemId;
+
+    /**
+     * Network ID
+     */
+    int networkId;
+
+    /**
+     * Basic ID
+     */
+    int baseId;
+
+    /**
+     * Zone ID
+     */
+    int zoneId;
+
+    /**
+     * PN pilot sequence
+     */
+    int pilotPn;
+
+    /**
+     * Pilot signal strength
+     */
+    int pilotStrength;
+
+    /**
+     * Channel
+     */
+    int channel;
+
+    /**
+     * Longitude
+     */
+    int longitude;
+
+    /**
+     * Latitude
+     */
+    int latitude;
+};
+
+/**
+ * @brief Defines the TD-SCDMA cellular information.
+ */
+struct CellRatTdscdma {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int arfcn;
+
+    /**
+     * Synchronization flag
+     */
+    int syncId;
+
+    /**
+     * Super cell
+     */
+    int sc;
+
+    /**
+     * Cell ID
+     */
+    int cellId;
+
+    /**
+     * Location area code
+     */
+    int lac;
+
+    /**
+     * Received signal code power
+     */
+    int rscp;
+
+    /**
+     * Discontinuous reception cycle
+     */
+    int drx;
+
+    /**
+     * Routing area code
+     */
+    int rac;
+
+    /**
+     * Super cell ID
+     */
+    int cpid;
+};
+
+/**
+ * @brief Defines the NR cellular information.
+ */
+struct CellRatNr {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int nrArfcn;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Type allocation code
+     */
+    int tac;
+
+    /**
+     * NR cell ID
+     */
+    int nci;
+};
+
+/**
+ * @brief Defines the current cellular data information.
+ */
+union CurrentServiceCellParas {
+    /**
+     * GSM cellular information
+     */
+    struct CellRatGsm gsm;
+
+    /**
+     * LTE cellular information
+     */
+    struct CellRatLte lte;
+
+    /**
+     * WCDMA cellular information
+     */
+    struct CellRatWcdma wcdma;
+
+    /**
+     * CDMA cellular information
+     */
+    struct CellRatCdma cdma;
+
+    /**
+     * TD-SCDMA cellular information
+     */
+    struct CellRatTdscdma tdscdma;
+
+    /**
+     * NR cellular information
+     */
+    struct CellRatNr nr;
+};
+
+/**
+ * @brief Defines the current cell information.
+ */
+struct CurrentCellInfo {
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    int ratType;
+
+    /**
+     * Mobile country code (MCC)
+     */
+    int mcc;
+
+    /**
+     * Mobile network code (MNC)
+     */
+    int mnc;
+
+    /**
+     * Cell information parameters. For details, see {@link CurrentServiceCellParas}.
+     */
+    union CurrentServiceCellParas serviceCells;
+};
+
+/**
+ * @brief Defines the current cell information list.
+ */
+struct CellListCurrentInfo {
+    /**
+     * Number of cells
+     */
+    int itemNum;
+
+    /**
+     * Current cell information
+     */
+    List<struct CurrentCellInfo> cellCurrentInfo;
+};
+
+/**
+ * @brief Defines the preferred network type.
+ */
+struct PreferredNetworkTypeInfo {
+    /**
+     * Network type
+     *- 0: automatic
+     *- 1: GSM
+     *- 2: WCDMA.
+     *- 3: LTE.
+     *- 4: LTE and WCDMA
+     *- 5: LTE, WCDMA, and GSM
+     *- 6: WCDMA and GSM
+     *- 7: CDMA
+     *- 8: EV-DO
+     *- 9: EV-DO and CDMA
+     *- 10: WCDMA, GSM, EV-DO, and CDMA
+     *- 11: LTE, EV-DO, and CDMA
+     *- 12: LTE, WCDMA, GSM, EV-DO, and CDMA
+     *- 13: TD-SCDMA
+     *- 14: TD-SCDMA and GSM
+     *- 15: TD-SCDMA and WCDMA
+     *- 16: TD-SCDMA, WCDMA, and GSM
+     *- 17: LTE and TD-SCDMA
+     *- 18: LTE, TDSCDMA, and GSM
+     *- 19: LTE, TD-SCDMA, and WCDMA
+     *- 20: LTE, TDSCDMA, WCDMA, and GSM
+     *- 21: TD-SCDMA, WCDMA, GSM, EV-DO, and CDMA
+     *- 22: LTE, TD-SCDMA, WCDMA, GSM, EV-DO, and CDMA
+     *- 31: NR
+     *- 32: NR and LTE
+     *- 33: NR, LTE, and WCDMA
+     *- 34: NR, LTE, WCDMA, and GSM
+     *- 35: NR, LTE, EV-DO, and CDMA
+     *- 36: NR, LTE, WCDMA, GSM, EV-DO, and CDMA
+     *- 37: NR, LTE, and TD-SCDMA.
+     *- 38: NR, LTE, TDSCDMA, and GSM
+     *- 39: NR, LTE, TD-SCDMA, and WCDMA
+     *- 40: NR, LTE, TD-SCDMA, WCDMA, and GSM
+     *- 41: NR, LTE, TD-SCDMA, WCDMA, GSM, EV-DO, and CDMA
+     */
+    int preferredNetworkType;
+
+    /**
+     * Network ID
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines the physical channel configuration.
+ */
+struct PhysicalChannelConfig {
+    /**
+     * Connection status
+     */
+    enum RilCellConnectionStatus cellConnStatus;
+
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    enum RilRadioTech ratType;
+
+    /**
+     * Downlink bandwidth in kHz
+     */
+    int cellBandwidthDownlinkKhz;
+
+    /**
+     * Uplink bandwidth in kHz.
+     */
+    int cellBandwidthUplinkKhz;
+
+    /**
+     * Frequency range
+     */
+    int freqRange;
+
+    /**
+     * Downlink channel ID
+     */
+    int downlinkChannelNum;
+
+    /**
+     * Uplink channel ID
+     */
+    int uplinkChannelNum;
+
+    /**
+     * Physical cell ID
+     */
+    int physicalCellId;
+
+    /**
+     * Logical device ID
+     */
+    int contextIdNum;
+
+    /**
+     * Uplink channel ID
+     */
+    List<int> contextIds;
+};
+
+/**
+ * @brief Defines the channel configuration information list.
+ */
+struct ChannelConfigInfoList {
+    /**
+     * Number
+     */
+    int itemNum;
+
+    /**
+     * Physical channel configuration
+     */
+    List<struct PhysicalChannelConfig> channelConfigInfos;
+
+    /**
+     * Channel configuration ID
+     */
+    int flag;
+};
+
+/**
+ * @brief Defines a GSM SMS message.
+ */
+struct GsmSmsMessageInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Status
+     */
+    int state;
+
+    /**
+     * Short message service center
+     */
+    String smscPdu;
+
+    /**
+     * Protocol data unit
+     */
+    String pdu;
+};
+
+/**
+ * @brief Defines a CDMA SMS message.
+ */
+struct SendCdmaSmsMessageInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Status
+     */
+    int state;
+
+    /**
+     * Short message service center
+     */
+    String smscPdu;
+};
+
+/**
+ * @brief Defines the SMS message information in a SIM card.
+ */
+struct SmsMessageIOInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Short message service center
+     */
+    String smscPdu;
+
+    /**
+     * Protocol data unit
+     */
+    String pdu;
+
+    /**
+     * Status
+     */
+    int state;
+
+    /**
+     Message index.
+     */
+    int index;
+};
+
+/**
+ * @brief Defines the SMSC address information.
+ */
+struct ServiceCenterAddress {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * SMSC address type. For details, see 3GPP TS 24.011 [6].
+     */
+    int tosca;
+
+    /**
+     * SMSC address. For details, see 3GPP TS 24.011 [6].
+     */
+    String address;
+};
+
+/**
+ * @brief Defines the GSM cell broadcast configuration information.
+ */
+struct CBConfigInfo {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Mode (activated or not)
+     */
+    int mode;
+
+    /**
+     * Response type:
+     *- 0: query and report
+     *- 1: report
+     */
+    int indicationType;
+
+    /**
+     * Message IDs
+     */
+    String mids;
+
+    /**
+     * Data coding schemes
+     */
+    String dcss;
+};
+
+/**
+ * @brief Defines the CDMA cell broadcast configuration information.
+ */
+struct CdmaCBConfigInfo {
+    /**
+     * Service
+     */
+    int service;
+
+    /**
+     * Language
+     */
+    int language;
+
+    /**
+     * Selected or not
+     */
+    int checked;
+};
+
+/**
+ * @brief Defines the CDMA cell broadcast configuration information list.
+ */
+struct CdmaCBConfigInfoList {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Total number
+     */
+    int size;
+
+    /**
+     * CDMA cell broadcast configuration information list
+     */
+    List<struct CdmaCBConfigInfo> list;
+};
+
+/**
+ * @brief Defines the cell broadcast report information.
+ */
+struct CBConfigReportInfo {
+    /**
+     * Response type:
+     *- 0: query and report
+     *- 1: report
+     */
+    int indicationType;
+
+    /**
+     * Cell broadcast SN
+     */
+    int sn;
+
+    /**
+     * Message IDs
+     */
+    int mid;
+
+    /**
+     * Cell broadcast page number
+     */
+    int page;
+
+    /**
+     * Total number of cell broadcast pages
+     */
+    int pages;
+
+    /**
+     * Number of PDU bytes
+     */
+    int length;
+
+    /**
+     * Decoded cell broadcast content
+     */
+    String data;
+
+    /**
+     * Data coding schemes
+     */
+    String dcs;
+
+    /**
+     * Protocol data unit
+     */
+    String pdu;
+};
+
+/**
+ * @brief Defines the SMS message information.
+ */
+struct SmsMessageInfo {
+    /**
+     * Response type:
+     *- 0: query and report
+     *- 1: report
+     */
+    int indicationType;
+
+    /**
+     * Total number
+     */
+    int size;
+
+    /**
+     * Protocol data unit
+     */
+    List<unsigned char> pdu;
+};
+
+/**
+ * @brief Defines the processing mode of received SMS messages.
+ */
+struct ModeData {
+    /**
+     * Request SN
+     */
+    int serial;
+
+    /**
+     * Whether to receive SMS messages
+     */
+    boolean result;
+
+    /**
+     * Processing mode of received SMS messages. For details, see {@link AckIncomeCause}.
+     */
+    int mode;
+
+    /**
+     * Protocol data unit
+     */
+    String pdu;
+};
+
+/**
+ * @brief Defines an SMS message response.
+ */
+struct SendSmsResultInfo {
+    /**
+     * Message reference number
+     */
+    int msgRef;
+
+    /**
+     * Protocol data unit
+     */
+    String pdu;
+
+    /**
+     * Error code
+     */
+    int errCode;
+
+    /**
+     * SMS message response ID
+     */
+    int flag;
+};
+/** @} */

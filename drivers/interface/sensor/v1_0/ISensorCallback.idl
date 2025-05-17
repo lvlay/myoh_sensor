@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiSensor
+ * @{
+ *
+ * @brief Provides unified APIs for sensor services to access sensor drivers.
+ *
+ * A sensor service can obtain a sensor driver object or agent and then call APIs provided by this object or agent to
+ * access different types of sensor devices based on the sensor IDs, thereby obtaining sensor information,
+ * subscribing to or unsubscribing from sensor data, enabling or disabling a sensor,
+ * setting the sensor data reporting mode, and setting sensor options such as the accuracy and measurement range.
+ *
+ * @version 1.0
+ */
+
+package ohos.hdi.sensor.v1_0;
+
+import ohos.hdi.sensor.v1_0.SensorTypes;
+
+/**
+ * @brief Defines the callback for reporting sensor data. This callback needs to be registered when
+ * a sensor user subscribes to sensor data. Only after the sensor is enabled, the sensor data subscriber can receive
+ * sensor data. For details, see {@link ISensorInterface}.
+ *
+ * @since 2.2
+ */
+[callback] interface ISensorCallback {
+    /**
+    * @brief Defines the function for reporting sensor data. 
+    *
+    * @since 2.2
+    */
+    OnDataEvent([in] struct HdfSensorEvents event);
+}

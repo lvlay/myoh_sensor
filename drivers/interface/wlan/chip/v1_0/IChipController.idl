@@ -1,0 +1,128 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup CHIP
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to manager the wifi chip, init and release the wifi chip, create and remove iface, register callback
+ * get the name and type of the iface, get the support frequencies and set the mode of chip.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @file IChipController.idl
+ *
+ * @brief Provides APIs to controller the wifi chip, register wifi event callback, init or release wifi chip, get available chips 
+ * and get the wifi chip service.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the chip module interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+package ohos.hdi.wlan.chip.v1_0;
+
+import ohos.hdi.wlan.chip.v1_0.ChipTypes;
+import ohos.hdi.wlan.chip.v1_0.IChipControllerCallback;
+import ohos.hdi.wlan.chip.v1_0.IConcreteChip;
+
+interface IChipController {
+    /**
+     * @brief Registers wifi event callback messages.
+     *
+     * @param eventCallback Indicates the register callback messages.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RegisterWifiEventCallback([in] IChipControllerCallback eventCallback);
+
+    /**
+     * @brief Checkes if the hdi service is inited.
+     *
+     * @param started Indicates if the hdi service is inited.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    IsInit([out] boolean inited);
+
+    /**
+     * @brief Inites the wifi hdi service.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    Init();
+
+    /**
+     * @brief Releases the wifi hdi service.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    Release();
+
+    /**
+     * @brief Obtains the id of chips.
+     *
+     * @param chipIds Indicates the id of chips.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetAvailableChips([out] unsigned int[] chipIds);
+
+    /**
+     * @brief Obtains the chip service corresponding to the chip id.
+     *
+     * @param chipId Indicates the id of the chip.
+     * @param chip Indicates the chip service object of the chip id.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetChipService([in] unsigned int chipId, [out] IConcreteChip chip);
+};
+/** @} */

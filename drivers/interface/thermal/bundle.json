@@ -1,0 +1,64 @@
+{
+    "name": "@ohos/drivers_interface_thermal",
+    "description": "thermal device driver interface",
+    "version": "3.2",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/thermal"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_thermal",
+      "subsystem": "hdf",
+      "adapted_system_type": [
+        "small",
+        "standard"
+      ],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/thermal/v1_1:thermal_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/thermal/v1_1:libthermal_proxy_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/thermal"
+            }
+          },
+          {
+            "name": "//drivers/interface/thermal/v1_1:libthermal_stub_1.1",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/thermal"
+            }
+          },
+          {
+            "name": "//drivers/interface/thermal/v1_1:thermal_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/thermal"
+            }
+          }
+        ]
+      }
+    }
+  }

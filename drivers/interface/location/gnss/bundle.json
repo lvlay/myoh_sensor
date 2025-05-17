@@ -1,0 +1,63 @@
+{
+    "name": "@ohos/drivers_interface_location_gnss",
+    "description": "gnss device driver interface",
+    "version": "3.2",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/location/gnss"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_location_gnss",
+      "subsystem": "hdf",
+      "adapted_system_type": [
+        "standard"
+      ],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/location/gnss/v2_0:location_gnss_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/location/gnss/v2_0:liblocation_gnss_proxy_2.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/location/gnss"
+            }
+          },
+          {
+            "name": "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/location/gnss"
+            }
+          },
+          {
+            "name": "//drivers/interface/location/gnss/v2_0:liblocation_gnss_stub_2.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/location/gnss"
+	    }
+          }
+        ]
+      }
+    }
+  }

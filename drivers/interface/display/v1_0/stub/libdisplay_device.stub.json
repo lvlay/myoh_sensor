@@ -1,0 +1,5 @@
+[
+    { "name": "DeviceInitialize" },
+    { "name": "DeviceUninitialize" },
+    { "name": "RegComposerDeathCallback" }
+]

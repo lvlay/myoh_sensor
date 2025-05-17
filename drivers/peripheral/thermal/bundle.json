@@ -1,0 +1,42 @@
+{
+  "name": "@ohos/drivers_peripheral_thermal",
+  "description": "thermal device driver",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/thermal"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_thermal",
+    "subsystem": "hdf",
+    "adapted_system_type": ["standard", "small"],
+    "rom": "610KB",
+    "ram": "7500KB",
+    "deps": {
+      "components": [
+        "c_utils",
+        "config_policy",
+        "drivers_interface_thermal",
+        "init",
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "libxml2",
+        "zlib"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/thermal:thermal_entry",
+        "//drivers/peripheral/thermal/etc:param_files"
+      ],
+      "test": [
+        "//drivers/peripheral/thermal/test:hdf_test_thermal"
+      ],
+      "inner_kits": []
+    }
+  }
+}

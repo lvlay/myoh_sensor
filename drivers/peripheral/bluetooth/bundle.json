@@ -1,0 +1,56 @@
+{
+  "name": "@ohos/drivers_peripheral_bluetooth",
+  "description": "bluetooth device driver",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/bluetooth"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_bluetooth",
+    "subsystem": "hdf",
+    "adapted_system_type": ["standard"],
+    "rom": "615KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "c_utils",
+        "drivers_peripheral_bluetooth",
+        "hdf_core",
+        "hilog",
+        "ipc",
+        "samgr",
+        "drivers_interface_bluetooth",
+        "bluetooth_service"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/bluetooth/hci:bluetooth_hci_entry",
+        "//drivers/peripheral/bluetooth/audio:hdi_audio_bluetooth"
+      ],
+      "inner_kits": [
+        {
+          "header": {
+            "header_base": "//drivers/peripheral/bluetooth/audio",
+            "header_files": [
+              "interfaces/include/audio_adapter.h",
+              "interfaces/include/audio_attribute.h",
+              "interfaces/include/audio_control.h",
+              "interfaces/include/audio_manager.h",
+              "interfaces/include/audio_render.h",
+              "interfaces/include/audio_scene.h",
+              "interfaces/include/audio_types.h",
+              "interfaces/include/audio_volume.h",
+              "/hal/hdi_binder/proxy/include/audio_proxy_manager.h"
+            ]
+          },
+          "name": "//drivers/peripheral/bluetooth/audio:hdi_audio_bluetooth_header"
+        }
+      ]
+    }
+  }
+}

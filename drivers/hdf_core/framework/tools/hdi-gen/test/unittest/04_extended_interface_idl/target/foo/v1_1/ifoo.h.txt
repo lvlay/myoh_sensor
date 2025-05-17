@@ -1,0 +1,25 @@
+#ifndef OHOS_HDI_FOO_V1_1_IFOO_H
+#define OHOS_HDI_FOO_V1_1_IFOO_H
+
+#include <stdint.h>
+#include <string>
+#include <hdf_base.h>
+#include <hdi_base.h>
+#include "foo/v1_0/ifoo.h"
+
+using namespace OHOS;
+using namespace OHOS::HDI;
+using namespace OHOS::HDI::Foo::V1_0;
+
+enum {
+    CMD_FOO_TEST_PING_V1_1 = 4,
+    CMD_FOO_TEST_GET_DATA = 5,
+};
+
+class IFoo : public OHOS::HDI::Foo::V1_0::IFoo {
+    virtual int32_t TestPingV1_1(const std::string& sendMsg, std::string& recvMsg) = 0;
+
+    virtual int32_t TestGetData(std::string& info) = 0;
+};
+
+#endif // OHOS_HDI_FOO_V1_1_IFOO_H

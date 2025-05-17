@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ohos.hdi.memorytracker.v1_0;
+
+enum MemoryTrackerType {
+    /* muti-media related */
+    MEMORY_TRACKER_TYPE_MM = 0,
+    /* GL related */
+    MEMORY_TRACKER_TYPE_GL = 1,
+    /* camera related */
+    MEMORY_TRACKER_TYPE_CAM = 2,
+    /* graphic related */
+    MEMORY_TRACKER_TYPE_GRAPH = 3,
+    MEMORY_TRACKER_TYPE_OTHER = 4,
+    MEMORY_TRACKER_TYPE_COUNTS,
+};
+
+enum MemoryTrackerFlag {
+    /* memory shared with other processes */
+    FLAG_SHARED_RSS = 2,
+    /* FLAG_SHARED_RSS / counts of shared processes */
+    FLAG_SHARED_PSS = 4,
+    /* contrary to FLAG_SHARED_RSS */
+    FLAG_PRIVATE = 8,
+    /* memory mapped in smaps */
+    FLAG_MAPPED = 16,
+    /* contrary to FLAG_MAPPED */
+    FLAG_UNMAPPED = 32,
+    /* CPU secure mode related */
+    FLAG_PROTECTED = 64,
+    /* contrary to FLAG_PROTECTED */
+    FLAG_UNPROTECTED = 128,
+    /* managed by system */
+    FLAG_SYSTEM = 256,
+    /* contrary to FLAG_SYSTEM */
+    FLAG_SYSTEM_EXCEPT = 512,
+
+};
+
+struct MemoryRecord {
+    /* MemoryTracker Flags */
+    int flags;
+    /* in Bytes */
+    long size;
+};

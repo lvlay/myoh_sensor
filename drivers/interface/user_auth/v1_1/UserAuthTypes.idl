@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdfUserAuth
+ * @{
+ *
+ * @brief Provides APIs for the user_auth driver.
+ *
+ * The user_auth driver provides a unified interface for the user_auth service to access the user_auth driver.
+
+ *
+ * @since 4.0
+ */
+
+ /**
+ * @file UserAuthTypes.idl
+ *
+ * @brief Defines the enumeration values and data structures of the user_auth driver.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.user_auth.v1_1;
+
+import ohos.hdi.user_auth.v1_0.UserAuthTypes;
+
+/**
+ * @brief Defines scheduling information.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct ScheduleInfoV1_1 {
+    /**< Schedule index of authentication. */
+    unsigned long scheduleId;
+    /**< Templates to authenticate. */
+    unsigned long[] templateIds;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor matcher. */
+    unsigned int executorMatcher;
+    /**< Operation to perform. See @{scheduleMode}*/
+    unsigned int scheduleMode;
+    /**< Executor information. See @{ExecutorInfo}. */
+    struct ExecutorInfo[] executors;
+    /**< Extra information of schedule. */
+    unsigned char[] extraInfo;
+};
+
+/**
+ * @brief Defines enrolled users information.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct UserInfo {
+    /**< SecureUid of this user. */
+    unsigned long secureUid;
+    /**< PinSubType of this user. See @{@PinSubType}. */
+    enum PinSubType pinSubType;
+    /**< Related enrolled information list. See @{EnrolledInfo}. */
+    struct EnrolledInfo[] enrolledInfos;
+};
+/** @} */

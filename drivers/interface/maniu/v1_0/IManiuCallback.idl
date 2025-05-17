@@ -1,0 +1,9 @@
+package ohos.hdi.maniu.v1_0;
+
+import ohos.hdi.maniu.v1_0.ManiuTypes;
+
+[callback] interface IManiuCallback {
+
+    OnDataEvent([in] struct ManiuEvents event);
+
+}

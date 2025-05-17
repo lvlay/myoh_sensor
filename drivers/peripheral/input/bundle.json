@@ -1,0 +1,70 @@
+{
+  "name": "@ohos/drivers_peripheral_input",
+  "description": "input device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/input"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_input",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_input_feature_model",
+      "drivers_peripheral_input_feature_udriver",
+      "drivers_peripheral_input_feature_lite_support_test",
+      "drivers_peripheral_input_feature_support_ddk"
+    ],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "630KB",
+    "ram": "7600KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "c_utils",
+        "hdf_core",
+        "hilog",
+        "hilog_lite",
+        "drivers_interface_input",
+        "access_token"
+      ],
+      "third_party": [
+        "bounds_checking_function"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/input:input_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/input/test:hdf_test_input"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/input/hal:hdi_input",
+          "header": {
+            "header_files": [
+              "input_controller.h",
+              "input_manager.h",
+              "input_reporter.h",
+              "input_type.h"
+            ],
+            "header_base": "//drivers/peripheral/input/interfaces/include"
+          }
+        },
+        {
+          "name": "//drivers/peripheral/input/udriver:hdi_input_udriver",
+          "header": {
+            "header_files": [
+              "input_device_manager.h"
+            ],
+            "header_base": "//drivers/peripheral/input/udriver/include"
+          }
+        }
+      ]
+    }
+  }
+}

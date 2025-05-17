@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup NNRt
+ * @{
+ *
+ * @brief Provides a unified interface for AI chip drivers to access OpenHarmony. 
+ * Neural Network Runtime (NNRt) is a cross-chip inference computing runtime environment oriented to the AI field.
+ * It serves as a bridge between the upper-layer AI inference framework and the underlying acceleration chip to implement cross-chip inference computing of AI models.
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IPreparedModel.idl
+ *
+ * @brief Defines the APIs for exporting AI models and performing AI model inference.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the NNRt module.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.nnrt.v1_0;
+
+import ohos.hdi.nnrt.v1_0.NnrtTypes;
+
+/**
+ * @brief Provides the APIs for exporting AI models and performing AI model inference.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+interface IPreparedModel {
+    /**
+     * @brief Exports an AI model from the cache.
+     *
+     * @param modelCache Indicates an array of model files to export. For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    ExportModelCache([out] struct SharedBuffer[] modelCache);
+
+    /**
+     * @brief Performs AI model inference.
+     *
+     * @param inputs Indicates the input data for AI model inference. The data is input in the sequence defined by the model. For details about the input data type, see {@link IOTensor}.
+     * @param outputs Indicates the output data of AI model inference. After inference, the output data is written to the shared buffer. For details about the output data type, see {@link IOTensor}.
+     * @param outputsDims Indicates the dimensions of the output data. The output sequence is the same as that of <b>outputs</b>.
+     * @param isOutputBufferEnough Indicates whether the shared buffer space is sufficient for the output data. The value <b>true</b> means the shared buffer space is sufficient; the value <b>false</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative number if the operation fails.
+     */
+    Run([in] struct IOTensor[] inputs, [in] struct IOTensor[] outputs,
+        [out] int[][] outputsDims, [out] boolean[] isOutputBufferEnough);
+}
+
+/** @} */

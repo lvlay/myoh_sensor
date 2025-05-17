@@ -1,0 +1,108 @@
+#include "v1_0/foo_stub.h"
+#include <hdf_base.h>
+#include <hdf_log.h>
+#include <hdi_support.h>
+#include <securec.h>
+#include <string_ex.h>
+
+#define HDF_LOG_TAG    foo_stub
+
+sptr<OHOS::HDI::Foo::V1_0::IFoo> OHOS::HDI::Foo::V1_0::IFoo::Get(bool isStub)
+{
+    return OHOS::HDI::Foo::V1_0::IFoo::Get("foo_service", isStub);
+}
+
+sptr<OHOS::HDI::Foo::V1_0::IFoo> OHOS::HDI::Foo::V1_0::IFoo::Get(const std::string& serviceName, bool isStub)
+{
+    if (!isStub) {
+        return nullptr;
+    }
+    std::string desc = Str16ToStr8(OHOS::HDI::Foo::V1_0::IFoo::GetDescriptor());
+    void *impl = LoadHdiImpl(desc.c_str(), serviceName == "foo_service" ? "service" : serviceName.c_str());
+    if (impl == nullptr) {
+        HDF_LOGE("failed to load hdi impl %{public}s", desc.c_str());
+        return nullptr;
+    }
+    return reinterpret_cast<OHOS::HDI::Foo::V1_0::IFoo *>(impl);
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::OnRemoteRequest(uint32_t code, MessageParcel& data, MessageParcel& reply, MessageOption& option)
+{
+    switch (code) {
+        case CMD_FOO_GET_VERSION:
+            return FooStubGetVersion(data, reply, option);
+        case CMD_FOO_PING:
+            return FooStubPing(data, reply, option);
+        case CMD_FOO_GET_DATA:
+            return FooStubGetData(data, reply, option);
+        case CMD_FOO_INFO_TEST:
+            return FooStubInfoTest(data, reply, option);
+        default: {
+            HDF_LOGE("%{public}s: cmd %{public}d is not supported", __func__, code);
+            return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+        }
+    }
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubPing(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubGetData(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubInfoTest(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubGetVersion(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubPing_(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption, sptr<OHOS::HDI::Foo::V1_0::IFoo> impl)
+{
+    if (fooData.ReadInterfaceToken() != OHOS::HDI::Foo::V1_0::IFoo::GetDescriptor()) {
+        HDF_LOGE("%{public}s: interface token check failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    bool fooMemSet = false;
+    if (!fooData.ReadBool(fooMemSet)) {
+        HDF_LOGE("%{public}s: failed to read fooMemSet", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+    const char* sendMsgCp = fooData.ReadCString();
+    if (sendMsgCp == nullptr) {
+        HDF_LOGE("%{public}s: read sendMsg failed", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+    std::string sendMsg = sendMsgCp;
+
+    std::string recvMsg;
+    if (fooMemSet) {
+        uint32_t capacity = 0;
+        if (!fooData.ReadUint32(capacity)) {
+            HDF_LOGE("%{public}s: failed to read capacity", __func__);
+            return HDF_ERR_INVALID_PARAM;
+        }
+        HDI_CHECK_VALUE_RETURN(capacity, >, HDI_BUFF_MAX_SIZE / sizeof(char), HDF_ERR_INVALID_PARAM);
+        recvMsg.reserve(capacity);
+    }
+
+    if (impl == nullptr) {
+        HDF_LOGE("%{public}s: impl is nullptr!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    int32_t fooRet = impl->Ping(sendMsg, recvMsg);
+    if (fooRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s failed, error code is %{public}d", __func__, fooRet);
+        return fooRet;
+    }
+
+    if (!fooReply.WriteCString(recvMsg.c_str())) {
+        HDF_LOGE("%{public}s: write recvMsg failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    return fooRet;
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubGetData_(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption, sptr<OHOS::HDI::Foo::V1_0::IFoo> impl)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubInfoTest_(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption, sptr<OHOS::HDI::Foo::V1_0::IFoo> impl)
+
+int32_t OHOS::HDI::Foo::V1_0::FooStub::FooStubGetVersion_(MessageParcel& fooData, MessageParcel& fooReply, MessageOption& fooOption, sptr<OHOS::HDI::Foo::V1_0::IFoo> impl)

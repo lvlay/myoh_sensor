@@ -1,0 +1,154 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* *
+ * @addtogroup HdiUsbfnMtp
+ * @{
+ *
+ * @brief Provides unified APIs for mtp services to access usb mtp/ptp drivers.
+ *
+ * A mtp service can obtain a usb mtp/ptp driver object or agent and then call APIs provided by this object or agent to
+ * transfer different types of mtp/ptp data packet.
+ *
+ * @since 4.0
+ */
+
+/* *
+ * @file IUsbfnMtpInterface.idl
+ *
+ * @brief Declares the APIs provided by the usb module for obtaining usb information, subscribing to or
+ * unsubscribing from usb data, enabling or disabling a usb, setting the usb data reporting mode,
+ * and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+package ohos.hdi.usb.gadget.mtp.v1_0;
+
+import ohos.hdi.usb.gadget.mtp.v1_0.UsbfnMtpTypes;
+
+/* *
+ * @brief Defines the functions for performing basic operations on usb.
+ *
+ * The operations include obtaining usb information, subscribing to or unsubscribing from usb data,
+ * enabling or disabling a usb, setting the usb data reporting mode, and setting usb options such as
+ * the accuracy and measurement range.
+ */
+interface IUsbfnMtpInterface {
+
+    /* *
+     * @brief Opens a USB MTP/PTP driver.
+     *
+     * @param None No parameter needed.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Start();
+
+    /* *
+     * @brief Closes a USB MTP/PTP driver.
+     *
+     * @param None No parameter needed.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Stop();
+
+    /* *
+     * @brief Read data by USB MTP/PTP driver.
+     *
+     * @param data Indicates the data read by USB MTP/PTP driver.
+     *
+     * @return Return number of bytes read, -1 or other negative value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Read([out] unsigned char[] data);
+
+    /* *
+     * @brief Write data by USB MTP/PTP driver.
+     *
+     * @param data Indicates the data write to USB MTP/PTP driver.
+     *
+     * @return Return number of bytes written, <b>-1</b> or other negative value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Write([in] unsigned char[] data);
+
+    /* *
+     * @brief Receive file by USB MTP/PTP driver.
+     * Proxy worked on file management, include fopen/fclose/fseek/fread/fwrite and offset infomation.
+     * Stub worked on data process.
+     *
+     * @param mfs Indicates the mtp file slice info.
+     *
+     * @return Returns <b>0</b> if receive is successful, <b>-1</b> or other negative value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    ReceiveFile([in] struct UsbFnMtpFileSlice mfs);
+
+    /* *
+     * @brief Send file by USB MTP/PTP driver.
+     * Proxy worked on file management, include fopen/fclose/fseek/fread/fwrite and offset infomation.
+     * Stub worked on data process.
+     *
+     * @param mfs Indicates the mtp file range info, used is packet header.
+     *
+     * @return Returns <b>0</b> if send is successful, <b>-1</b> or other negative value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    SendFile([in] struct UsbFnMtpFileSlice mfs);
+
+    /* *
+     * @brief Send event data by USB MTP/PTP driver.
+     *
+     * @param data Indicates the event data write to USB MTP/PTP driver.
+     *
+     * @return Returns <b>0</b> if send is successful, <b>-1</b> or other negative value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    SendEvent([in] unsigned char[] eventData);
+
+    /* *
+     * @brief Init a USB MTP/PTP driver. Used by usb_host.
+     *
+     * @param None No parameter needed.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Init();
+
+    /* *
+     * @brief Release a USB MTP/PTP driver. Used by usb_host.
+     *
+     * @param None No parameter needed.
+     *
+     * @return Returns <b>0</b> if the operation is successful; returns a non-0 value if the operation fails.
+     * @since 4.0
+     * @version 1.0
+     */
+    Release();
+}

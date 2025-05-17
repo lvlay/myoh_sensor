@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiAGnss
+ * @{
+ *
+ * @brief Provides unified APIs for the AGNSS service.
+ *
+ * The upper layer can use the interfaces provided by this module to set the AGNSS callback, AGNSS server address,
+ * AGNSS reference information, and setId.
+ *
+ * @since 3.2
+ */
+
+/*
+ * @file IAGnssCallback.idl
+ *
+ * @brief Defines the agnss callback to request the upper layer to establish or release data services,
+ * request the upper layer to deliver setId, and request the upper layer to deliver the agnss reference information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.location.agnss.v1_0;
+
+import ohos.hdi.location.agnss.v1_0.AGnssTypes;
+
+/*
+ * @brief Defines the agnss callback to request the upper layer to establish or release data services,
+ * request the upper layer to deliver setId, and request the upper layer to deliver the agnss reference information.
+ *
+ * @since 3.2
+ */
+[callback] interface IAGnssCallback {
+    /*
+     * @brief Request the upper layer to establish or release data services.
+     *
+     * @param request Indicates the request information for operating the data service.
+     * For details, see {@link AGnssDataLinkRequest}.
+     * @return Returns <b>0</b> if send request successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RequestSetUpAgnssDataLink([in] struct AGnssDataLinkRequest request);
+
+    /*
+     * @brief Request the upper layer to deliver the subscriber identity.
+     *
+     * @param type Indicates the type of setId. For details, see {@link SubscriberSetIdType}.
+     * @return Returns <b>0</b> if send request successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RequestSubscriberSetId([in] enum SubscriberSetIdType type);
+
+    /*
+     * @brief Request upper-layer ingest reference information.
+     *
+     * @return Returns <b>0</b> if send request successed; returns a negative value otherwise.
+     *
+     * @since 3.2
+     * @version 1.0
+     */
+    RequestAgnssRefInfo();
+}

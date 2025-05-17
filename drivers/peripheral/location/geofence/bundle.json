@@ -1,0 +1,37 @@
+{
+    "name": "@ohos/drivers_peripheral_location_geofence",
+    "description": "location geofence hdf",
+    "version": "1.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/peripheral/location/geofence"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_peripheral_location_geofence",
+      "subsystem": "hdf",
+      "adapted_system_type": [
+        "standard"
+      ],
+      "rom": "1000KB",
+      "ram": "1000KB",
+      "deps": {
+        "components": [
+          "c_utils",
+          "drivers_interface_location_geofence",
+          "ipc",
+          "hdf_core",
+          "hilog"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/peripheral/location/geofence:location_geofence_entry"
+        ]
+      }
+    }
+  }
+  

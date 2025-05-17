@@ -1,0 +1,60 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+
+TEST_ROOT_DIR = "../.."
+
+module_output_path = "drivers_peripheral_wlan/wlan"
+
+###########################palTest###########################
+
+ohos_unittest("WlanHdiServiceTestC") {
+  module_out_path = module_output_path
+  sources = [
+    "hostapd_callback_impl.c",
+    "p2p_callback_impl.c",
+    "wlan_callback_impl.c",
+    "wlan_hdi_direct_test.cpp",
+    "wlan_hdi_hal_services_c_test.cpp",
+    "wpa_callback_impl.c",
+  ]
+
+  deps = [
+    "$TEST_ROOT_DIR/hdi_service:hdi_wlan_service",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+
+  include_dirs = [ "include" ]
+
+  if (is_standard_system) {
+    external_deps = [
+      "c_utils:utils",
+      "drivers_interface_wlan:libhostapd_proxy_1.0",
+      "drivers_interface_wlan:libwlan_proxy_1.3",
+      "drivers_interface_wlan:libwpa_proxy_1.1",
+      "hdf_core:libhdf_host",
+      "hdf_core:libhdf_utils",
+      "hilog:libhilog",
+    ]
+  } else {
+    external_deps = [ "hilog:libhilog" ]
+  }
+}
+
+###########################end###########################
+group("unittest") {
+  testonly = true
+  deps = [ ":WlanHdiServiceTestC" ]
+}

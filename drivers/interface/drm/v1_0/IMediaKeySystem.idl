@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiDrm
+ * @
+ * @brief Defines APIs of the Drm module.
+ * The Drm module provides APIs for multimedia Drm.
+ * @since 4.1
+ * @version 1.0
+ */
+
+/**
+ * @file IMediaKeySystem.idl
+ *
+ * @brief Defines methods used in MediaKeySystem.
+ * @since 4.1
+ * @version 1.0
+ */
+
+package ohos.hdi.drm.v1_0;
+
+import ohos.hdi.drm.v1_0.MediaKeySystemTypes;
+import ohos.hdi.drm.v1_0.IMediaKeySession;
+import ohos.hdi.drm.v1_0.IMediaKeySystemCallback;
+import ohos.hdi.drm.v1_0.IOemCertificate;
+
+interface IMediaKeySystem {
+    GetConfigurationString([in] String name, [out] String value);
+    SetConfigurationString([in] String name, [in] String value);
+    GetConfigurationByteArray([in] String name, [out] unsigned char[] value);
+    SetConfigurationByteArray([in] String name, [in] unsigned char[] value);
+    GetStatistics([out] Map<String, String> statistics);
+    GetMaxContentProtectionLevel([out] enum ContentProtectionLevel level);
+
+    GenerateKeySystemRequest([out] String defaultUrl, [out] unsigned char[] request);
+    ProcessKeySystemResponse([in] unsigned char[] response);
+    GetOemCertificateStatus([out] enum CertificateStatus status);
+    SetCallback([in] IMediaKeySystemCallback systemCallback);
+
+    CreateMediaKeySession([in] enum ContentProtectionLevel level, [out] IMediaKeySession keySession);
+
+    GetOfflineMediaKeyIds([out] unsigned char[][] mediaKeyIds);
+    GetOfflineMediaKeyStatus([in] unsigned char[] mediaKeyId, [out] enum OfflineMediaKeyStatus mediaKeyStatus);
+    ClearOfflineMediaKeys([in] unsigned char[] mediaKeyId);
+
+    GetOemCertificate([out] IOemCertificate oemCert);
+    Destroy();
+};

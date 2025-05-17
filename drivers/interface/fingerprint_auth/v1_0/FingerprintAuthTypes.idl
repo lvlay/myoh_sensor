@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfFingerprintAuth
+ * @{
+ *
+ * @brief Provides APIs for the fingerprint auth driver.
+ *
+ * The fingerprint auth driver provides a unified interface for the fingerprint auth service to access the fingerprint auth driver.
+ * After obtaining the fingerprint auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the fingerprint auth executors, the service can call related APIs to get executor info, get
+ * template info, enroll template, authenticate template, delete template, etc.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @file FingerprintAuthTypes.idl
+ *
+ * @brief Defines fingerprint auth driver enumeration and data structure, including AuthType, ExecutorRole, ExecutorSecureLevel,
+ * CommandId, FingerprintTipsCode, ExecutorInfo and TemplateInfo.
+ *
+ * @since 3.2
+ */
+
+package ohos.hdi.fingerprint_auth.v1_0;
+
+/**
+ * Enumerates credential type for authentication.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum AuthType : int {
+    PIN = 1, /**< Indicates authentication type is PIN. */
+    FACE = 2, /**< Indicates authentication type is face. */
+    FINGERPRINT = 4, /**< Indicates authentication type is fingerprint. */
+};
+
+/**
+ * Enumerates executor role.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorRole : int {
+    COLLECTOR = 1, /**< Indicates executor role is collector. */
+    VERIFIER = 2, /**< Indicates executor role is verifier. */
+    ALL_IN_ONE = 3, /**< Indicates executor role is combination of collector and verifier, cannot be used as collector or verifier. */
+};
+
+/**
+ * Enumerates executor secure level.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorSecureLevel : int {
+    ESL0 = 0, /**< Indicates executor secure level is ESL0. */
+    ESL1 = 1, /**< Indicates executor secure level is ESL1. */
+    ESL2 = 2, /**< Indicates executor secure level is ESL2. */
+    ESL3 = 3, /**< Indicates executor secure level is ESL3. */
+};
+
+/**
+ * Enumerates command id.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum CommandId : int {
+    LOCK_TEMPLATE = 1, /**< Indicates lock template command id. */
+    UNLOCK_TEMPLATE = 2, /**< Indicates unlock template command id. */
+    VENDOR_COMMAND_BEGIN = 10000 /**< Vendor may add custom command id after this. */
+};
+
+/**
+ * Enumerates prompt codes.
+ *
+ * @since 3.2
+ * @version 1.0
+ *
+ * @deprecated
+ */
+enum FingerprintTipsCode : int {
+    FINGERPRINT_AUTH_TIP_GOOD = 0, /**< Indicates that the image acquired is good. */
+    FINGERPRINT_AUTH_TIP_DIRTY = 1, /**< Indicates that the fingerprint image is too noisy due to suspected or detected dirt on sensor. */
+    FINGERPRINT_AUTH_TIP_INSUFFICIENT = 2, /**< Indicates that only a partial fingerprint image is detected. */
+    FINGERPRINT_AUTH_TIP_PARTIAL = 3, /**< Indicates that only a partial fingerprint image is detected. */
+    FINGERPRINT_AUTH_TIP_TOO_FAST = 4, /**< Indicates that the fingerprint image is incomplete due to quick motion. */
+    FINGERPRINT_AUTH_TIP_TOO_SLOW = 5, /**< Indicates that the fingerprint image is unreadable due to lack of motion. */
+    VENDOR_FINGERPRINT_AUTH_TIP_BEGIN = 10000 /**< Vendor may add custom fingerprint auth tip after this. */
+};
+
+/**
+ * Indicates the executor info.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct ExecutorInfo {
+    unsigned short sensorId; /**< Indicates sensor id. Sensor id must be unique in driver. */
+    unsigned int executorType; /**< Indicates executor type. */
+    enum ExecutorRole executorRole; /**< Indicates executor role, see @{ExecutorRole}. */
+    enum AuthType authType; /**< Indicates auth type, see @{AuthType}. */
+    enum ExecutorSecureLevel esl; /**< Indicates executor secure level, see @{ExecutorSecureLevel}. */
+    unsigned char[] publicKey; /**< Indicates publicKey. */
+    unsigned char[] extraInfo; /**< Indicates extra info. */
+};
+
+/**
+ * Indicates the template info.
+ *
+ * @since 3.2
+ * @version 1.0
+ *
+ * @deprecated
+ */
+struct TemplateInfo {
+    unsigned int executorType; /**< Indicates executor type. */
+    int lockoutDuration; /**< Indicates lockout duration in millisecond. */
+    int remainAttempts; /**< Indicates remain attempts before a lockout. */
+    unsigned char[] extraInfo; /**< Indicates extra info. */
+};

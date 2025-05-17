@@ -1,0 +1,56 @@
+{
+    "name": "@ohos/drivers_interface_huks",
+    "description": "huks device driver",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/huks"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_huks",
+      "subsystem": "hdf",
+      "features": [
+        "drivers_interface_huks_enabled"
+      ],
+      "adapted_system_type": ["standard"],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": [
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/huks/v1_0:huks_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/huks/v1_0:libhuks_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/huks"
+            }
+          },
+          {
+            "name": "//drivers/interface/huks/v1_0:huks_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/huks"
+            }
+          }
+        ]
+      }
+    }
+}

@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdiUsb
+ * @
+ *
+ * @brief Provides unified APIs for usb services to access usb drivers.
+ *
+ * A usb service can obtain a usb driver object or agent and then call APIs provided by this object or agent to
+ * access different types of usb devices based on the usb IDs, thereby obtaining usb information,
+ * subscribing to or unsubscribing from usb data, enabling or disabling a usb,
+ * setting the usb data reporting mode, and setting usb options such as the accuracy and measurement range.
+ *
+ * @since 5.0
+ */
+
+/**
+ * @file UsbTypes.idl
+ *
+ * @brief Defines the data used by the usb module, including the usb information,
+ * and reported usb data.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+package ohos.hdi.usb.v1_1;
+
+import ohos.hdi.usb.v1_0.UsbTypes;
+
+/**
+ * @brief Defines the ControlTransfer Params, which is used by {@link IUsbInterface::ControlTransferReadwithLength}.
+ * @since 5.0
+ * @version 1.0
+ */
+struct UsbCtrlTransferParams {
+    /**
+     * request type
+     * @since 5.0
+     * @version 1.0
+     */
+    int requestType;
+    /**
+     * request cmd 
+     * @since 5.0
+     * @version 1.0
+     */
+    int requestCmd;
+    /**
+     * value 
+     * @since 5.0
+     * @version 1.0
+     */
+    int value;
+    /**
+     * index
+     * @since 5.0
+     * @version 1.0
+     */
+    int index;
+    /**
+     * length
+     * @since 5.0
+     * @version 1.0
+     */
+    int length;
+    /**
+     * timeout
+     * @since 5.0
+     * @version 1.0
+     */
+    int timeout;
+};

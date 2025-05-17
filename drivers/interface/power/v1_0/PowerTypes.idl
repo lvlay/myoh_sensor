@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup power
+ * @{
+ *
+ * @brief Provides APIs for performing hibernation/wakeup operations, subscribing to the hibernation/wakeup status,
+ * and managing running locks.
+ * 
+ * After obtaining an object or proxy of this module, the power service can invoke related APIs to perform
+ * hibernation/wakeup operations, subscribe to the hibernation/wakeup status, and manage running locks.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+/**
+ * @file PowerTypes.idl
+ *
+ * @brief Enumerates data types related to power management.
+ *
+ * Such data types include command parameters, callback parameters, and system status.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+package ohos.hdi.power.v1_0;
+
+/**
+ * @brief Enumerates command parameters for power management.
+ *
+ * @since 3.1
+ */
+enum PowerHdfCmd {
+    /** Command parameter for registering a callback of the power status */
+    CMD_REGISTER_CALLBCK = 0,
+    /** Command parameter for hibernating the device */
+    CMD_START_SUSPEND,
+    /** Command parameter for waking up the device */
+    CMD_STOP_SUSPEND,
+    /** Command parameter for forcibly hibernating the device */
+    CMD_FORCE_SUSPEND,
+    /** Command parameter for opening the running lock */
+    CMD_SUSPEND_BLOCK,
+    /** Command parameter for closing the running lock*/
+    CMD_SUSPEND_UNBLOCK,
+    /** Command parameter for dumping */
+    CMD_DUMP,
+};
+
+/**
+ * @brief Enumerates command parameters for the power status callback.
+ *
+ * @since 3.1
+ */
+enum PowerHdfCallbackCmd {
+    /** Command parameter for the hibernation callback */
+    CMD_ON_SUSPEND = 0,
+    /** Command parameter for the wakeup callback */
+    CMD_ON_WAKEUP,
+};
+
+/**
+ * @brief Enumerates the power status.
+ *
+ * @since 3.1
+ */
+enum PowerHdfState {
+    /** Awake state */
+    AWAKE = 0,
+    /** Inactive state */
+    INACTIVE,
+    /** Sleep state */
+    SLEEP,
+};
+/** @} */

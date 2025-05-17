@@ -1,0 +1,59 @@
+{
+  "name": "@ohos/drivers_peripheral_sensor",
+  "description": "sensor device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/sensor"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_sensor",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_sensor_feature_model",
+      "drivers_peripheral_sensor_feature_community",
+      "drivers_peripheral_sensor_feature_lite_support_test"
+    ],
+    "syscap": [],
+    "adapted_system_type": ["standard", "small"],
+    "rom": "650KB",
+    "ram": "7600KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "hdf_core",
+        "hilog",
+        "hitrace",
+        "c_utils",
+        "drivers_interface_sensor",
+        "hilog_lite"
+      ],
+      "third_party": [
+        "bounds_checking_function"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/sensor:sensor_entry"
+      ],
+      "test": [
+        "//drivers/peripheral/sensor/test:hdf_test_sensor"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/sensor/hal:hdi_sensor",
+          "header": {
+            "header_files": [
+              "sensor_if.h",
+              "sensor_type.h"
+            ],
+            "header_base": "//drivers/peripheral/sensor/interfaces/include"
+          }
+        }
+      ]
+    }
+  }
+}

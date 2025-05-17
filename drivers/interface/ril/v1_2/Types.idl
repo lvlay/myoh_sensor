@@ -1,0 +1,333 @@
+/*
+ * Copyright (c) 2023-2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer telephony services,
+ * including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+package ohos.hdi.ril.v1_2;
+
+import ohos.hdi.ril.v1_1.Types;
+
+/**
+ * @brief Sim matched operator info.
+ */
+struct NcfgOperatorInfo {
+    /**
+     * Operator Name Matched with SIM card
+     */
+    String operName;
+    /**
+     * Operator Key Matched with SIM card
+     */
+    String operKey;
+    /**
+     * Current SIM State
+     */
+    int state;
+    /**
+     * Reserved Field
+     */
+    String reserve;
+};
+
+/**
+ * @brief Defines NR cell's ssb id information.
+ */
+struct SsbIdInfo {
+    /** SSB index. */
+    int ssbId;
+
+    /** Reference Signal Received Power -140~-44, dBm */
+    int rsrp;
+};
+
+/**
+ * @brief Defines NR Neighboring cell's information.
+ */
+struct NeighboringCellSsbInfo {
+    /** Physical cell ID. */
+    int pci;
+
+    /** Absolute Radio Frequency Channel Number of the BCCH carrier 0~1023 */
+    int arfcn;
+
+    /** Reference Signal Received Power -140~-44, dBm */
+    int rsrp;
+
+    /** Signal To Interference Plus Noise Ratio. */
+    int sinr;
+
+    /** Neighboring cell ssbId list, always size is 4 */
+    List<struct SsbIdInfo> ssbIdList;
+};
+
+/**
+ * @brief Defines NR cell's information.
+ */
+struct NrCellSsbIds {
+    /** Absolute Radio Frequency Channel Number of the BCCH carrier 0~1023 */
+    int arfcn;
+
+    /** Context Identifier. */
+    long cid;
+
+    /** Physical cell ID. */
+    int pic;
+
+    /** Reference Signal Received Power -140~-44, dBm */
+    int rsrp;
+
+    /** Signal To Interference Plus Noise Ratio. */
+    int sinr;
+
+    /** Time advance. */
+    int timeAdvance;
+
+    /** Service cell ssbId list, always size is 8 */
+    List<struct SsbIdInfo> sCellSsbList;
+
+    /** Neighboring cell ssb list count, max size is 4 */
+    int nbCellCount;
+
+    /** Neighboring cell ssb info list, max size is 4 */
+    List<struct NeighboringCellSsbInfo> nbCellSsbList;
+};
+
+/**
+ * @brief Defines the NR cell information.
+ */
+struct CellListRatNr_1_2 {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int nrArfcn;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Type allocation code
+     */
+    int tac;
+
+    /**
+     * NR cell ID
+     */
+    long nci;
+
+    /**
+     * Signal received power, which ranges from -140 to -44
+     */
+    int rsrp;
+
+    /**
+     * Signal received quality, which ranges from -19 to -3
+     */
+    int rsrq;
+};
+
+/**
+ * @brief Defines cell information for different network modes.
+ */
+union ServiceCellParas_1_2 {
+    /**
+     * GSM cell information. For details, see {@link CellListRatGsm}.
+     */
+    struct CellListRatGsm gsm;
+
+    /**
+     * LTE cell information. For details, see {@link CellListRatLte}.
+     */
+    struct CellListRatLte lte;
+
+    /**
+     * WCDMA cell information. For details, see {@link CellListRatWcdma}.
+     */
+    struct CellListRatWcdma wcdma;
+
+    /**
+     * CDMA cell information. For details, see {@link CellListRatCdma}.
+     */
+    struct CellListRatCdma cdma;
+
+    /**
+     * TD-SCDMA cell information. For details, see {@link CellListRatTdscdma}.
+     */
+    struct CellListRatTdscdma tdscdma;
+
+    /**
+     * NR cell information. For details, see {@link CellListRatNr_1_2}.
+     */
+    struct CellListRatNr_1_2 nr;
+};
+
+/**
+ * @brief Defines the neighboring cell information.
+ */
+struct CellNearbyInfo_1_2 {
+    /**
+     * Access technology type:
+     *- 0: unknown
+     *- 1: GSM
+     *- 2: CDMA
+     *- 3: WCDMA
+     *- 4: TD-SCDMA
+     *- 5: LTE
+     *- 6: NR
+     */
+    int ratType;
+
+    /**
+     * Cell information for different network modes
+     */
+    union ServiceCellParas_1_2 serviceCells;
+};
+
+/**
+ * @brief Defines the neighboring cell list.
+ */
+struct CellListNearbyInfo_1_2 {
+    /**
+     * Number
+     */
+    int itemNum;
+
+    /**
+     * Neighboring cell list
+     */
+    List<struct CellNearbyInfo_1_2> cellNearbyInfo;
+};
+
+/**
+ * @brief Defines the NR cellular information.
+ */
+struct CellRatNr_1_2 {
+    /**
+     * Absolute RF channel number of the BCCH carrier
+     */
+    int nrArfcn;
+
+    /**
+     * Physical cell ID
+     */
+    int pci;
+
+    /**
+     * Type allocation code
+     */
+    int tac;
+
+    /**
+     * NR cell ID
+     */
+    long nci;
+
+    /**
+     * Signal received power, which ranges from -140 to -44
+     */
+    int rsrp;
+
+    /**
+     * Signal received quality, which ranges from -19 to -3
+     */
+    int rsrq;
+};
+
+/**
+ * @brief Defines the current cellular data information.
+ */
+union CurrentServiceCellParas_1_2 {
+    /**
+     * GSM cellular information
+     */
+    struct CellRatGsm gsm;
+
+    /**
+     * LTE cellular information
+     */
+    struct CellRatLte lte;
+
+    /**
+     * WCDMA cellular information
+     */
+    struct CellRatWcdma wcdma;
+
+    /**
+     * CDMA cellular information
+     */
+    struct CellRatCdma cdma;
+
+    /**
+     * TD-SCDMA cellular information
+     */
+    struct CellRatTdscdma tdscdma;
+
+    /**
+     * NR cellular information
+     */
+    struct CellRatNr_1_2 nr;
+};
+
+/**
+ * @brief Defines the current cell information.
+ */
+struct CurrentCellInfo_1_2 {
+    /**
+     * Radio access technology type. For details, see {@link RilRadioTech}.
+     */
+    int ratType;
+
+    /**
+     * Mobile country code (MCC)
+     */
+    int mcc;
+
+    /**
+     * Mobile network code (MNC)
+     */
+    int mnc;
+
+    /**
+     * Cell information parameters. For details, see {@link CurrentServiceCellParas_1_2}.
+     */
+    union CurrentServiceCellParas_1_2 serviceCells;
+};
+
+/**
+ * @brief Defines the current cell information list.
+ */
+struct CellListCurrentInfo_1_2 {
+    /**
+     * Number of cells
+     */
+    int itemNum;
+
+    /**
+     * Current cell information
+     */
+    List<struct CurrentCellInfo_1_2> cellCurrentInfo;
+};

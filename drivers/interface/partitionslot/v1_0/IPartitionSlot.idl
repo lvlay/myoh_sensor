@@ -1,0 +1,92 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfPartitionSlot
+ *
+ * @brief Provides APIs for the partionton slot service.
+ *
+ * The PartitionSlot module provides a unified interface for PartitionSlot service.
+ * After obtaining the driver object or proxy, the realted APIs can be used to
+ * obtain current booting partition slot, update current booting partition slot,
+ * or set partition slot as unbootable.
+ * @since 3.1
+ */
+
+/**
+ * @file IPartitionSlot.idl
+ *
+ * @brief Declares common APIs of the PartitionSlot service.
+ * These APIs can be used to obtain current booting partition slot,
+ * or update current booting partition slot, or set partition slot as unbootable.
+ * @since 3.1
+ */
+
+/**
+ * @brief Defines the basic operations that can be performed on PartitionSlot.
+ *
+ * The operations include getting and setting current booting partition slot,
+ */
+
+package ohos.hdi.partitionslot.v1_0;
+
+interface IPartitionSlot {
+    /**
+     * @brief Obtains current booting partition slot.
+     *
+     * @param numOfSlots number of slots supported. 1 means no AB partition; 2 means AB, > 2 means multiple slots
+     * @return Returns <b>-1</b> if the board does not support AB Parittion.
+     * @return Returns <b>0</b> if the board is booting from partition slot A.
+     * @return Returns <b>1</b> if the board is booting from partition slot B.
+     * @return Returns <b>N</b> if the board is booting from partition slot N.
+     *
+     * @since 3.1
+     */
+    GetCurrentSlot([out] int currentSlot, [out] int numOfSlots);
+
+    /**
+     * @brief Obtains slot suffix string from slot id
+     *
+     * @param slot slot index.
+     * @param suffix slot suffix string.
+     * @return Returns <b>-1</b> if the board does not support AB Parittion.
+     * @return Returns <b>0</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetSlotSuffix([in] int slot, [out] String suffix);
+
+    /**
+     * @brief Set current active boot partition slot
+     *
+     * @param slot slot index.
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.1
+     */
+    SetActiveSlot([in] int slot);
+
+    /**
+     * @brief Set boot partition slot unbootable
+     *
+     * @param slot slot index.
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 3.1
+     */
+    SetSlotUnbootable([in] int slot);
+}

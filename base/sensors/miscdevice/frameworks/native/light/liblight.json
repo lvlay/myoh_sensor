@@ -1,0 +1,15 @@
+[
+    {
+         "first_introduced": "7",
+         "name": "GetLightList"
+    },
+    {
+         "name": "TurnOn"
+    },
+    {
+         "name": "TurnOnMulti"
+    },
+    {
+         "name": "TurnOff"
+    }
+ ]

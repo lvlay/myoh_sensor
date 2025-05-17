@@ -1,0 +1,198 @@
+# Copyright (c) 2021-2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("./../../miscdevice.gni")
+
+ohos_shared_library("libmiscdevice_service") {
+  sources = [
+    "haptic_matcher/src/custom_vibration_matcher.cpp",
+    "hdi_connection/adapter/src/compatible_light_connection.cpp",
+    "hdi_connection/adapter/src/hdi_connection.cpp",
+    "hdi_connection/interface/src/light_hdi_connection.cpp",
+    "hdi_connection/interface/src/vibrator_hdi_connection.cpp",
+    "src/miscdevice_common_event_subscriber.cpp",
+    "src/miscdevice_dump.cpp",
+    "src/miscdevice_observer.cpp",
+    "src/miscdevice_service.cpp",
+    "src/miscdevice_service_stub.cpp",
+    "src/vibration_priority_manager.cpp",
+    "src/vibrator_thread.cpp",
+  ]
+
+  include_dirs = [
+    "haptic_matcher/include",
+    "include",
+    "$SUBSYSTEM_DIR/frameworks/native/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api/light",
+    "$SUBSYSTEM_DIR/services/miscdevice_service/hdi_connection/adapter/include",
+    "$SUBSYSTEM_DIR/services/miscdevice_service/hdi_connection/interface/include",
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/utils/haptic_decoder/interface",
+    "$SUBSYSTEM_DIR/utils/haptic_decoder/oh_json/include",
+  ]
+
+  if (miscdevice_build_eng) {
+    sources += [ "hdi_connection/adapter/src/compatible_connection.cpp" ]
+  }
+
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  cflags = [ "-Wno-error=inconsistent-missing-override" ]
+  deps = [ "$SUBSYSTEM_DIR/utils:miscdevice_utils_target" ]
+
+  external_deps = [
+    "ability_base:want",
+    "ability_base:zuri",
+    "ability_runtime:app_manager",
+    "ability_runtime:dataobs_manager",
+    "access_token:libaccesstoken_sdk",
+    "access_token:libprivacy_sdk",
+    "access_token:libtokenid_sdk",
+    "bundle_framework:appexecfwk_base",
+    "bundle_framework:appexecfwk_core",
+    "cJSON:cjson",
+    "c_utils:utils",
+    "common_event_service:cesfwk_innerkits",
+    "data_share:datashare_consumer",
+    "drivers_interface_vibrator:libvibrator_proxy_1.3",
+    "hilog:libhilog",
+    "hisysevent:libhisysevent",
+    "hitrace:hitrace_meter",
+    "ipc:ipc_single",
+    "os_account:os_account_innerkits",
+    "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
+  ]
+
+  defines = miscdevice_default_defines
+
+  if (miscdevice_memmgr_enable) {
+    defines += [ "MEMMGR_ENABLE" ]
+    external_deps += [ "memmgr:memmgrclient" ]
+  }
+
+  if (miscdevice_feature_vibrator_custom) {
+    external_deps += [ "init:libbegetutil" ]
+  }
+
+  if (hdf_drivers_interface_light) {
+    sources += [ "hdi_connection/adapter/src/hdi_light_connection.cpp" ]
+
+    external_deps += [ "drivers_interface_light:liblight_proxy_1.0" ]
+  }
+
+  shlib_type = "sa"
+  part_name = "miscdevice"
+  subsystem_name = "sensors"
+}
+
+#############################################################################
+ohos_static_library("libmiscdevice_service_static") {
+  sources = [
+    "haptic_matcher/src/custom_vibration_matcher.cpp",
+    "hdi_connection/adapter/src/compatible_light_connection.cpp",
+    "hdi_connection/adapter/src/hdi_connection.cpp",
+    "hdi_connection/interface/src/light_hdi_connection.cpp",
+    "hdi_connection/interface/src/vibrator_hdi_connection.cpp",
+    "src/miscdevice_common_event_subscriber.cpp",
+    "src/miscdevice_dump.cpp",
+    "src/miscdevice_observer.cpp",
+    "src/miscdevice_service.cpp",
+    "src/miscdevice_service_stub.cpp",
+    "src/vibration_priority_manager.cpp",
+    "src/vibrator_thread.cpp",
+  ]
+
+  include_dirs = [
+    "haptic_matcher/include",
+    "include",
+    "$SUBSYSTEM_DIR/frameworks/native/common/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api/light",
+    "$SUBSYSTEM_DIR/services/miscdevice_service/hdi_connection/adapter/include",
+    "$SUBSYSTEM_DIR/services/miscdevice_service/hdi_connection/interface/include",
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/utils/haptic_decoder/interface",
+    "$SUBSYSTEM_DIR/utils/haptic_decoder/oh_json/include",
+  ]
+
+  if (miscdevice_build_eng) {
+    sources += [ "hdi_connection/adapter/src/compatible_connection.cpp" ]
+  }
+
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  cflags = [ "-Wno-error=inconsistent-missing-override" ]
+  deps = [ "$SUBSYSTEM_DIR/utils:miscdevice_utils_target" ]
+
+  external_deps = [
+    "ability_base:want",
+    "ability_base:zuri",
+    "ability_runtime:app_manager",
+    "ability_runtime:dataobs_manager",
+    "access_token:libaccesstoken_sdk",
+    "access_token:libprivacy_sdk",
+    "access_token:libtokenid_sdk",
+    "bundle_framework:appexecfwk_base",
+    "bundle_framework:appexecfwk_core",
+    "cJSON:cjson",
+    "c_utils:utils",
+    "common_event_service:cesfwk_innerkits",
+    "data_share:datashare_consumer",
+    "drivers_interface_vibrator:libvibrator_proxy_1.3",
+    "hilog:libhilog",
+    "hisysevent:libhisysevent",
+    "hitrace:hitrace_meter",
+    "ipc:ipc_single",
+    "os_account:os_account_innerkits",
+    "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
+  ]
+
+  defines = miscdevice_default_defines
+
+  if (miscdevice_memmgr_enable) {
+    defines += [ "MEMMGR_ENABLE" ]
+    external_deps += [ "memmgr:memmgrclient" ]
+  }
+
+  if (miscdevice_feature_vibrator_custom) {
+    external_deps += [ "init:libbegetutil" ]
+  }
+
+  if (hdf_drivers_interface_light) {
+    sources += [ "hdi_connection/adapter/src/hdi_light_connection.cpp" ]
+
+    external_deps += [ "drivers_interface_light:liblight_proxy_1.0" ]
+  }
+
+  part_name = "miscdevice"
+  subsystem_name = "sensors"
+}
+
+group("miscdevice_service_target") {
+  deps = [
+    ":libmiscdevice_service",
+    ":libmiscdevice_service_static",
+  ]
+}

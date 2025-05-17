@@ -1,0 +1,232 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup battery
+ * @{
+ *
+ * @brief Provides APIs for obtaining and subscribing to battery information.
+ * 
+ * After obtaining an object or proxy of this module, the battery service can invoke related APIs to obtain and
+ * subscribe to battery information.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+/**
+ * @file IBatteryInterface.idl
+ *
+ * @brief Provides APIs for obtaining and subscribing to battery information.
+ *
+ * After obtaining an object or proxy of this module, the battery service can invoke related APIs to obtain and
+ * subscribe to battery information.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+package ohos.hdi.battery.v1_0;
+
+import ohos.hdi.battery.v1_0.Types;
+import ohos.hdi.battery.v1_0.IBatteryCallback;
+
+/**
+ * @brief Represents APIs for obtaining and subscribing to battery information.
+ *
+ * 
+ *
+ * @since 3.1
+ */
+interface IBatteryInterface {
+    /**
+     * @brief Registers the callback of battery information.
+     *
+     * @param event Callback to register.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    Register([in] IBatteryCallback event);
+
+    /**
+     * @brief Unregisters the callback of battery information.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    UnRegister();
+
+    /**
+     * @brief Sets the path of the battery information node.
+     *
+     * @param path Path of the battery information node.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    ChangePath([in] String path);
+
+    /**
+     * @brief Obtains the battery percentage.
+     *
+     * @param capacity Battery percentage.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetCapacity([out] int capacity);
+
+    /**
+     * @brief Obtains the battery voltage.
+     *
+     * @param voltage Battery voltage, in microvolts.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetVoltage([out] int voltage);
+
+    /**
+     * @brief Obtains the battery temperature during charging. The unit is 0.1°C.
+     *
+     * @param temperature Battery temperature.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetTemperature([out] int temperature);
+
+    /**
+     * @brief Obtains the battery health status.
+     *
+     * @param healthState Battery health status.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see BatteryHealthState
+     *
+     * @since 3.1
+     */
+    GetHealthState([out] enum BatteryHealthState healthState);
+
+    /**
+     * @brief Obtains the type of the charging device.
+     *
+     * @param pluggedType Type of the charging device.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see BatteryPluggedType
+     *
+     * @since 3.1
+     */
+    GetPluggedType([out] enum BatteryPluggedType pluggedType);
+
+    /**
+     * @brief Obtains the charging status.
+     *
+     * @param chargeState Battery charging status.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see BatteryChargeState
+     *
+     * @since 3.1
+     */
+    GetChargeState([out] enum BatteryChargeState chargeState);
+
+    /**
+     * @brief Checks whether the battery is supported or present.
+     *
+     * @param present Whether battery is supported or present. The value **true** indicates that the battery is
+     * supported or present, and the value **false** indicates the opposite.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetPresent([out] boolean present);
+
+    /**
+     * @brief Obtains the battery technology of the current device.
+     *
+     * @param technology Battery technology of the current device.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetTechnology([out] String technology);
+
+    /**
+     * @brief Obtains the total battery capacity.
+     *
+     * @param totalEnergy Total battery capacity, in mA.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetTotalEnergy([out] int totalEnergy);
+
+    /**
+     * @brief Obtains the average battery current.
+     *
+     * @param totalEnergy Average battery current, in mA.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetCurrentAverage([out] int curAverage);
+
+    /**
+     * @brief Obtains the battery current.
+     *
+     * @param curNow Battery current, in mA.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetCurrentNow([out] int curNow);
+
+    /**
+     * @brief Obtains the remaining battery capacity.
+     *
+     * @param remainEnergy Remaining battery capacity, in mA.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     *
+     * @since 3.1
+     */
+    GetRemainEnergy([out] int remainEnergy);
+
+    /**
+     * @brief Obtains all battery information.
+     *
+     * @param info Battery information.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @see BatteryInfo
+     *
+     * @since 3.1
+     */
+    GetBatteryInfo([out] struct BatteryInfo info);
+}
+/** @} */

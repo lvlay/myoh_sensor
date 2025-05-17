@@ -1,0 +1,320 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * @addtogroup HdiGnss
+ * @{
+ *
+ * @brief Provides unified APIs for GNSS services to access GNSS drivers.
+ *
+ * A GNSS service can obtain a GNSS driver object or agent and then call APIs provided by this object or agent to
+ * access GNSS devices, thereby Start the GNSS chip, start the navigation,
+ * set the GNSS working mode, inject reference information, obtain the positioning result, obtain the nmea,
+ * obtain the satellite status information, and obtain the cache location information.
+ *
+ * @since 3.2
+ */
+
+/*
+ * @file GnssTypes.idl
+ *
+ * @brief Defines the data structure used by the GNSS module.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+package ohos.hdi.location.gnss.v1_0;
+
+/*
+ * @brief Defines the GNSS working mode.
+ *
+ * Defines the enumerated values of the GNSS working mode.
+ *
+ * @since 3.2
+ */
+enum GnssWorkingMode {
+    /* GNSS standalone (no assistance) */
+    GNSS_WORKING_MODE_STANDALONE = 1,
+
+    /* AGNSS MS-Based mode */
+    GNSS_WORKING_MODE_MS_BASED = 2,
+
+    /* AGPS MS-Assisted mode */
+    GNSS_WORKING_MODE_MS_ASSISTED = 3
+};
+
+/*
+ * @brief Defines the GNSS startup type.
+ *
+ * Defines the enumerated value of the GNSS startup type, which is used to distinguish between common GNSS positioning
+ * and GNSS caching(The bottom-layer buffer location is not reported, location is reported only after the upper-layer
+ * request or the bottom-layer FIFO is full).
+ *
+ * @since 3.2
+ */
+enum GnssStartType {
+    GNSS_START_TYPE_NORMAL = 1,
+    GNSS_START_TYPE_GNSS_CACHE = 2,
+};
+
+/*
+ * @brief Defines the GNSS reference information type.
+ *
+ * The reference information includes the reference time, reference location, and best location.
+ *
+ * @since 3.2
+ */
+enum GnssRefInfoType {
+    GNSS_REF_INFO_TIME = 1,
+    GNSS_REF_INFO_LOCATION = 2,
+    GNSS_REF_INFO_BEST_LOCATION = 3,
+};
+
+/*
+ * @brief Defines the type of auxiliary data to be deleted.
+ *
+ * @since 3.2
+ */
+enum GnssAuxiliaryData {
+    GNSS_AUXILIARY_DATA_EPHEMERIS    = 1,
+    GNSS_AUXILIARY_DATA_ALMANAC      = 2,
+    GNSS_AUXILIARY_DATA_POSITION     = 4,
+    GNSS_AUXILIARY_DATA_TIME         = 8,
+    GNSS_AUXILIARY_DATA_IONO         = 16,
+    GNSS_AUXILIARY_DATA_UTC          = 32,
+    GNSS_AUXILIARY_DATA_HEALTH       = 64,
+    GNSS_AUXILIARY_DATA_SVDIR        = 128,
+    GNSS_AUXILIARY_DATA_SVSTEER      = 256,
+    GNSS_AUXILIARY_DATA_SADATA       = 512,
+    GNSS_AUXILIARY_DATA_RTI          = 1024,
+    GNSS_AUXILIARY_DATA_CELLDB_INFO  = 32768,
+    GNSS_AUXILIARY_DATA_ALL          = 65535
+};
+
+/*
+ * @brief Defines the enumerated values of the working status of the GNSS module.
+ *
+ * @since 3.2
+ */
+enum GnssWorkingStatus {
+    /* GNSS status unknown. */
+    GNSS_STATUS_NONE           = 0,
+
+    /* Navigation started. */
+    GNSS_STATUS_SESSION_BEGIN  = 1,
+
+    /* Navigation stoped. */
+    GNSS_STATUS_SESSION_END    = 2,
+
+    /* The GNSS chip is started, but the navigation is not started.. */
+    GNSS_STATUS_ENGINE_ON      = 3,
+
+    /* The GNSS chip is powered off. */
+    GNSS_STATUS_ENGINE_OFF     = 4
+};
+
+/*
+ * @brief Defines the GNSS capability.
+ *
+ * @since 3.2
+ */
+enum GnssCapabilities {
+    /* GNSS supports MS-Based AGNSS mode */
+    GNSS_CAP_SUPPORT_MSB = 1,
+
+    /* GNSS supports MS-Assisted AGNSS mode */
+    GNSS_CAP_SUPPORT_MSA = 2,
+
+    /* GNSS supports Geofencing  */
+    GNSS_CAP_SUPPORT_GEOFENCING = 4,
+
+    /* GNSS supports Measurements. */
+    GNSS_CAP_SUPPORT_MEASUREMENTS = 8,
+
+    /* GNSS supports Navigation Messages */
+    GNSS_CAP_SUPPORT_NAV_MESSAGES = 16,
+
+    /* GNSS supports location caching */
+    GNSS_CAP_SUPPORT_GNSS_CACHE = 32,
+};
+
+/*
+ * @brief Defines the GNSS satellite type.
+ *
+ * @since 3.2
+ */
+enum GnssConstellationType {
+    GNSS_CONSTELLATION_UNKNOWN = 0,
+
+    /* Global Positioning System. */
+    GNSS_CONSTELLATION_GPS     = 1,
+
+    /* Satellite-Based Augmentation System. */
+    GNSS_CONSTELLATION_SBAS    = 2,
+
+    /* Global Navigation Satellite System. */
+    GNSS_CONSTELLATION_GLONASS = 3,
+
+    /* Quasi-Zenith Satellite System. */
+    GNSS_CONSTELLATION_QZSS    = 4,
+
+    /* BeiDou Navigation Satellite System. */
+    GNSS_CONSTELLATION_BEIDOU  = 5,
+
+    /* Galileo Navigation Satellite System. */
+    GNSS_CONSTELLATION_GALILEO = 6,
+
+    /* Indian Regional Navigation Satellite System. */
+    GNSS_CONSTELLATION_IRNSS   = 7,
+};
+
+/*
+ * @brief Indicates the information contained in the satellite status information.
+ *
+ * @since 3.2
+ */
+enum SatellitesStatusFlag {
+    SATELLITES_STATUS_NONE                  = 0,
+    SATELLITES_STATUS_HAS_EPHEMERIS_DATA    = 1,
+    SATELLITES_STATUS_HAS_ALMANAC_DATA      = 2,
+    SATELLITES_STATUS_USED_IN_FIX           = 4,
+    SATELLITES_STATUS_HAS_CARRIER_FREQUENCY = 8
+};
+
+/*
+ * @brief Defines the satellite status information structure reported by the GNSS chip.
+ *
+ * @since 3.2
+ */
+struct SatelliteStatusInfo {
+    unsigned int satellitesNumber;
+
+    /* Satellite ID number for the satellite. */
+    short[] satelliteIds;
+
+    /* Defines the constellation type of the given satellite. */
+    enum GnssConstellationType[] constellation;
+
+    /* Carrier-to-noise density in dB-Hz. */
+    float[] carrierToNoiseDensitys;
+
+    /* Elevation of SV in degrees. */
+    float[] elevation;
+
+    /* Azimuth of SV in degrees. */
+    float[] azimuths;
+
+    /* Carrier frequency of the signal tracked. */
+    float[] carrierFrequencies;
+
+    enum SatellitesStatusFlag flags;
+};
+
+/*
+ * @brief Defines basic GNSS configuration information.
+ *
+ * @since 3.2
+ */
+struct GnssBasicConfig {
+    /* Minimus interval between locations in millisecond */
+    unsigned int minInterval;
+
+    /* expected accuracy in meters */
+    unsigned int accuracy;
+
+    /* time required for locating the first time in ms */
+    unsigned int firstFixTime;
+
+    boolean isPeriodicPositioning;
+
+    enum GnssWorkingMode gnssMode;
+};
+
+/*
+ * @brief Defines the configuration information of the GNSS cache function.
+ *
+ * @since 3.2
+ */
+struct GnssCachingConfig {
+    /* Minimus interval between locations in millisecond */
+    unsigned int interval;
+
+    /* If the value is true, the cached locations are reported
+     * and the AP is woken up after the FIFO is full.
+     */
+    boolean fifoFullNotify;
+};
+
+/*
+ * @brief Defines the GNSS configuration information structure, including common GNSS configuration
+ * parameters and GNSS cache configuration parameters.
+ *
+ * @since 3.2
+ */
+struct GnssConfigPara {
+    struct GnssBasicConfig gnssBasic;
+    struct GnssCachingConfig gnssCaching;
+};
+
+/*
+ * @brief Defines the GNSS reference time.
+ *
+ * @since 3.2
+ */
+struct GnssRefTime {
+    long timeMs;
+    long timeReferenceMs;
+    int uncertainty;
+};
+
+/*
+ * @brief Defines the GNSS reference location.
+ *
+ * @since 3.2
+ */
+struct GnssRefLocation {
+    double latitude;
+    double longitude;
+    float accuracy;
+};
+
+/*
+ * @brief Defines the GNSS positioning result structure.
+ *
+ * @since 3.2
+ */
+struct LocationInfo {
+    double latitude;
+    double longitude;
+    double altitude;
+    float accuracy;
+    float speed;
+    double direction;
+    long timeStamp;
+    long timeSinceBoot;
+};
+
+/*
+ * @brief Defines the GNSS reference information structure, including the reference time and reference location.
+ *
+ * @since 3.2
+ */
+struct GnssRefInfo {
+    enum GnssRefInfoType type;
+    struct GnssRefTime time;
+    struct GnssRefLocation location;
+    struct LocationInfo best_location;
+};

@@ -1,0 +1,24 @@
+[
+   {
+        "first_introduced": "6",
+        "name": "GetAllSensors"
+   },
+   {
+        "name": "SubscribeSensor"
+   },
+   {
+     "name": "UnsubscribeSensor"
+   },
+   {
+        "name": "SetBatch"
+   },
+   {
+        "name": "ActivateSensor"
+   },
+   {
+        "name": "DeactivateSensor"
+   },
+   {
+        "name": "SetMode"
+   }
+]

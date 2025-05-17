@@ -1,0 +1,60 @@
+{
+    "name": "@ohos/drivers_interface_memorytracker",
+    "description": "memorytracker_hdf",
+    "version": "3.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/memorytracker"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_memorytracker",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "rom": "45KB",
+      "ram": "100KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/memorytracker/v1_0:memorytracker_idl_target"
+        ],
+        "test": [],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/memorytracker/v1_0:libmemorytracker_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/memorytracker"
+            }
+          },
+          {
+            "name": "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/memorytracker"
+            }
+          },
+          {
+            "name": "//drivers/interface/memorytracker/v1_0:libmemorytracker_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/memorytracker"
+            }
+          }
+        ]
+      }
+    }
+  }

@@ -1,0 +1,169 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("./../../sensor.gni")
+
+ohos_shared_library("libsensor_client") {
+  sources = [
+    "src/fd_listener.cpp",
+    "src/sensor_agent_proxy.cpp",
+    "src/sensor_client_stub.cpp",
+    "src/sensor_data_channel.cpp",
+    "src/sensor_event_handler.cpp",
+    "src/sensor_file_descriptor_listener.cpp",
+    "src/sensor_service_client.cpp",
+    "src/sensor_service_proxy.cpp",
+  ]
+
+  include_dirs = [
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/utils/common/include",
+    "$SUBSYSTEM_DIR/utils/ipc/include",
+  ]
+
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  defines = sensor_default_defines
+
+  deps = [
+    "$SUBSYSTEM_DIR/utils/common:libsensor_utils",
+    "$SUBSYSTEM_DIR/utils/ipc:libsensor_ipc",
+  ]
+
+  if (rust_socket_ipc) {
+    deps +=
+        [ "$SUBSYSTEM_DIR/rust/utils/socket_ipc_rust_ffi:sensor_rust_util_ffi" ]
+  }
+
+  external_deps = [
+    "c_utils:utils",
+    "eventhandler:libeventhandler",
+    "hilog:libhilog",
+    "hisysevent:libhisysevent",
+    "hitrace:hitrace_meter",
+    "ipc:ipc_single",
+    "samgr:samgr_proxy",
+  ]
+
+  innerapi_tags = [ "platformsdk_indirect" ]
+  part_name = "sensor"
+  subsystem_name = "sensors"
+}
+ohos_ndk_library("libsensor_ndk") {
+  output_name = "sensor"
+  ndk_description_file = "./libsensor.json"
+  min_compact_version = "6"
+}
+
+config("sensor_private_config") {
+  include_dirs = [
+    "$SUBSYSTEM_DIR/frameworks/native/include",
+    "$SUBSYSTEM_DIR/interfaces/inner_api",
+    "$SUBSYSTEM_DIR/utils/common/include",
+  ]
+}
+config("sensor_public_config") {
+  include_dirs = [ "$SUBSYSTEM_DIR/interfaces/inner_api" ]
+}
+
+ohos_shared_library("sensor_interface_native") {
+  output_name = "sensor_agent"
+  sources = [
+    "src/geomagnetic_field.cpp",
+    "src/sensor_agent.cpp",
+    "src/sensor_algorithm.cpp",
+  ]
+
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+    boundary_sanitize = true
+    integer_overflow = true
+    ubsan = true
+  }
+
+  configs = [ ":sensor_private_config" ]
+  public_configs = [ ":sensor_public_config" ]
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:libsensor_client",
+    "$SUBSYSTEM_DIR/frameworks/native:libsensor_ndk",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "eventhandler:libeventhandler",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+    "safwk:system_ability_fwk",
+  ]
+
+  part_name = "sensor"
+  innerapi_tags = [ "platformsdk" ]
+  subsystem_name = "sensors"
+}
+
+config("ohsensor_public_config") {
+  include_dirs = [ "$SUBSYSTEM_DIR/interfaces/kits/c" ]
+}
+
+ohos_shared_library("ohsensor") {
+  sources = [ "src/native_sensor.cpp" ]
+  output_extension = "so"
+  defines = [ "API_EXPORT=__attribute__((visibility (\"default\")))" ]
+
+  configs = [ ":sensor_private_config" ]
+  public_configs = [ ":ohsensor_public_config" ]
+
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  deps = [
+    "$SUBSYSTEM_DIR/frameworks/native:libsensor_client",
+    "$SUBSYSTEM_DIR/frameworks/native:libsensor_ndk",
+    "$SUBSYSTEM_DIR/frameworks/native:sensor_interface_native",
+    "$SUBSYSTEM_DIR/utils/ipc:libsensor_ipc",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "eventhandler:libeventhandler",
+    "hilog:libhilog",
+    "ipc:ipc_single",
+    "safwk:system_ability_fwk",
+  ]
+
+  relative_install_dir = "ndk"
+  part_name = "sensor"
+  subsystem_name = "sensors"
+}
+
+group("sensor_target") {
+  deps = [
+    ":libsensor_client",
+    ":sensor_interface_native",
+  ]
+}

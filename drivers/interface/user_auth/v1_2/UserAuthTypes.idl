@@ -1,0 +1,398 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdfUserAuth
+ * @{
+ *
+ * @brief Provides APIs for the user_auth driver.
+ *
+ * The user_auth driver provides a unified interface for the user_auth service to access the user_auth driver.
+
+ *
+ * @since 4.1
+ */
+
+ /**
+ * @file UserAuthTypes.idl
+ *
+ * @brief Defines the enumeration values and data structures of the user_auth driver.
+ *
+ * @since 4.1
+ */
+
+package ohos.hdi.user_auth.v1_2;
+
+ /**
+ * @brief Enumerates the credential types for authentication.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+enum AuthType : int {
+    /**< All types. */
+    ALL = 0,
+    /**< PIN authentication. */
+    PIN = 1,
+    /**< Facial authentication. */
+    FACE = 2,
+    /**< Fingerprint authentication. */
+    FINGERPRINT = 4,
+};
+
+/**
+ * @brief Enumerates executor roles.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+enum ExecutorRole : int {
+    /**< The executor acts as a collector. */
+    COLLECTOR = 1,
+    /**< The executor acts as a verifier. */
+    VERIFIER = 2,
+    /**< The executor acts as a collector and verifier. */
+    ALL_IN_ONE = 3,
+};
+
+/**
+ * @brief Enumerates executor security levels.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+enum ExecutorSecureLevel : int {
+    /**< ESL0. */
+    ESL0 = 0,
+    /**< ESL1. */
+    ESL1 = 1,
+    /**< ESL2. */
+    ESL2 = 2,
+    /**< ESL3. */
+    ESL3 = 3,
+};
+
+/**
+ * @brief Defines pin auth's subtype.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+enum PinSubType : int {
+    PIN_SIX = 10000, /**< Six digit pin. */
+    PIN_NUMBER = 10001, /**< Digit pin. */
+    PIN_MIX = 10002, /**< Mixing pin. */
+};
+
+/**
+ * Schedule mode.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+enum ScheduleMode : int {
+    /**< The schedule mode is enrollment. */
+    ENROLL = 0,
+    /**< The schedule mode is authentication. */
+    AUTH = 1,
+    /**< The schedule mode is identification. */
+    IDENTIFY = 2,
+};
+
+/**
+ * @brief Defines executor registration information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct ExecutorRegisterInfo {
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor role. See @{ExecutorRole}. */
+    enum ExecutorRole executorRole;
+    /**< Executor sensor hint under the same authentication type, 0 is not allowed. */
+    unsigned int executorSensorHint;
+    /**< Executor matcher. */
+    unsigned int executorMatcher;
+    /**< Executor secure level. See @{ExecutorSecureLevel}. */
+    enum ExecutorSecureLevel esl;
+    /**< Public key of the executor. */
+    unsigned char[] publicKey;
+};
+
+/**
+ * @brief Defines executor information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct ExecutorInfo {
+    /**< Executor index under the authentication framework. */
+    unsigned long executorIndex;
+    /**< Executor registration information. See @{ExecutorRegisterInfo}. */
+    struct ExecutorRegisterInfo info;
+};
+
+/**
+ * @brief Defines scheduling information.
+ *
+ * @since 4.1
+ * @version 1.2
+ *
+ * @deprecated
+ */
+struct ScheduleInfo {
+    /**< Schedule index of authentication. */
+    unsigned long scheduleId;
+    /**< Templates to authenticate. */
+    unsigned long[] templateIds;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor matcher. */
+    unsigned int executorMatcher;
+    /**< Operation to perform. See @{scheduleMode}*/
+    unsigned int scheduleMode;
+    /**< Executor information. See @{ExecutorInfo}. */
+    struct ExecutorInfo[] executors;
+};
+
+/**
+ * @brief Defines the authentication solution.
+ *
+ * @since 4.1
+ * @version 1.2
+ *
+ * @deprecated
+ */
+struct AuthSolution {
+    /**< User ID. */
+    int userId;
+    /**< Authentication trust level. */
+    unsigned int authTrustLevel;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor sensor hint under the same authentication type, 0 is not allowed. */
+    unsigned int executorSensorHint;
+    /**< Challenge of the authentication. */
+    unsigned char[] challenge;
+};
+
+/**
+ * @brief Defines executor messages.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct ExecutorSendMsg {
+    /**< Executor index under the authentication framework. */
+    unsigned long executorIndex;
+    /**< Indicates command ID. */
+    int commandId;
+    /**< Executor message to send. */
+    unsigned char[] msg;
+};
+
+/**
+ * @brief Defines authentication result information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct AuthResultInfo {
+    /**< Authentication result. */
+    int result;
+    /**< Lockout duration, in millisecond. */
+    int lockoutDuration;
+    /**< Remaining authentication attempts before a lockout. */
+    int remainAttempts;
+    /**< Executor messages. See @{ExecutorSendMsg}. */
+    struct ExecutorSendMsg[] msgs;
+    /**< Authentication token. */
+    unsigned char[] token;
+    /**< Protection key for the user file key. */
+    unsigned char[] rootSecret;
+};
+
+/**
+ * @brief Defines identification result information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct IdentifyResultInfo {
+    /**< iIdentification result. */
+    int result;
+    /**< User ID. */
+    int userId;
+    /**< Identification token. */
+    unsigned char[] token;
+};
+
+/**
+ * @brief Defines credential enrollment parameters.
+ *
+ * @since 4.1
+ * @version 1.2
+ *
+ * @deprecated
+ */
+struct EnrollParam {
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor sensor hint under the same authentication type. 0 is not allowed. */
+    unsigned int executorSensorHint;
+};
+
+/**
+ * @brief Defines credential information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct CredentialInfo {
+    /**< Credential ID. */
+    unsigned long credentialId;
+    /**< Executor index under the authentication framework. */
+    unsigned long executorIndex;
+    /**< Template ID. */
+    unsigned long templateId;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor matcher. */
+    unsigned int executorMatcher;
+    /**< Executor sensor hint under the same authentication type. 0 is not allowed. */
+    unsigned int executorSensorHint;
+};
+
+/**
+ * @brief Defines credential enrollment information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct EnrolledInfo {
+    /**< Enrollment ID. */
+    unsigned long enrolledId;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+};
+
+/**
+ * @brief Defines enrollment result information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct EnrollResultInfo {
+    /**< Credential ID. */
+    unsigned long credentialId;
+    /**< Old credential information. See {@link CredentialInfo}. */
+    struct CredentialInfo oldInfo;
+    /**< Protection key for the user file key. */
+    unsigned char[] rootSecret;
+};
+
+/**
+ * @brief Defines scheduling information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct ScheduleInfoV1_1 {
+    /**< Schedule index of authentication. */
+    unsigned long scheduleId;
+    /**< Templates to authenticate. */
+    unsigned long[] templateIds;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor matcher. */
+    unsigned int executorMatcher;
+    /**< Operation to perform. See @{scheduleMode}*/
+    unsigned int scheduleMode;
+    /**< Executor information. See @{ExecutorInfo}. */
+    struct ExecutorInfo[] executors;
+    /**< Extra information of schedule. */
+    unsigned char[] extraInfo;
+};
+
+/**
+ * @brief Defines enrolled users information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct UserInfo {
+    /**< SecureUid of this user. */
+    unsigned long secureUid;
+    /**< PinSubType of this user. See @{@PinSubType}. */
+    enum PinSubType pinSubType;
+    /**< Related enrolled information list. See @{EnrolledInfo}. */
+    struct EnrolledInfo[] enrolledInfos;
+};
+
+/**
+ * @brief Defines enrolled users information.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct ExtUserInfo {
+    /**< User ID. */
+    int userId;
+    /**< info of this user. */
+    struct UserInfo userInfo;
+};
+
+/**
+ * @brief Defines the authentication solution.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct AuthSolutionV1_2 {
+    /**< User ID. */
+    int userId;
+    /**< Authentication trust level. */
+    unsigned int authTrustLevel;
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor sensor hint under the same authentication type, 0 is not allowed. */
+    unsigned int executorSensorHint;
+    /**< Challenge of the authentication. */
+    unsigned char[] challenge;
+    /**< Caller name. */
+    String callerName;
+    /**< Calling api version. */
+    int apiVersion;
+};
+
+/**
+ * @brief Defines credential enrollment parameters.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+struct EnrollParamV1_2 {
+    /**< Authentication type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Executor sensor hint under the same authentication type. 0 is not allowed. */
+    unsigned int executorSensorHint;
+    /**< Caller name. */
+    String callerName;
+    /**< Calling api version. */
+    int apiVersion;
+};
+
+/** @} */

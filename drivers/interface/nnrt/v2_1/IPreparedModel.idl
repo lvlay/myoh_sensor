@@ -1,0 +1,101 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup NNRt
+ * @{
+ *
+ * @brief Provides a unified interface for AI chip drivers to access OpenHarmony.\n
+ * Neural Network Runtime (NNRt) is a cross-chip inference computing runtime environment oriented to the AI field.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+
+/**
+ * @file IPreparedModel.idl
+ *
+ * @brief Defines the APIs for AI model inference, obtaining the input tensor dimension range,\n
+ * and exporting the AI model built.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+
+/**
+ * @brief Defines the package path of the NNRt module.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+package ohos.hdi.nnrt.v2_1;
+
+import ohos.hdi.nnrt.v2_1.NnrtTypes;
+
+/**
+ * @brief Provides the APIs for exporting AI models and performing AI model inference.
+ *
+ * @since 3.2
+ * @version 2.1
+ */
+interface IPreparedModel {
+    /**
+     * @brief Exports an AI model from the cache.
+     *
+     * @param modelCache Array of the model files, which are in the same sequence as they exported.\n
+     * For details, see {@link SharedBuffer}.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    ExportModelCache([out] struct SharedBuffer[] modelCache);
+
+    /**
+     * @brief Obtains the tensor dimension range supported by AI model. If a fixed dimension is used,\n
+     * the maximum dimension value is the same as the minimum dimension value.
+     *
+     * @param minInputDims Two-dimensional array that stores the minimum dimension of the model input data.\n
+     * The first dimension of the array indicates the number of tensors, and the second dimension indicates\n
+     * the number of dimensions of the tensors.
+     * @param maxInputDims Two-dimensional array that stores the maximum dimension of the model input data.\n
+     * The first dimension of the array indicates the number of tensors, and the second dimension indicates\n
+     * the number of dimensions of the tensors.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    GetInputDimRanges([out] unsigned int[][] minInputDims, [out] unsigned int[][] maxInputDims);
+
+    /**
+     * @brief Performs AI model inference.
+     *
+     * @param inputs Input data for AI model inference. The data is input in the sequence defined by the model.\n
+     * For details about the input data type, see {@link IOTensor}.
+     * @param outputs Output data of AI model inference. After inference, the output data is written to the\n
+     * shared buffer. For details about the output data type, see {@link IOTensor}.
+     * @param outputDims Dimensions of the output data. The output sequence is the same as that of <b>outputs</b>.
+     * @param isOutputBufferEnough Whether the shared buffer space is sufficient for the output data.\n
+     * The value <b>true</b> means the shared buffer space is sufficient; the value <b>false</b> means the opposite.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-0 value if the operation fails. A negative value is an HDF standard error code,\n
+     * and a positive value is a dedicated error code defined by NNRt. For details, see {@link NNRT_ReturnCode}.
+     */
+    Run([in] struct IOTensor[] inputs, [in] struct IOTensor[] outputs, [out] int[][] outputDims);
+}
+
+/** @} */

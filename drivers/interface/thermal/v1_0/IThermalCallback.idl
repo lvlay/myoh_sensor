@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup thermal
+ * @{
+ *
+ * @brief Provides APIs for managing, controlling, and subscribing to the device temperature.
+ *
+ * The thermal module provides APIs for the thermal service to manage, control, and subscribe to the device temperature.
+ * After obtaining an object or proxy of this module, the thermal service can invoke related APIs to manage, control,
+ * and subscribe to the device temperature.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+/**
+ * @file IThermalCallback.idl
+ *
+ * @brief Provides the callback of device temperature changes.
+ *
+ * The thermal module provides the callback for the thermal service to obtain device temperature changes.
+ *
+ * @since 3.1
+ * @version 1.0
+ */
+
+package ohos.hdi.thermal.v1_0;
+
+import ohos.hdi.thermal.v1_0.ThermalTypes;
+
+/**
+ * @brief Represents the callback of thermal status changes.
+ *
+ * After creating a callback object, the thermal service can call {@link IThermalInterface} to register a callback to
+ * subscribe to thermal status changes.
+ *
+ * @since 3.1
+ */
+[callback] interface IThermalCallback {
+    /**
+     * @brief Callback of thermal status changes.
+     *
+     * @param event Thermal information of the device, including the device type and temperature.
+     * @see HdfThermalCallbackInfo
+     *
+     * @since 3.1
+     */
+    OnThermalDataEvent([in] struct HdfThermalCallbackInfo event);
+}
+/** @} */

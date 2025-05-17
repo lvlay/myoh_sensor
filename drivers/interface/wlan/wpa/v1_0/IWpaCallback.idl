@@ -1,0 +1,375 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Wpa
+ * @{
+ *
+ * @brief Defines APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to enable or disable a WLAN hotspot, scan for hotspots, connect to a WLAN hotspot,
+ * manage WLAN chips, network devices, and power, and apply for, release, and move network data buffers.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file IWpaCallback.idl
+ *
+ * @brief Provides callbacks to be invoked when the wpa supplicant is restarted, the scan result is returned,
+ * and a Netlink message is received.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the WLAN module interface.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.wlan.wpa.v1_0;
+
+import ohos.hdi.wlan.wpa.v1_0.WpaTypes;
+
+/**
+ * @brief Defines the callbacks of the Wpa module.
+ *
+ * The callback is invoked to continue the subsequent processing when the wpa supplicant restarts, hotspot scan ends,
+ * or a Netlink message is received.
+ *
+ * @since 4.1
+ * @version 1.0
+ */
+[callback] interface IWpaCallback {
+    /**
+     * Used to indicate the disconnection from the currently connected
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of Disconnect
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+   OnEventDisconnected([in] struct HdiWpaDisconnectParam disconnectParam, [in] String ifName);
+
+    /**
+     * Used to indicate the Connection from the currently connected
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of Connect
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+   OnEventConnected([in] struct HdiWpaConnectParam connectParam, [in] String ifName);
+
+    /**
+     * Used to indicate the BssidChanged from the currently BssidChanged
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of BssidChanged
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventBssidChanged([in] struct HdiWpaBssidChangedParam bssidChangedParam, [in] String ifName);
+
+    /**
+     * Used to indicate the  Wpa State Changed from the currently State Changed
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of BssidChanged
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+   OnEventStateChanged([in] struct HdiWpaStateChangedParam statechangedParam, [in] String ifName);
+
+    /**
+     * Used to indicate the TempDisabled from the currently wifi TempDisabled
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of TempDisabled
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+   OnEventTempDisabled([in] struct HdiWpaTempDisabledParam tempDisabledParam, [in] String ifName);
+
+    /**
+     * Used to indicate the AssociateReject from the currently wifi AssociateReject
+     * network on this iface.
+     *
+     * @param disconnectParam  Indicates the paramerter of AssociateReject
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventAssociateReject([in] struct HdiWpaAssociateRejectParam associateRejectParam, [in] String ifName);
+
+    /**
+     * Used to indicate the overlap of a WPS PBC connection attempt from the currently wifi
+     * network on this iface.
+     *
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventWpsOverlap([in] String ifName);
+
+    /**
+     * Used to indicate the timeout of a PBC connection attempt from the currently wifi
+     * network on this iface.
+     *
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventWpsTimeout([in] String ifName);
+
+    /**
+     * Used to indicate the timeout of a PBC connection attempt from the currently wifi
+     * network on this iface.
+     *
+     * @param ifName Indicates the NIC name.
+     *
+     * @since 4.1
+     * @version 1.0
+     */
+    OnEventScanResult([in] HdiWpaRecvScanResultParam recvScanResultParam, [in] String ifName);
+   /**
+   * Used to indicate that a P2P device has been found.
+   *
+   * @param deviceInfoParam  Indicates the paramerter of device found
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventDeviceFound([in] struct HdiP2pDeviceInfoParam deviceInfoParam, [in] String ifName);
+
+   /**
+   * Used to indicate that a P2P device has been lost.
+   *
+   * @param deviceLostParam Indicates the paramerter of device Lost
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventDeviceLost([in] struct HdiP2pDeviceLostParam deviceLostParam, [in] String ifName);
+
+   /**
+   * Used to indicate the reception of a P2P Group Owner negotiation request.
+   *
+   * @param goNegotiationRequestParam MAC address of the device that initiated the GO
+   *        negotiation request.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGoNegotiationRequest([in] struct HdiP2pGoNegotiationRequestParam goNegotiationRequestParam,
+       [in] String ifName);
+
+   /**
+   * Used to indicate the completion of a P2P Group Owner negotiation request.
+   *
+   * @param goNegotiationCompletedParam Status of the GO negotiation.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGoNegotiationCompleted([in] struct HdiP2pGoNegotiationCompletedParam goNegotiationCompletedParam,
+       [in] String ifName);
+
+  /**
+   * Used to indicate the reception of a P2P invitation.
+   *
+   * @param invitationReceivedParam  Indicates the paramerter of invitation ReceivedParam.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventInvitationReceived([in] struct HdiP2pInvitationReceivedParam invitationReceivedParam,
+       [in] String ifName);
+
+  /**
+   * Used to indicate the result of the P2P invitation request.
+   *
+   * @param invitationResultParam  Indicates the paramerter of Invitation Result.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventInvitationResult([in] struct HdiP2pInvitationResultParam invitationResultParam,
+       [in] String ifName);
+
+   /**
+   * Used to indicate a successful formation of a P2P group.
+   *
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGroupFormationSuccess([in] String ifName);
+
+   /**
+   * Used to indicate a failure to form a P2P group.
+   *
+   * @param reason  Indicates the reason of Group Formation Failure.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGroupFormationFailure([in] String reason, [in] String ifName);
+
+   /**
+   * Used to indicate the start of a P2P group.
+   *
+   * @param groupStartedParam  Indicates the paramerter of Group Started.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGroupStarted([in] struct HdiP2pGroupStartedParam groupStartedParam, [in] String ifName);
+
+  /**
+   * Used to indicate the removal of a P2P group.
+   *
+   * @param groupRemovedParam  Indicates the paramerter of Group Removed.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventGroupRemoved([in] struct HdiP2pGroupRemovedParam groupRemovedParam, [in] String ifName);
+
+  /**
+   * Used to indicate the completion of a P2P provision discovery request.
+   *
+   * @param provisionDiscoveryCompletedParam  Indicates the paramerter of Provision Discovery Completed.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventProvisionDiscoveryCompleted([in] struct HdiP2pProvisionDiscoveryCompletedParam
+       provisionDiscoveryCompletedParam, [in] String ifName);
+
+   /**
+   * Used to indicate the termination of P2P find operation.
+   *
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventFindStopped([in] String ifName);
+
+  /**
+   * Used to indicate the request of a P2P service discovery.
+   *
+   * @param servDiscReqInfoParam  Indicates the paramerter of Service Discovery request.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventServDiscReq([in] struct HdiP2pServDiscReqInfoParam servDiscReqInfoParam, [in] String ifName);
+
+  /**
+   * Used to indicate the reception of a P2P service discovery response.
+   *
+   * @param servDiscRespParam  Indicates the paramerter of Service Discovery Resp.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventServDiscResp([in] struct HdiP2pServDiscRespParam servDiscRespParam, [in] String ifName);
+
+  /**
+   * Used to indicate when a STA device is connected or disconnected to this device.
+   *
+   * @param staConnectStateParam  Indicates the paramerter of Sta Connect State.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventStaConnectState([in] struct HdiP2pStaConnectStateParam staConnectStateParam, [in] String ifName);
+
+  /**
+   * Used to indicate when a Iface was created.
+   *
+   * @param ifaceCreatedParam  Indicates the paramerter of Iface Created.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventIfaceCreated([in] struct HdiP2pIfaceCreatedParam ifaceCreatedParam, [in] String ifName);
+
+   /**
+   * Used to indicate STA authentication reject
+   *
+   * @param authRejectParam  Indicates the paramerter of auth reject.
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventAuthReject([in]  struct HdiWpaAuthRejectParam authRejectParam, [in] String ifName);
+
+  /**
+   * Used to handle STA callback parameters
+   *
+   * @param notifyParam Indicates the paramerter of Sta.
+   * @param cmd Indicates command of Sta from WifiHal.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventStaNotify([in] String notifyParam, [in] String ifName);
+
+  /**
+   * Used to Reporting WPA Information
+   *
+   * @param wpaMsgForCbInfo  Parameters for reporting WPA information
+   * @param ifName Indicates the NIC name.
+   *
+   * @since 4.1
+   * @version 1.0
+   */
+   OnEventVendorCb([in] WpaVendorInfo wpaVendorInfo, [in] String ifName);
+}

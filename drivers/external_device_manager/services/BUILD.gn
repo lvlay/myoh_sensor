@@ -1,0 +1,124 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("../extdevmgr.gni")
+
+ohos_shared_library("driver_extension_manager") {
+  install_enable = true
+  sources = [
+    "native/driver_extension_manager/src/driver_ext_mgr.cpp",
+    "native/driver_extension_manager/src/ext_permission_manager.cpp",
+    "zidl/src/driver_ext_mgr_callback_proxy.cpp",
+    "zidl/src/driver_ext_mgr_stub.cpp",
+    "zidl/src/driver_ext_mgr_types.cpp",
+  ]
+
+  include_dirs = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/include",
+    "${ext_mgr_path}/interfaces/ddk/usb/",
+    "${ext_mgr_path}/interfaces/innerkits/",
+    "${ext_mgr_path}/services/zidl/include/",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/drivers_pkg_manager",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/device_manager",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/bus_extension/core",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/bus_extension/usb",
+  ]
+  configs = [ "${utils_path}:utils_config" ]
+  deps = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/bus_extension/core:driver_extension_bus_core",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/device_manager:driver_extension_device_manager",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager",
+  ]
+  external_deps = [
+    "ability_runtime:ability_manager",
+    "access_token:libaccesstoken_sdk",
+    "access_token:libtokenid_sdk",
+    "bundle_framework:appexecfwk_base",
+    "bundle_framework:appexecfwk_core",
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
+  ]
+  cflags_cc = [
+    "-fno-asynchronous-unwind-tables",
+    "-fno-unwind-tables",
+    "-Os",
+  ]
+
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    cfi_no_nvcall = true
+    cfi_vcall_icall_only = true
+    debug = false
+  }
+
+  shlib_type = "sa"
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+}
+
+################################################################################################################
+
+config("driver_extension_manager_test_public_config") {
+  include_dirs = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/include",
+    "${ext_mgr_path}/interfaces/ddk/usb/",
+    "${ext_mgr_path}/interfaces/innerkits/",
+    "${ext_mgr_path}/services/zidl/include/",
+    "${ext_mgr_path}/utils/include/",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/drivers_pkg_manager",
+  ]
+}
+
+ohos_static_library("driver_extension_manager_test") {
+  sources = [
+    "native/driver_extension_manager/src/driver_ext_mgr.cpp",
+    "native/driver_extension_manager/src/ext_permission_manager.cpp",
+    "zidl/src/driver_ext_mgr_callback_proxy.cpp",
+    "zidl/src/driver_ext_mgr_stub.cpp",
+    "zidl/src/driver_ext_mgr_types.cpp",
+  ]
+
+  public_configs = [ ":driver_extension_manager_test_public_config" ]
+
+  include_dirs = [
+    "${ext_mgr_path}/interfaces/ddk/usb/",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/device_manager",
+    "${ext_mgr_path}/services/native/driver_extension_manager/include/bus_extension/core",
+  ]
+
+  configs = [ "${utils_path}:utils_config" ]
+  deps = [
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/bus_extension/core:driver_extension_bus_core",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/device_manager:driver_extension_device_manager",
+    "${ext_mgr_path}/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager",
+  ]
+  external_deps = [
+    "ability_runtime:ability_manager",
+    "access_token:libaccesstoken_sdk",
+    "access_token:libtokenid_sdk",
+    "bundle_framework:appexecfwk_base",
+    "bundle_framework:appexecfwk_core",
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
+  ]
+
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+}

@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiIntelligentVoiceEngine
+ * @{
+ *
+ * @brief Provides unified APIs for intelligent voice framework services to access intelligent voice engine drivers.
+ *
+ * An intelligent voice framework service can obtain an intelligent voice engine driver object or agent and then call APIs provided by this object or agent to
+ * access different types of intelligent voice engine devices based on the intelligent voice engine IDs, thereby obtaining or sending intelligent voice engine information,
+ * creating or releasing an intelligent voice engine adapter, attaching or detaching the intelligent voice engine,
+ * starting or stopping the intelligent voice engine, setting parameter to or getting parameter from the intelligent voice engine, 
+ * writing audio or reading files from the intelligent voice engine, subscribing callback to the intelligent voice engine.
+ *
+ * @since 4.0
+ * @version 1.2
+ */
+
+/**
+ * @file IIntellVoiceEngineManager.idl
+ *
+ * @brief Declares the APIs provided by the intelligent voice engine manager for obtaining or sending intelligent voice engine information,
+ * creating or releasing an intelligent voice engine adapter.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+
+package ohos.hdi.intelligent_voice.engine.v1_2;
+
+import ohos.hdi.intelligent_voice.engine.v1_1.IIntellVoiceEngineManager;
+import ohos.hdi.intelligent_voice.engine.v1_0.IntellVoiceEngineTypes;
+import ohos.hdi.intelligent_voice.engine.v1_2.IntellVoiceEngineTypes;
+import ohos.hdi.intelligent_voice.engine.v1_2.IIntellVoiceEngineAdapter;
+
+/**
+ * @brief Defines the functions in intelligent voice engine manager.
+ *
+ * The operations include obtaining or sending intelligent voice engine information, creating or releasing an intelligent voice engine adapter.
+ *
+ * @since 4.0
+ * @version 1.2
+ */
+interface IIntellVoiceEngineManager extends ohos.hdi.intelligent_voice.engine.v1_1.IIntellVoiceEngineManager {
+    /**
+     * @brief Creates intelligent voice engine adapter.
+     * @param descriptor Indicates intelligent voice engine adapter description.
+     * The description includes intelligent voice engine adapter type, see {@link IntellVoiceEngineAdapterDescriptor}.
+     * @param adapter Indicates the pointer to the intelligent voice engine adapter to operate, see {@link IIntellVoiceEngineAdapter}.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    CreateAdapter_V_2([in] struct IntellVoiceEngineAdapterDescriptor descriptor, [out] IIntellVoiceEngineAdapter adapter);
+
+    /**
+     * @brief Obtains files needed to upload.
+     * @param numMax Indicates the maximum count of files needed to upload.
+     * @param files Indicates the vector of files needed to upload.
+     * The file includes upload hdi file type, files description, files content, see {@link UploadHdiFile}.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    GetUploadFiles([in] int numMax, [out] List<struct UploadHdiFile> files);
+
+    /**
+     * @brief Obtains clone files list.
+     * @param cloneFiles Indicates files list needed to clone.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    GetCloneFilesList([out] List <String> cloneFiles);
+
+    /**
+     * @brief Obtains clone file.
+     * @param filePath Indicates the path of file that will be cloned.
+     * @param buffer Indicates the content of file that will be cloned.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    GetCloneFile([in] String filePath, [out] List <unsigned char> buffer);
+
+    /**
+     * @brief Sends clone file.
+     * @param filePath Indicates the path of file that will be send.
+     * @param buffer Indicates the content of file that will be send.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    SendCloneFile([in] String filePath, [in] List <unsigned char> buffer);
+    /**
+     * @brief Clear user wakeup data.
+     * @param wakeupPhrase Indicates wakeup phrase.
+     * @return Returns <b>0</b> if the operation is successful; returns a negative value otherwise.
+     *
+     * @since 5.0
+     * @version 1.2
+     */
+    ClearUserWakeupData([in] String wakeupPhrase);
+}

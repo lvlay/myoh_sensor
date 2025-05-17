@@ -1,0 +1,64 @@
+ 
+  {
+    "name": "@ohos/drivers_interface_myled",
+    "description": "myled device driver interface",
+    "version": "4.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/interface/myled"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_interface_myled",
+      "subsystem": "hdf",
+      "syscap": [],
+      "adapted_system_type": ["standard"],
+      "rom": "675KB",
+      "ram": "1024KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils"
+        ],
+        "third_party": []
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/interface/myled/v1_0:myled_idl_target"
+        ],
+        "test": [
+        ],
+        "inner_kits": [
+          {
+            "name": "//drivers/interface/myled/v1_0:libmyled_proxy_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/myled"
+            }
+          },
+          {
+            "name": "//drivers/interface/myled/v1_0:libmyled_stub_1.0",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/myled"
+            }
+          },
+          {
+            "name": "//drivers/interface/myled/v1_0:myled_idl_headers",
+            "header": {
+              "header_files": [
+              ],
+              "header_base": "//drivers/interface/myled"
+            }
+          }
+        ]
+      }
+    }
+  }
+  

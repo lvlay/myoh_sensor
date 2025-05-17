@@ -1,0 +1,44 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//drivers/external_device_manager/extdevmgr.gni")
+
+ohos_shared_library("devicemanager_napi") {
+  sources = [ "device_manager_middle.cpp" ]
+
+  include_dirs = [
+    "${utils_path}/include/",
+    "${ext_mgr_path}/interfaces/innerkits/",
+    "${ext_mgr_path}/services/zidl/include/",
+  ]
+
+  deps = [ "${ext_mgr_path}/interfaces/innerkits:driver_ext_mgr_client" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_napi",
+    "ipc:ipc_single",
+    "napi:ace_napi",
+  ]
+  cflags_cc = [
+    "-fno-asynchronous-unwind-tables",
+    "-fno-unwind-tables",
+    "-Os",
+  ]
+
+  relative_install_dir = "module/driver"
+
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+}

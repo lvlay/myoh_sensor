@@ -1,0 +1,186 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup CHIP
+ * @{
+ *
+ * @brief Provides APIs for the upper-layer WLAN service.
+ *
+ * You can use the APIs to manager the wifi chip, init and release the wifi chip, create and remove iface, register callback
+ * get the name and type of the iface, get the support frequencies and set the mode of chip. The interface of the current path
+ * is used perferentially. The interface of the wlan/v1_0, wlan/v1_1, wlan/v1_2 path will be distributed later.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @file ChipTypes.idl
+ *
+ * @brief Provides the enumerated variables, structures in CHIP APIs. 
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Defines the package path of the chip module interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+package ohos.hdi.wlan.chip.v1_0;
+
+/**
+ * @brief Enumerates the code of status.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+enum ErrorCode : int{
+    SUCCESS,
+    INVALID_CHIP,
+    INVALID_IFACE,
+    UNSUPPORTED,
+    UNAVAILABLE,
+    NOT_INITED,
+    UNKNOWN
+};
+
+/**
+ * @brief Enumerates the types of the interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+enum IfaceType : unsigned int {
+    STA,
+    AP,
+    P2P,
+    NANIFACE
+};
+
+/**
+ * @brief Defines the limitations of the interface.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct IfaceLimit {
+    enum IfaceType[] types;
+    unsigned int ifaceNum;
+};
+
+/**
+ * @brief Defines the usable interface of the chip.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct ComboIface {
+    struct IfaceLimit[] limits;
+};
+
+/**
+ * @brief Defines the usable mode of the chip.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct UsableMode {
+    unsigned int modeId;
+    struct ComboIface[] usableCombo;
+};
+
+/**
+ * @brief Defines the scan param.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct ScanParams {
+    String[] ssids;
+    int[] freqs;
+    String extraIes;
+    String bssid;
+    unsigned char prefixSsidScanFlag;
+    unsigned char fastConnectFlag;
+};
+
+/**
+ * @brief Defines the scan result info, This interface is preferentially used to communicate with the Wi-Fi service.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct ScanResultsInfo {
+    unsigned int flags;
+    unsigned char[] bssid;
+    unsigned short caps;
+    unsigned int freq;
+    unsigned short beaconInterval;
+    int qual;
+    int level;
+    unsigned int age;
+    unsigned long tsf;
+    unsigned char[] variable;
+    unsigned char[] ie;
+    unsigned char[] beaconIe;
+};
+
+/**
+ * @brief Defines the pno scan info.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct PnoScanParams {
+    int min2gRssi;
+    int min5gRssi;
+    int scanIntervalMs;
+    int scanIterations;
+    String[] hiddenssids;
+    String[] savedssids;
+    int[] freqs;
+};
+
+/**
+ * @brief Defines the signal info, This interface is preferentially used to communicate with the Wi-Fi service.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+struct SignalPollResult {
+    int currentRssi;
+    int associatedFreq;
+    int txBitrate;
+    int rxBitrate;
+    int currentNoise;
+    int currentSnr;
+    int currentChload;
+    int currentUlDelay;
+    int currentTxBytes;
+    int currentRxBytes;
+    int currentTxFailed;
+    int currentTxPackets;
+    int currentRxPackets;
+    unsigned short chloadSelf;
+    int c0Rssi;
+    int c1Rssi;
+    unsigned char[] ext;
+};
+/** @} */

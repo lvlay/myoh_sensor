@@ -1,0 +1,70 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfPinAuth
+ * @{
+ *
+ * @brief Provides APIs for the pin auth driver.
+ *
+ * The pin auth driver provides a unified interface for the pin auth service to access the pin auth driver.
+ * After obtaining the pin auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the pin auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 4.0
+ */
+
+/**
+ * @fiPinTypes.idl
+ *
+ * @brief Defines the enumeration and data structure of the pin auth driver, including AuthType, ExecutorRole, ExecutorSecureLevel,
+ * CommandId, ResultCode, ExecutorInfo, and TemplateInfo.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.pin_auth.v1_1;
+
+/**
+ * @brief Enumerates get Property types.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+enum GetPropertyType : int {
+    /**< Indicates that the property to get is auth sub type. */
+    AUTH_SUB_TYPE = 1,
+    /**< Indicates that the property to get is lockout duration. */
+    LOCKOUT_DURATION = 2,
+    /**< Indicates that the property to get is remain attempts. */
+    REMAIN_ATTEMPTS = 3
+};
+
+/**
+ * @brief Indicates executor property.
+ *
+ * @since 4.0
+ * @version 1.1
+ */
+struct Property {
+    /**< Indicates auth sub type. */
+    unsigned long authSubType;
+    /**< Indicates lockout duration. */
+    int lockoutDuration;
+    /**< Indicates remain attempts. */
+    int remainAttempts;
+};
+/** @} */

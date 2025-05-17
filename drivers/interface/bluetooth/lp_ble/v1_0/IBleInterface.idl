@@ -1,0 +1,140 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdiBluetoothLpBle
+ * @{
+ *
+ * @brief Provides APIs for the low power BLE service.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @file IBleCallback.idl
+ *
+ * @brief Declares the callbacks for the low power BLE module.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Declares the path of the low power BLE module interface package.
+ *
+ * @since 5.0
+ */
+package ohos.hdi.bluetooth.lp_ble.v1_0;
+
+/**
+ * @brief Defines the message callback for the low power BLE module.
+ *
+ * @since 5.0
+ */
+import ohos.hdi.bluetooth.lp_ble.v1_0.IBleCallback;
+
+/**
+ * @brief Defines the device callback for the low power BLE module.
+ *
+ * @since 5.0
+ */
+import ohos.hdi.bluetooth.lp_ble.v1_0.IDeviceCallback;
+
+/**
+ * @brief Defines the wakeup message callback for the low power BLE module.
+ *
+ * @since 5.0
+ */
+import ohos.hdi.bluetooth.lp_ble.v1_0.IWakeupCallback;
+
+interface IBleInterface {
+    /**
+     * @brief Send Ble parameters to controller.
+     *
+     * @param buff Indicates data send to controller.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    SetBleParameters([in] unsigned char[] buff);
+
+    /**
+     * @brief Registers Ble data report callback.
+     * Provide the callback routines to the hal.
+     * The cmd is used to determine whether to obtain messages or the device list.
+     *
+     * @param callbackObj Indicates the callback to register, which needs to be registered only once.
+     * @param cmd Indicates message or device list.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetBleBroadCastMessage([in] IBleCallback callbackObj, [in] int cmd);
+
+    /**
+     * @brief Obtains Ble capability from controller.
+     *
+     * @return Returns ability.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    GetBleCapability();
+
+    /**
+     * @brief Registers callback to notify hal controller has reset.
+     *
+     * @param callbackObj Indicates handle to the IDeviceCallback.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RegisterDeviceResetCallback([in] IDeviceCallback callbackObj);
+
+    /**
+     * @brief Registers callback to wakeup framework and send Message.
+     *
+     * @param callbackObj Indicates handle to the IWakeupCallback.
+     * @param cmd Indicates event.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RegisterWakeupCallback([in] IWakeupCallback callbackObj, [in] int cmd);
+
+    /*
+     * @brief Registers callback to report error code.
+     *
+     * @param callbackObj handle to the IBleCallback
+     * @return ret 0 on success, others on failure
+     *
+     * @since 5.0
+     * @version 1.0
+     */
+    RegisterErrorCodeCallback([in] IBleCallback callbackObj);
+}

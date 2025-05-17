@@ -1,0 +1,18 @@
+#ifndef OHOS_HDI_FOO_V1_0_FOOCALLBACKSERVICE_H
+#define OHOS_HDI_FOO_V1_0_FOOCALLBACKSERVICE_H
+
+#include "v1_0/ifoo_callback.h"
+
+namespace OHOS {
+namespace HDI {
+namespace Foo {
+namespace V1_0 {
+class FooCallbackService : public OHOS::HDI::Foo::V1_0::IFooCallback {
+    int32_t PushData(const std::string& message) override;
+};
+} // V1_0
+} // Foo
+} // HDI
+} // OHOS
+
+#endif // OHOS_HDI_FOO_V1_0_FOOCALLBACKSERVICE_H

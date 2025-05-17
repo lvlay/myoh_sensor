@@ -1,0 +1,95 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Display
+ *
+ * @brief Defines driver interfaces of the display module.
+ *
+ * This module provides driver interfaces for upper-layer graphics services, including layer management, device control, and display buffer management.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+
+/**
+ * @file DisplayComposerType.idl
+ *
+ * @brief Declares the data types used by the interfaces related to display composer operations.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+
+/**
+ * @brief Defines the package path of the display module interfaces.
+ *
+ * @since 5.0
+ * @version 1.2
+ */
+package ohos.hdi.display.composer.v1_2;
+sequenceable OHOS.HDI.Display.HdifdParcelable;
+import ohos.hdi.display.composer.v1_0.DisplayComposerType;
+import ohos.hdi.display.composer.v1_1.DisplayComposerType;
+
+/**
+ * @brief Enumerates power status.
+ */
+enum DispPowerStatus : ohos.hdi.display.composer.v1_1.DispPowerStatus {
+    POWER_STATUS_PRE_ON = 5,                  /**< The power status is Enter pre-lit screen state */
+    POWER_STATUS_PRE_OFF = 6,                 /**< The power status is Exit pre-lit sreen state */
+    POWER_STATUS_BUTT_V1_2,                   /**< The power status is invalid */
+};
+
+/**
+ * @brief Defines the buffer usage.
+ *
+ */
+enum BufferUsage : ohos.hdi.display.composer.v1_0.BufferUsage {
+    HBM_USE_CPU_HW_BOTH = (1ULL << 17),        /**< For support cpu and hardware */
+    HBM_USAGE_GPU_PERFORMANCE = (1ULL << 18),             /**< Prefer performance over memory consumption: */
+    HBM_USE_RGB_TO_YUV_CONVERSION = (1ULL << 19),          /**< For identify RGB to YUV conversion */
+};
+
+
+/**
+ * @brief Enumerates pixel formats.
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+enum PixelFormat : ohos.hdi.display.composer.v1_1.PixelFormat {
+    PIXEL_FMT_RGBA16_FLOAT = 39, /**< RGBA16 float format */
+};
+
+enum DispCmd : ohos.hdi.display.composer.v1_0.DispCmd {
+    REQUEST_CMD_COMMIT_AND_GET_RELEASE_FENCE = 82,        /**< Request cmd */
+    REQUEST_CMD_SET_DISPLAY_CONSTRAINT = 83,              /**< LTPO cmd> */
+    REQUEST_CMD_BUTT_V1_2,
+    REPLY_CMD_COMMIT_AND_GET_RELEASE_FENCE = 515,         /**< Reply cmd */
+    REPLY_CMD_BUTT_V1_2,
+};
+
+
+/**
+ * @brief Enumerates the property id of the display vdi.
+ *
+ * @since 5.0
+ * @version 1.1
+ */
+enum DisplayPropertyID {
+    DISPLAY_PROPERTY_ID_SKIP_VALIDATE = 1,
+    DISPLAY_CAPBILITY_HARDWARE_CURSOR = 2,
+};

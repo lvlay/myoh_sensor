@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfPinAuth
+ * @{
+ *
+ * @brief Provides APIs for the pin auth driver.
+ *
+ * The pin auth driver provides a unified interface for the pin auth service to access the pin auth driver.
+ * After obtaining the pin auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the pin auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @fiPinTypes.idl
+ *
+ * @brief Defines the enumeration and data structure of the pin auth driver, including AuthType, ExecutorRole, ExecutorSecureLevel,
+ * CommandId, ResultCode, ExecutorInfo, and TemplateInfo.
+ *
+ * @since 3.2
+ */
+
+package ohos.hdi.pin_auth.v1_0;
+
+/**
+ * @brief Enumerates the credential types for authentication.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum AuthType : int {
+    /**< Indicates that the authentication type is PIN. */
+    PIN = 1,
+    /**< Indicates that the authentication type is face. */
+    FACE = 2,
+    /**< Indicates that the authentication type is fingerprint. */
+    FINGERPRINT = 4,
+};
+
+/**
+ * @brief Enumerates executor roles.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorRole : int {
+    /**< Indicates that the executor role is collector. */
+    COLLECTOR = 1,
+    /**< Indicates that the executor role is verifier. */
+    VERIFIER = 2,
+    /**< Indicates that the executor role is the combination of collector and verifier. */
+    ALL_IN_ONE = 3,
+};
+
+/**
+ * @brief Enumerates executor secure levels.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorSecureLevel : int {
+    /**< Indicates that the executor secure level is ESL0. */
+    ESL0 = 0,
+    /**< Indicates that the executor secure level is ESL1. */
+    ESL1 = 1,
+    /**< Indicates that the executor secure level is ESL2. */
+    ESL2 = 2,
+    /**< Indicates that the executor secure level is ESL3. */
+    ESL3 = 3,
+};
+
+/**
+ * @brief Enumerates command IDs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum CommandId : int {
+    /**< Default parameters. */
+    DEFAULT = 0,
+};
+
+
+/**
+ * @brief Indicates executor information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct ExecutorInfo {
+    /**< Indicates the sensor ID, which must be unique within the driver. */
+    unsigned short sensorId;
+    /**< Indicates the executor type. */
+    unsigned int executorType;
+    /**< Indicates the executor role. See @{ExecutorRole}. */
+    enum ExecutorRole executorRole;
+    /**< Indicates the auth type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Indicates the executor secure level. See @{ExecutorSecureLevel}. */
+    enum ExecutorSecureLevel esl;
+    /**< Indicates the public key of the executor. */
+    unsigned char[] publicKey;
+    /**< Indicates extra information. */
+    unsigned char[] extraInfo;
+};
+
+/**
+ * @brief Indicates template information.
+ *
+ * @since 3.2
+ * @version 1.0
+ *
+ * @deprecated
+ */
+struct TemplateInfo {
+    /**< Indicates the executor type. */
+    unsigned int executorType;
+    /**< Indicates lockout duration in millisecond. */
+    int lockoutDuration;
+    /**< Indicates remaining authentication attempts before a lockout. */
+    int remainAttempts;
+    /**< Indicates extra information. */
+    unsigned char[] extraInfo;
+};
+/** @} */

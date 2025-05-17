@@ -1,0 +1,46 @@
+#include "v1_0/foo_callback_proxy.h"
+#include <hdf_base.h>
+#include <hdf_log.h>
+#include <hdi_support.h>
+#include <message_option.h>
+#include <message_parcel.h>
+#include <string_ex.h>
+
+#define HDF_LOG_TAG    foo_callback_proxy
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackProxy::PushData(const std::string& message)
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackProxy::GetVersion(uint32_t& majorVer, uint32_t& minorVer)
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackProxy::PushData_(const std::string& message, const sptr<IRemoteObject> remote)
+{
+    MessageParcel fooCallbackData;
+    MessageParcel fooCallbackReply;
+    MessageOption fooCallbackOption(MessageOption::TF_SYNC);
+
+    if (!fooCallbackData.WriteInterfaceToken(OHOS::HDI::Foo::V1_0::IFooCallback::GetDescriptor())) {
+        HDF_LOGE("%{public}s: failed to write interface descriptor!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (!fooCallbackData.WriteCString(message.c_str())) {
+        HDF_LOGE("%{public}s: write message failed!", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (remote == nullptr) {
+        HDF_LOGE("%{public}s: invalid remote object!", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    int32_t fooCallbackRet = remote->SendRequest(CMD_FOO_CALLBACK_PUSH_DATA, fooCallbackData, fooCallbackReply, fooCallbackOption);
+    if (fooCallbackRet != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s failed, error code is %{public}d", __func__, fooCallbackRet);
+        return fooCallbackRet;
+    }
+
+    return fooCallbackRet;
+}
+
+int32_t OHOS::HDI::Foo::V1_0::FooCallbackProxy::GetVersion_(uint32_t& majorVer, uint32_t& minorVer,
+     const sptr<IRemoteObject> remote)

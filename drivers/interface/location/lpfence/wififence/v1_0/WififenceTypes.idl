@@ -1,0 +1,95 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdiLpfenceWififence
+ * @{
+ *
+ * @brief Provides Wi-Fi fence APIs for the low-power fence service.
+ *
+ * You can use the APIs provided by this module to add or remove Wi-Fi fences, obtain Wi-Fi fence information of a device, and obtain the relationship between a device and a Wi-Fi fence.
+ * The Wi-Fi fence feature is used to determine whether a device is in a specific indoor location, for example, an area at home or a store in a shopping mall.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @file WififenceTypes.idl
+ *
+ * @brief Defines the data types used by the Wi-Fi fence feature.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Declares the path of the Wi-Fi fence module interface package.
+ *
+ * @since 4.0
+ */
+package ohos.hdi.location.lpfence.wififence.v1_0;
+
+/**
+ * @brief Enumerates the Wi-Fi fence status events.
+ *
+ * @since 4.0
+ */
+enum WififenceTransition {
+    /** The device is within the Wi-Fi fence. */
+    WIFIFENCE_TRANSITION_ENTERED = (1 << 0),
+    /** The device is out of the Wi-Fi fence. */
+    WIFIFENCE_TRANSITION_EXITED = (1 << 1),
+};
+
+/**
+ * @brief Enumerates the Wi-Fi fence algorithms.
+ *
+ * @since 4.0
+ */
+enum WififenceAlgoType {
+    /** If the scanned MAC address overlaps the MAC addresses in a Wi-Fi fence, the device is within the fence. */
+    TYPE_ONE_BSSID = 1,
+    /** If the similarity between the MAC address and RSSI scanned and the MAC address and RSSI in the Wi-Fi fence reaches the threshold, the device is within the fence. */
+    TYPE_FP_MATCH = 2,
+};
+
+/**
+ * @brief Defines the struct for a Wi-Fi fence to add.
+ *
+ * @since 4.0
+ */
+struct WififenceRequest {
+    /** ID of the Wi-Fi fence. A Wi-Fi fence with the same ID cannot be added repeatedly. */
+    int wififenceId;
+    /** Algorithm of the Wi-Fi fence. For details, see {@Link WififenceAlgoType}. */
+    int algoType;
+    /** If the {@Link TYPE_ONE_BSSID} algorithm is used, <b>bssid</b> is multiple groups of Wi-Fi MAC addresses.
+    If the {@Link TYPE_FP_MATCH} algorithm is used, <b>bssid</b> is multiple groups of Wi-Fi MAC address and RSSI pairs. */
+    unsigned char[] bssid;
+};
+
+/**
+ * @brief Defines the struct of the Wi-Fi fence information of a device.
+ *
+ * @since 4.0
+ */
+struct WififenceSize {
+    /** Maximum number of Wi-Fi fences that can be added for the device. */
+    unsigned int maxNum;
+    /** Number of Wi-Fi fences added for the device. */
+    unsigned int usedNum;
+};
+/** @} */

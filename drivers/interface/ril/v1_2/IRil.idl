@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Ril
+ * @{
+ *
+ * @brief Defines Ril-related APIs.
+ *
+ * The radio interface layer (RIL) module provides APIs and callbacks for upper-layer
+ * telephony services, including call, SMS, MMS, network search, and SIM card services.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+/**
+ * @file IRil.idl
+ *
+ * @brief Declares the request API of the RIL module.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+
+/**
+ * @brief Defines the path for the package of the RIL module APIs.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+package ohos.hdi.ril.v1_2;
+
+import ohos.hdi.ril.v1_2.IRilCallback;
+import ohos.hdi.ril.v1_1.IRil;
+import ohos.hdi.ril.v1_2.Types;
+
+/**
+ * @brief Declares the request API of the RIL module.
+ *
+ * Request APIs are called to make calls, send SMS and MMS messages, activate SIM cards,
+ * and access the Internet.
+ *
+ * @since 4.1
+ * @version 1.2
+ */
+interface IRil extends ohos.hdi.ril.v1_1.IRil {
+     /**
+      * @brief Sets an IRil callback.
+      *
+      * @param rilCallback Callback to set. For details, see {@link IRilCallback}.
+      *
+      * @return Returns <b>0</b> if the operation is successful.
+      * @return Returns a non-0 value if the operation fails.
+      *
+      * @since 4.1
+      * @version 1.2
+      */
+    [oneway] SetCallback1_2([in] IRilCallback rilCallback);
+
+     /**
+      * @brief Send sim matched operator info.
+      *
+      * @param slotId Card slot ID.
+      * @param serialId Serial ID of a request.
+      * @param ncfgOperatorInfo Operator info. For details, see {@link Types}.
+      *
+      * @return Returns <b>0</b> if the operation is successful.
+      * @return Returns a non-0 value if the operation fails.
+      *
+      * @since 4.1
+      * @version 1.2
+      */
+    [oneway] SendSimMatchedOperatorInfo([in] int slotId, [in] int serialId,
+        [in] struct NcfgOperatorInfo ncfgOperatorInfo);
+
+     /**
+      * @brief Clean all data connections.
+      *
+      * @param slotId Card slot ID.
+      * @param serialId Serial ID of a request.
+      *
+      * @return Returns <b>0</b> if the operation is successful.
+      * @return Returns a non-0 value if the operation fails.
+      *
+      * @since 4.1
+      * @version 1.2
+      */
+    [oneway] CleanAllConnections([in] int slotId, [in] int serialId);
+
+     /**
+      * @brief Get nr ssbid info.
+      *
+      * @param slotId Card slot ID.
+      * @param serialId Serial ID of a request.
+      *
+      * @return Returns <b>0</b> if the operation is successful.
+      * @return Returns a non-0 value if the operation fails.
+      *
+      * @since 4.1
+      * @version 1.2
+      */
+    [oneway] GetNrSsbId([in] int slotId, [in] int serialId);
+}
+/** @} */

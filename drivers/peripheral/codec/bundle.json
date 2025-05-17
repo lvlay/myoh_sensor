@@ -1,0 +1,66 @@
+{
+  "name": "@ohos/drivers_peripheral_codec",
+  "description": "codec device driver",
+  "version": "4.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/codec"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_codec",
+    "subsystem": "hdf",
+    "features": [
+      "drivers_peripheral_codec_feature_support_omx_extend_test",
+      "drivers_peripheral_codec_feature_set_omx_role",
+      "drivers_peripheral_codec_feature_support_hdi_v1",
+      "drivers_peripheral_codec_feature_support_high_work_frequency",
+      "drivers_peripheral_codec_feature_support_dma_buffer"
+    ],
+    "syscap": [],
+    "adapted_system_type": ["standard"],
+    "rom": "675KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "bounds_checking_function",
+        "c_utils",
+        "drivers_interface_codec",
+        "drivers_interface_display",
+        "drivers_peripheral_display",
+        "graphic_surface",
+        "hdf_core",
+        "hitrace",
+        "hilog",
+        "ipc",
+        "openmax"
+      ],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/codec:hdf_media_codec"
+      ],
+      "test": [
+        "//drivers/peripheral/codec/test:hdf_test_media_codec"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/codec/hal:libcodec_hdi_omx_client",
+            "header": {
+              "header_files": [
+                "codec_callback_if.h",
+                "codec_component_if.h",
+                "codec_component_manager.h",
+                "codec_component_type.h",
+                "codec_omx_ext.h"
+              ],
+              "header_base": "//drivers/peripheral/codec/interfaces/include"
+          }
+        }
+      ]
+    }
+  }
+}

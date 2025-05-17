@@ -1,0 +1,48 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("../../extdevmgr.gni")
+
+config("ext_dvc_mgr_public_config") {
+  include_dirs = [
+    "./",
+    "${utils_path}/include",
+  ]
+}
+
+ohos_shared_library("driver_ext_mgr_client") {
+  include_dirs = [
+    "${ext_mgr_path}/services/zidl/include",
+    "${ext_mgr_path}/utils/include",
+  ]
+
+  sources = [
+    "${ext_mgr_path}/frameworks/native/driver_ext_mgr_client.cpp",
+    "${ext_mgr_path}/services/zidl/src/driver_ext_mgr_callback_stub.cpp",
+    "${ext_mgr_path}/services/zidl/src/driver_ext_mgr_proxy.cpp",
+    "${ext_mgr_path}/services/zidl/src/driver_ext_mgr_types.cpp",
+  ]
+
+  public_configs = [ ":ext_dvc_mgr_public_config" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "samgr:samgr_proxy",
+  ]
+
+  subsystem_name = "hdf"
+  part_name = "external_device_manager"
+}

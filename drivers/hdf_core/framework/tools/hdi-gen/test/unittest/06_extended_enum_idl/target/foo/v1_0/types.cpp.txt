@@ -1,0 +1,8 @@
+#include "v1_0/types.h"
+#include <hdf_log.h>
+#include <message_parcel.h>
+#include <securec.h>
+
+bool FooInfoBlockMarshalling(OHOS::MessageParcel& data, const OHOS::HDI::Foo::V1_0::FooInfo& dataBlock)
+
+bool FooInfoBlockUnmarshalling(OHOS::MessageParcel& data, OHOS::HDI::Foo::V1_0::FooInfo& dataBlock)

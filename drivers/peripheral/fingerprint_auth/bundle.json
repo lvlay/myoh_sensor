@@ -1,0 +1,41 @@
+{
+    "name": "@ohos/drivers_peripheral_fingerprint_auth",
+    "description": "fingerprint_auth device driver",
+    "version": "4.0",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath": "drivers/peripheral/fingerprint_auth"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "drivers_peripheral_fingerprint_auth",
+      "subsystem": "hdf",
+      "adapted_system_type": ["standard"],
+      "features": ["drivers_peripheral_fingerprint_auth_enabled"],
+      "rom": "1000KB",
+      "ram": "1000KB",
+      "deps": {
+        "components": [
+          "ipc",
+          "hdf_core",
+          "hilog",
+          "c_utils",
+          "drivers_interface_fingerprint_auth"
+        ],
+        "third_party": [
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//drivers/peripheral/fingerprint_auth:fingerprint_auth_entry"
+        ],
+        "test": [
+          "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth:hdf_fingerprint_auth_fuzztest"
+        ],
+        "inner_kits": [
+        ]
+      }
+    }
+  }

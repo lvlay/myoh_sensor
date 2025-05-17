@@ -1,0 +1,494 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfHuks
+ * @{
+ *
+ * @brief Provides standard driver APIs for OpenHarmony Universal KeyStore (HUKS).
+ *
+ * The HUKS driver APIs define standard interfaces of the HUKS Core and provide
+ * a unified driver interface for the HUKS service.
+ * You can use these APIs to implement key lifecycle management, including
+ * key generation, key import and export, key operations, key access control,
+ * and key attestation.
+ *
+ * @since 4.0
+ */
+
+ /**
+ * @file IHuks.idl
+ *
+ * @brief Defines the HUKS driver interfaces for key management.
+ *
+ * @since 4.0
+ */
+
+package ohos.hdi.huks.v1_0;
+
+import ohos.hdi.huks.v1_0.IHuksTypes;
+
+/**
+ * @brief Defines the HUKS driver interfaces for key management.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+interface IHuks {
+    /**
+     * @brief Initializes the HUKS driver.
+     *
+     * @return Returns <b>0</b> if the initialization is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ModuleInit();
+
+    /**
+     * @brief Destroy the HUKS driver, including clear memory, temp key, etc.
+     *
+     * @return Returns <b>0</b> if the destory is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ModuleDestroy();
+
+    /**
+     * @brief Generates a key and returns the key in ciphertext.
+     *
+     * @param keyAlias Indicates the alias {@link HuksBlob} of the key
+     * to generate.
+     * @param paramSet Indicates the property set {@link HuksParamSet} of the
+     * key to generate. For details about the key property set struct,
+     * see the HUKS Device Development.
+     * @param keyIn Indicates the material {@link HuksBlob} of the key
+     * to generate. This parameter is optional.
+     * @param encKeyOut Indicates the key {@link HuksBlob} generated in
+     * ciphertext. For details about the key material struct, see the
+     * HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the key is generated.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GenerateKey([in] struct HuksBlob keyAlias,[in] struct HuksParamSet paramSet,
+       [in] struct HuksBlob keyIn, [out] struct HuksBlob encKeyOut);
+
+    /**
+     * @brief Imports a key in plaintext.
+     *
+     * @param keyAlias Indicates the alias {@link HuksBlob} of the key to import.
+     * @param key Indicates the material {@link HuksBlob} in plaintext of the
+     * key to import. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param paramSet Indicates the property set {@link HuksParamSet} of the
+     * key to import. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param encKeyOut Indicates the key {@link HuksBlob} in ciphertext
+     * imported. For details about the key material struct, see the
+     * HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the key is imported.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ImportKey([in] struct HuksBlob keyAlias, [in] struct HuksBlob key,
+        [in] struct HuksParamSet paramSet, [out] struct HuksBlob encKeyOut);
+
+    /**
+     * @brief Imports an encrypted key.
+     *
+     * @param wrappingKeyAlias Indicates the alias of an intermediate key used
+     * to wrap the key to import. For details, see {@link HuksBlob}.
+     * @param wrappingEncKey Indicates the encrypted intermediate
+     * key {@link HuksBlob}. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param wrappedKeyData Indicates the encrypted key
+     * material {@link HuksBlob} of the key to import. For details about the
+     * key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the property set {@link HuksParamSet} of the
+     * key to import. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param encKeyOut Indicates the key {@link HuksBlob} in ciphertext
+     * imported. For details about the key material struct, see the
+     * HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the key is imported.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ImportWrappedKey([in] struct HuksBlob wrappingKeyAlias, [in] struct HuksBlob wrappingEncKey,
+        [in] struct HuksBlob wrappedKeyData, [in] struct HuksParamSet paramSet, [out] struct HuksBlob encKeyOut);
+
+    /**
+     * @brief Exports the public key of a key pair.
+     *
+     * @param encKey Indicates the key pair material {@link HuksBlob}
+     * in ciphertext. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param paramSet Indicates the property set {@link HuksParamSet} of the
+     * key to export. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param keyOut Indicates the public key material {@link HuksBlob}
+     * exported. For details about the key material struct, see the
+     * HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the public key is exported.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ExportPublicKey([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [out] struct HuksBlob keyOut);
+
+    /**
+     * @brief Initializes a key session, decrypts the key material into memory,
+     * and returns a handle and a token.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameter set {@link HuksParamSet} used
+     * for the key operation. It contains parameters for the key operation.
+     * @param handle Indicates the key session handle {@link HuksBlob} returned
+     * for subsequent key session operations.
+     * @param token Indicates the key session token {@link HuksBlob},
+     * which is used for key access control.
+     *
+     * @see Init | Update| Finish
+     *
+     * @return Returns 0 if the session initialization is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Init([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [out]struct HuksBlob handle,
+        [out] struct HuksBlob token);
+
+    /**
+     * @brief Updates (processes or passes in) data by segment based on
+     * the cryptographic algorithm used (for example, in key agreement).
+     *
+     * @param handle Indicates the key session handle {@link HuksBlob},
+     * which is obtained by {@Init()}.
+     * @param paramSet Indicates the parameter set {@link HuksParamSet}
+     * used for the key operation. For details about the key property set
+     * struct, see the HUKS Device Development.
+     * @param inData Indicates the data segment or parameters {@link HuksBlob}.
+     * @param outData Indicates the output data {@link HuksBlob}.
+     *
+     * @see Init | Finish | Abort
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Update([in] struct HuksBlob handle, [in] struct HuksParamSet paramSet,
+        [in] struct HuksBlob inData, [out] struct HuksBlob outData);
+
+    /**
+     * @brief Finishes the key session operation.
+     *
+     * @param handle Indicates the key session handle {@link HuksBlob}.
+     * @param paramSet Indicates the parameter set {@link HuksParamSet} used
+     * for the key operation. For details about the key property set struct,
+     * see the HUKS Device Development.
+     * @param inData Indicates the data segment or parameters {@link HuksBlob}.
+     * @param outData Indicates the output data {@link HuksBlob}.
+     *
+     * @see Init | Update | Abort
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Finish([in] struct HuksBlob handle, [in] struct HuksParamSet paramSet,
+        [in] struct HuksBlob inData, [out] struct HuksBlob outData);
+
+    /**
+     * @brief Aborts a key session and releases the data used in the session.
+     * The aborted session cannot be operated.
+     *
+     * @param handle Indicates the key session handle {@link HuksBlob}.
+     * @param paramSet Indicates the parameter set {@link HuksParamSet} used
+     * for the key operation. For details about the key property set struct,
+     * see the HUKS Device Development.
+     *
+     * @see Init | Update | Finish
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Abort([in] struct HuksBlob handle, [in] struct HuksParamSet paramSet);
+
+    /**
+     * @brief Checks the key validity (integrity of the key and its properties).
+     *
+     * @param paramSet Indicates the parameter set {@link HuksParamSet} for
+     * checking the key validity. For details about the key property set struct,
+     * see the HUKS Device Development.
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext
+     * to check. For details about the key material struct, see
+     * the HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the key material is valid.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    CheckKeyValidity([in] struct HuksParamSet paramSet, [in] struct HuksBlob encKey);
+
+    /**
+     * @brief Obtains the certificate chain for the given key.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used to
+     * obtain the certificate chain. For details about the key property
+     * set struct, see the HUKS Device Development.
+     * @param certChain Indicates the certificate chain {@link HuksBlob}
+     * obtained. For details about the certificate chain struct, see the
+     * HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the certificate chain is obtained.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    AttestKey([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [out] struct HuksBlob certChain);
+
+    /**
+     * @brief Generates a random number.
+     *
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used to
+     * generate a random number. For details about the key property set struct,
+     * see the HUKS Device Development.
+     * @param random Indicates the random number {@link HuksBlob} generated.
+     *
+     * @return Returns <b>0</b> if a random number is generated.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    GenerateRandom([in] struct HuksParamSet paramSet, [out]struct HuksBlob random);
+
+    /**
+     * @brief Generates a signature for data using a key.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for signing.
+     * For details about the key property set struct, see the HUKS Device Development.
+     * @param srcData Indicates the data {@link HuksBlob} to be signed.
+     * @param signature Indicates the signature {@link HuksBlob} generated.
+     *
+     * @return Returns <b>0</b> if a signature is generated.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Sign([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [in] struct HuksBlob  srcData,
+        [out]struct HuksBlob signature);
+
+    /**
+     * @brief Verifies a signature.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * signature verification. For details about the key property set struct,
+     * see the HUKS Device Development.
+     * @param srcData Indicates the data {@link HuksBlob} whose signature is
+     * to be verified.
+     * @param signature Indicates the signature {@link HuksBlob} to verify.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Verify([in] struct HuksBlob encKey, [in] struct HuksParamSet  paramSet, [in] struct HuksBlob  srcData,
+        [in] struct HuksBlob  signature);
+
+    /**
+     * @brief Encrypts data using a key.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * encryption. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param plainText Indicates the data {@link HuksBlob} to encrypt.
+     * @param cipherText indicates the data {@link HuksBlob} in ciphertext.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Encrypt([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [in] struct HuksBlob plainText,
+        [out] struct HuksBlob  cipherText);
+
+    /**
+     * @brief Decrypts data using a key.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * decryption. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param cipherText indicates the data {@link HuksBlob} in ciphertext to decrypt.
+     * @param plainText Indicates the decrypted data {@link HuksBlob} in plaintext.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Decrypt([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [in] struct HuksBlob  cipherText,
+        [out] struct HuksBlob  plainText);
+
+    /**
+     * @brief Performs key agreement using a private key stored in the HUKS
+     * and the public key of the service.
+     *
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used
+     * for key agreement.
+     * @param encPrivateKey Indicates the key pair material {@link HuksBlob}
+     * stored in the HUKS. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param peerPublicKey Indicates the public key {@link HuksBlob} used
+     * for key agreement.
+     * @param agreedKey Indicates the key {@link HuksBlob} in plaintext obtained
+     * after key agreement.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    AgreeKey([in] struct HuksParamSet paramSet, [in] struct HuksBlob encPrivateKey, [in] struct HuksBlob peerPublicKey,
+        [out] struct HuksBlob agreedKey);
+
+    /**
+     * @brief Derives a key from a key stored in the HUKS.
+     *
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * key derivation. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param encKdfKey Indicates the key material {@link HuksBlob} stored
+     * in the HUKS. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param derivedKey Indicates the derived key {@link HuksBlob} in plaintext.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    DeriveKey([in] struct HuksParamSet paramSet, [in] struct HuksBlob encKdfKey, [out] struct HuksBlob derivedKey);
+
+    /**
+     * @brief Generates a message authentication code (MAC) using a key
+     * stored in the HUKS.
+     *
+     * @param encKey Indicates the key material {@link HuksBlob} in ciphertext.
+     * For details about the key material struct, see the HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * generating a MAC. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param srcData Indicates the data {@link HuksBlob} used to generate a MAC.
+     * @param mac Indicates the MAC {@link HuksBlob} generated.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    Mac([in] struct HuksBlob encKey, [in] struct HuksParamSet paramSet, [in] struct HuksBlob srcData,
+        [out] struct HuksBlob mac);
+
+    /**
+     * @brief Upgrades a key, including its encryption mode and encryption
+     * material. The HUKS service triggers the upgrade when the key file version
+     * is earlier than the latest version.
+     *
+     * @param encOldKey Indicates the key material {@link HuksBlob} in
+     * ciphertext to upgrade. For details about the key material struct, see the
+     * HUKS Device Development.
+     * @param paramSet Indicates the parameters {@link HuksParamSet} used for
+     * the upgrade. For details about the key property set struct, see the
+     * HUKS Device Development.
+     * @param encNewKey Indicates the key material {@link HuksBlob} in
+     * ciphertext after the upgrade. For details about the key material struct,
+     * see the HUKS Device Development.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    UpgradeKey([in] struct HuksBlob encOldKey, [in] struct HuksParamSet paramSet, [out] struct HuksBlob encNewKey);
+
+    /**
+     * @brief Exports the public key of a chipset key pair.
+     *
+     * @param salt Indicates the salt {@link HuksBlob} used to derive the key
+     * pair of the chipset.
+     * @param scene Indicates the expected chipset decryption
+     * scenario {@link HuksParamSet} of the service. For details about the
+     * key property set struct, see the HUKS Device Development.
+     * @param publicKey Indicates the public key material {@link HuksBlob}
+     * exported, for example, the raw data (32 bytes) of the x-axis and y-axis
+     * values of ECC-P256.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a non-zero value otherwise.
+     *
+     * @since 4.0
+     * @version 1.0
+     */
+    ExportChipsetPlatformPublicKey([in] struct HuksBlob salt, [in] enum HuksChipsetPlatformDecryptScene scene,
+        [out] struct HuksBlob publicKey);
+}
+/** @} */

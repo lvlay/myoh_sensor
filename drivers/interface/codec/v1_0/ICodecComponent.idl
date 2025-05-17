@@ -1,0 +1,447 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup Codec
+ * @{
+ *
+ * @brief Defines APIs of the Codec module.
+ *
+ * The Codec module provides APIs for initializing the custom data and audio and video codecs,
+ * setting codec parameters, and controlling and transferring data.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+
+/**
+ * @file ICodecComponent.idl
+ *
+ * @brief Declares the APIs for codec components.
+ *
+ * You can use these APIs to obtain component information, send commands to components,
+ * set component parameters, and control and transfer buffer data. 
+ * After creating a component, you can use these APIs to implement encoding and decoding.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+ 
+/**
+ * @brief Defines the path for the package of the Codec module APIs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+package ohos.hdi.codec.v1_0;
+
+import ohos.hdi.codec.v1_0.CodecTypes;
+import ohos.hdi.codec.v1_0.ICodecCallback;
+
+/**
+ * @brief Defines the APIs for codec components.
+ *
+ * The APIs can be used to:
+ * - Obtain the component version.
+ * - Obtain and set component parameters.
+ * - Send a command to a component and obtain the component state.
+ * - Set callbacks.
+ * - Set or release the buffer used by a component.
+ * - Manage the input and output buffers for encoding and decoding.
+ * For details, see the description of the APIs.
+ */
+
+interface ICodecComponent {
+
+    /**
+     * @brief Obtains the version of this codec component.
+     *
+     *
+     * @param verInfo Indicates the pointer to the component version information. For details, see {@link CompVerInfo}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    GetComponentVersion([out] struct CompVerInfo verInfo);
+	
+	/**
+     * @brief Sends a command to this component.
+     *
+     * If the command is used to set the component state, a callback will be invoked to return the result.
+     * There is no callback invoked for other commands.
+     *
+     * @param cmd Indicates the command to send. For details, see {@link CodecCommandType}.
+     * @param param Indicates the parameter carried in the command.
+     * - If <b>cmd</b> is <b>CODEC_COMMAND_STATE_SET</b>, <b>param</b> can be set to any value of {@link CodecStateType}.
+     * - If <b>cmd</b> is <b>CODEC_COMMAND_FLUSH</b>, <b>CODEC_COMMAND_PORT_DISABLE</b>, <b>CODEC_COMMAND_PORT_ENABLE</b>,
+     * or <b>CODEC_COMMAND_MARK_BUFFER</b>, <b>param</b> is the target port.
+     * @param cmdData Indicates the pointer to the <b>OMX_MARKTYPE</b> structure when <b>cmd</b>
+     * is <b>CODEC_COMMAND_MARK_BUFFER</b>.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    SendCommand([in] enum CodecCommandType cmd, [in] unsigned int param, [in] byte[] cmdData);
+	
+    /**
+     * @brief Obtains the parameter settings of this component.
+     *
+     * For the component in a state other than OMX_StateInvalid, you can use this API to obtain the
+     * component's parameter settings. For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param index Indicates the index of the structure to fill. For details,
+     * see <b>OMX_INDEXTYPE</b> defined by OMX IL.
+     * @param inParamStruct Indicates the pointer to the application allocated structure to be filled by the component.
+     * @param outParamStruct Indicates the pointer to the application allocated structure filled by the component.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about
+     * the error codes, see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    GetParameter([in] unsigned int index, [in] byte[] inParamStruct, [out] byte[] outParamStruct);
+	
+    /**
+     * @brief Sets parameters for this component, that is, sends an initialization
+     * parameter structure to the component.
+     *
+     * You can use this API to set component parameters when:
+     * - The component is in the OMX_StateLoaded state (the component has been loaded).
+     * - The component is in the OMX_StateWaitForResources state (the component is waiting for required resources).
+     * - The component or port is disabled.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param index Indicates the index of the structure to set. For details, see <b>OMX_INDEXTYPE</b> defined by OMX IL.
+     * @param paramStruct Indicates the pointer to the application allocated structure used to set
+     * parameters for this component.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    SetParameter([in] unsigned int index, [in] byte[] paramStruct);
+	
+    /**
+     * @brief Obtains the configuration of this component.
+     *
+     * You can use this API to obtain the component configuration after a component is loaded.
+     *
+     * @param index Indicates the index of the structure to fill. For details, see {@link OMX_INDEXTYPE}.
+     * @param inCfgStruct Indicates the pointer to the application allocated structure to be filled by the component.
+     * @param outCfgStruct Indicates the pointer to the application allocated structure filled by the component.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    GetConfig([in] unsigned int index, [in] byte[] inCfgStruct, [out] byte[] outCfgStruct);
+	
+    /**
+     * @brief Sets the component configuration.
+     *
+     * You can use this API to set the component configuration after a component is loaded.
+     *
+     * @param index Indicates the index of the structure to set. For details, see {@link OMX_INDEXTYPE}.
+     * @param cfgStruct Indicates the pointer to the application allocated structure used to set the component.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    SetConfig([in] unsigned int index, [in] byte[] cfgStruct);
+	
+    /**
+     * @brief Obtains the extended index of this component based on a given string.
+     *
+     * The extended string can be converted into an OpenMAX IL structure index, which is used (as an input parameter)
+     * in {@link GetParameter} or {@link SetParameter}.
+     *
+     * @param paramName Indicates the string that can be converted into the structure index.
+     * @param indexType Indicates the structure index obtained. For details, see {@link OMX_INDEXTYPE}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    GetExtensionIndex([in] String paramName, [out] unsigned int indexType);
+	
+    /**
+     * @brief Obtains the current state of this component.
+     *
+     * 
+     *
+     * @param state Indicates the pointer to the state obtained. For details about the component
+     * states, see {@link CodecStateType}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    GetState([out] enum CodecStateType state);
+	
+    /**
+     * @brief Sets up tunneling for this component.
+     *
+     * For a component in the OMX_StateLoaded state (the component is loaded), you can use this API
+     * to determine whether
+     * tunneling is possible and if yes, to set up the tunneling.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param port Indicates the port on the component used for the setting.
+     * @param tunneledComp Indicates the handle of the tunnel component.
+     * @param tunneledPort Indicates the port on the component to be used for tunneling.
+     * @param inTunnelSetup Indicates the pointer to the tunnel setup structure {@link OMX_TUNNELSETUPTYPE} to set.
+     * @param outTunnelSetup Indicates the pointer to the tunnel setup structure {@link OMX_TUNNELSETUPTYPE} set.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    ComponentTunnelRequest([in] unsigned int port, [in] int tunneledComp, [in] unsigned int tunneledPort, [in]
+    struct CodecTunnelSetupType inTunnelSetup, [out] struct CodecTunnelSetupType outTunnelSetup);
+	
+    /**
+     * @brief Requests the component to use a buffer that is already allocated by another component.
+     *
+     * This API is used when:
+     * - The component is in the OMX_StateLoaded state (the component is loaded) and has received a request for
+     * changing the state to OMX_StateIdle.
+     * - The component is in the OMX_StateWaitForResources state, the required resources are available, and the
+     * component is ready to enter the OMX_StateIdle state.
+     * - The component is in the OMX_StateExecuting, OMX_StatePause, or OMX_StateIdle state on a disabled port.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param portIndex Indicates the component port.
+     * @param inBuffer Indicates the pointer to the structure of the buffer to be used. For details, see {@link OmxCodecBuffer}.
+     * @param outBuffer Indicates the pointer to the structure of the buffer to be used. For details, see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    UseBuffer([in] unsigned int portIndex, [in] struct OmxCodecBuffer inBuffer, [out] struct OmxCodecBuffer outBuffer);
+	
+    /**
+     * @brief Requests the component to allocate a new buffer.
+     *
+     * This API is used to request a new buffer from a component when:
+     * - The component is in the OMX_StateLoaded state and has received a request for changing the
+     * state to OMX_StateIdle.
+     * - The component is in the OMX_StateWaitForResources state, the required resources are available,
+     * and the component is ready to enter the OMX_StateIdle state.
+     * - The component is in the OMX_StateExecuting, OMX_StatePause, or OMX_StateIdle state on a disabled port.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param portIndex Indicates the component port.
+     * @param inBuffer Indicates the pointer to the structure of the buffer to be allocated. For details about
+     * the structure, see {@link OmxCodecBuffer}.
+     * @param outBuffer Indicates the pointer to the structure of the buffer allocated. For details about the
+     * structure, see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    AllocateBuffer([in] unsigned int portIndex, [in] struct OmxCodecBuffer inBuffer,
+    [out] struct OmxCodecBuffer outBuffer);
+	
+    /**
+     * @brief Releases a buffer.
+     *
+     * This API is used when:
+     * - The component is in the OMX_StateIdle state and has received a request for changing the
+     * state to OMX_StateLoaded.
+     * - The component is in the OMX_StateExecuting, OMX_StatePause, or OMX_StateIdle state on a disabled port.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     * - This API can be called at any time. However, if it is not called in any of the previous conditions,
+     * the component may report an <b>OMX_ErrorPortUnpopulated</b> event.
+     *
+     * @param portIndex Indicates the component port.
+     * @param buffer Indicates the pointer to the structure of the buffer to release. For details about the
+     * structure, see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    FreeBuffer([in] unsigned int portIndex, [in] struct OmxCodecBuffer buffer);
+	
+    /**
+     * @brief Empties a buffer.
+     *
+     * This API can be called when the component is in the OMX_StateExecuting or OMX_StatePause state. For details
+     * about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param buffer Indicates the pointer to the structure of the buffer to empty. For details about the structure,
+     * see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    EmptyThisBuffer([in] struct OmxCodecBuffer buffer);
+	
+    /**
+     * @brief Fills a buffer with the encoding and decoding output by this component.
+     *
+     * This API can be called when the component is in the OMX_StateExecuting or OMX_StatePause state. For details
+     * about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param buffer Indicates the pointer to the structure of the buffer to be filled. For details about the
+     * structure, see {@link OmxCodecBuffer}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    FillThisBuffer([in] struct OmxCodecBuffer buffer);
+	
+    /**
+     * @brief Sets callbacks for this component.
+     *
+     * The callbacks will be invoked to report an event or report available input or output information when the
+     * component is in the OMX_StateLoaded state. For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param callbacks Indicates the pointer to the {@link ICodecCallback} object.
+     * @param appData Indicates the pointer to an application-defined value that will be returned by the callback.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    SetCallbacks([in] ICodecCallback callbacks, [in] long appData);
+	
+    /**
+     * @brief Deinitializes this component.
+     *
+     * This API will deinitialize and close a component in the OMX_StateLoaded state. For details about the
+     * component states, see {@link OMX_STATETYPE}.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    ComponentDeInit();
+	
+    /**
+     * @brief Uses the image provided by EGL as a buffer on the specified port.
+     *
+     * This API is used when:
+     * - The component is in the OMX_StateLoaded state and has received a request for changing the
+     * state to OMX_StateIdle.
+     * - The component is in the OMX_StateWaitForResources state, the required resources are available,
+     * and the component is ready to enter the OMX_StateIdle state.
+     * - The component is in the OMX_StateExecuting, OMX_StatePause, or OMX_StateIdle state on a disabled port.
+     * For details about the component states, see {@link OMX_STATETYPE}.
+     *
+     * @param portIndex Indicates the component port.
+     * @param inBuffer Indicates the pointer to the {@link OmxCodecBuffer} structure.
+     * @param outBuffer Indicates the pointer to the {@link OmxCodecBuffer} structure.
+     * @param eglImage Indicates the pointer to the image allocated by EGL.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error codes,
+     * see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    UseEglImage([in] unsigned int portIndex, [in] struct OmxCodecBuffer inBuffer, [out] struct OmxCodecBuffer
+    outBuffer, [in] byte[] eglImage);
+	
+	/**
+     * @brief Obtains the component role based on the index.
+     *
+     * 
+     *
+     * @param role Indicates the role name obtained.
+     * @param index Indicates the index of the role. A component supports multiple roles.
+     *
+     * @return Returns <b>HDF_SUCCESS</b> if the operation is successful.
+     * @return Returns <b>HDF_ERR_INVALID_PARAM</b> if the operation fails due to invalid parameters.
+     * @return Returns <b>HDF_FAILURE</b> if the execution fails.
+     * @return Returns other values if the underlying layer returns a failure. For details about the error
+     * codes, see <b>OMX_ERRORTYPE</b> defined by OpenMAX IL.
+     *
+     * @since 3.2
+     */
+    ComponentRoleEnum([out] unsigned char[] role, [in] unsigned int index);
+}

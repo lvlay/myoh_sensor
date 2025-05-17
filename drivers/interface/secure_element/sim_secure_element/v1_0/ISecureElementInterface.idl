@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ohos.hdi.secure_element.sim_secure_element.v1_0;
+
+import ohos.hdi.secure_element.sim_secure_element.v1_0.ISecureElementCallback;
+import ohos.hdi.secure_element.sim_secure_element.v1_0.SecureElementTypes;
+
+/**
+ * @brief Declares the APIs provided by the SecureElement module for obtaining SecureElement operations,
+ * see "Open Mobile API Specification".
+ *
+ * @since 5.0
+ * @version 1.0
+ */
+interface ISecureElementInterface {
+
+    /**
+     * Initializes the secure element.
+     *
+     * @param callback The callback used to notify the secure element status changed.
+     * @param status The status code to initialize the secure element.
+     * @since 5.0
+     * @version 1.0
+     */
+    init([in] ISecureElementCallback clientCallback, [out] enum SecureElementStatus status);
+
+    /**
+     * Get the ATR of this SE.
+     *
+     * @return response The ATR or empty array SHALL be returned if the ATR for this SE is not available.
+     * @since 5.0
+     * @version 1.0
+     */
+    getAtr([out] List<unsigned char> response);
+
+    /**
+     * Checks if a SE is present in this reader.
+     *
+     * @param present True if the SE is present, false otherwise.
+     * @since 5.0
+     * @version 1.0
+     */
+    isSecureElementPresent([out] boolean present);
+
+    /**
+     * Open a logical channel with the SE, selecting the applet represented by the given AID (when the AID is not
+     * Null and the length of the AID is not 0).
+     *
+     * @param aid The AID of the applet to be selected on this channel, as a byte array.
+     * @param p2 The P2 parameter of the SELECT APDU executed on this channel.
+     * @param response The response to SELECT command, or empty if failure.
+     * @param channelNumber The channel number of new logical channel.
+     * @param status The status code to open logical channel.
+     * @since 5.0
+     * @version 1.0
+     */
+    openLogicalChannel([in] List<unsigned char> aid, [in] unsigned char p2, [out] List<unsigned char> response,
+        [out] unsigned char channelNumber, [out] enum SecureElementStatus status);
+
+    /**
+     * Get access to the basic channel, as defined in [ISO 7816-4] (the one that has number 0). The obtained object
+     * is an instance of the channel class.
+     *
+     * @param aid The AID of the applet to be selected on this channel, as a byte array.
+     * @param p2 The P2 parameter of the SELECT APDU executed on this channel.
+     * @param response The response to SELECT command, or empty if failure.
+     * @param status The status code to open basic channel.
+     * @since 5.0
+     * @version 1.0
+     */
+    openBasicChannel([in] List<unsigned char> aid, [in] unsigned char p2, [out] List<unsigned char> response,
+        [out] enum SecureElementStatus status);
+
+    /**
+     * Closes this logical channel to the SE.
+     * Closing a basic channel must return SecureElementStatus::FAILED.
+     *
+     * @param channelNumber The logical channel number to be closed
+     * @param status The status code to close the logical channel.
+     * @since 5.0
+     * @version 1.0
+     */
+    closeChannel([in] unsigned char channelNumber, [out] enum SecureElementStatus status);
+
+    /**
+     * Transmit an APDU command (as per ISO/IEC 7816) to the SE.
+     *
+     * @param command The APDU command to be transmitted, as a byte array.
+     * @param response The response received, as a byte array.
+     * @param status The status code to transmit command.
+     * @since 5.0
+     * @version 1.0
+     */
+     transmit([in] List<unsigned char> command, [out] List<unsigned char> response, [out] enum SecureElementStatus status);
+
+    /**
+     * Transmit an APDU command (as per ISO/IEC 7816) to the SE.
+     *
+     * @param status The status code to reset the secure element.
+     * @since 5.0
+     * @version 1.0
+     */
+     reset([out] enum SecureElementStatus status);
+}

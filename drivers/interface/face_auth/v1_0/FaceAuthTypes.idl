@@ -1,0 +1,177 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @addtogroup HdfFaceAuth
+ * @{
+ *
+ * @brief Provides APIs for the face auth driver.
+ *
+ * The face auth driver provides a unified interface for the face auth service to access the face auth driver.
+ * After obtaining the face auth driver proxy, the service can call related APIs to obtain executors.
+ * After obtaining the face auth executors, the service can call related APIs to get executor information, get
+ * template information, and enroll, authenticate, and delete templates, etc.
+ *
+ * @since 3.2
+ */
+
+/**
+ * @file FaceAuthTypes.idl
+ *
+ * @brief Defines the enumeration and data structure of the face auth driver, including AuthType, ExecutorRole, ExecutorSecureLevel,
+ * CommandId, FaceTipsCode, ExecutorInfo, and TemplateInfo.
+ *
+ * @since 3.2
+ */
+
+package ohos.hdi.face_auth.v1_0;
+
+/**
+ * @brief Enumerates credential types for authentication.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum AuthType : int {
+    /**< Indicates that the authentication type is PIN. */
+    PIN = 1,
+    /**< Indicates that the authentication type is face. */
+    FACE = 2,
+    /**< Indicates that the authentication type is fingerprint. */
+    FINGERPRINT = 4,
+};
+
+/**
+ * @brief Enumerates executor roles.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorRole : int {
+    /**< Indicates that the executor role is collector. */
+    COLLECTOR = 1,
+    /**< Indicates that the executor role is verifier. */
+    VERIFIER = 2,
+    /**< Indicates that the executor role is the combination of collector and verifier. */
+    ALL_IN_ONE = 3,
+};
+
+/**
+ * @brief Enumerates executor secure levels.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum ExecutorSecureLevel : int {
+    /**< Indicates that the executor secure level is ESL0. */
+    ESL0 = 0,
+    /**< Indicates that the executor secure level is ESL1. */
+    ESL1 = 1,
+    /**< Indicates that the executor secure level is ESL2. */
+    ESL2 = 2,
+    /**< Indicates that the executor secure level is ESL3. */
+    ESL3 = 3,
+};
+
+/**
+ * @brief Enumerates command IDs.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum CommandId : int {
+    /**< Indicates the command ID for locking the template. */
+    LOCK_TEMPLATE = 1,
+    /**< Indicates the command ID for unlocking the template. */
+    UNLOCK_TEMPLATE = 2,
+    /**< The vendor may add a custom command ID after this. */
+    VENDOR_COMMAND_BEGIN = 10000
+};
+
+/**
+ * @brief Enumerates prompt codes.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+enum FaceTipsCode : int {
+    /**< Indicates that the obtained facial image is too bright due to high illumination. */
+    FACE_AUTH_TIP_TOO_BRIGHT = 1,
+    /**< Indicates that the obtained facial image is too dark due to low illumination. */
+    FACE_AUTH_TIP_TOO_DARK = 2,
+    /**< Indicates that the face is too close to the device. */
+    FACE_AUTH_TIP_TOO_CLOSE = 3,
+    /**< Indicates that the face is too far away from the device. */
+    FACE_AUTH_TIP_TOO_FAR = 4,
+    /**< Indicates that the device is too high, and that only the upper part of the face is captured. */
+    FACE_AUTH_TIP_TOO_HIGH = 5,
+    /**< Indicates that the device is too low, and that only the lower part of the face is captured. */
+    FACE_AUTH_TIP_TOO_LOW = 6,
+    /**< Indicates that the device is deviated to the right, and that only the right part of the face is captured. */
+    FACE_AUTH_TIP_TOO_RIGHT = 7,
+    /**< Indicates that the device is deviated to the left, and that only the left part of the face is captured. */
+    FACE_AUTH_TIP_TOO_LEFT = 8,
+    /**< Indicates that the face moves too much during facial information collection. */
+    FACE_AUTH_TIP_TOO_MUCH_MOTION = 9,
+    /**< Indicates that the user is not gazing at the device. */
+    FACE_AUTH_TIP_POOR_GAZE = 10,
+    /**< Indicates that no face is detected. */
+    FACE_AUTH_TIP_NOT_DETECTED = 11,
+    /**< The vendor may add a custom face auth tip after this. */
+    VENDOR_FACE_AUTH_TIP_BEGIN = 10000
+};
+
+/**
+ * @brief Indicates executor information.
+ *
+ * @since 3.2
+ * @version 1.0
+ */
+struct ExecutorInfo {
+    /**< Indicates the sensor ID, which must be unique within the driver. */
+    unsigned short sensorId;
+    /**< Indicates the executor type. */
+    unsigned int executorType;
+    /**< Indicates the executor role. See @{ExecutorRole}. */
+    enum ExecutorRole executorRole;
+    /**< Indicates the auth type. See @{AuthType}. */
+    enum AuthType authType;
+    /**< Indicates the executor secure level. See @{ExecutorSecureLevel}. */
+    enum ExecutorSecureLevel esl;
+    /**< Indicates the public key of the executor. */
+    unsigned char[] publicKey;
+    /**< Indicates extra information. */
+    unsigned char[] extraInfo;
+};
+
+/**
+ * @brief Indicates template information.
+ *
+ * @since 3.2
+ * @version 1.0
+ *
+ * @deprecated
+ */
+struct TemplateInfo {
+    /**< Indicates the executor type. */
+    unsigned int executorType;
+    /**< Indicates lockout duration in millisecond. */
+    int lockoutDuration;
+    /**< Indicates remaining authentication attempts before a lockout. */
+    int remainAttempts;
+    /**< Indicates extra information. */
+    unsigned char[] extraInfo;
+};
+/** @} */

@@ -1,0 +1,48 @@
+{
+  "name": "@ohos/drivers_peripheral_partitionslot",
+  "description": "partitionslot hdf",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "drivers/peripheral/partitionslot"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "drivers_peripheral_partitionslot",
+    "subsystem": "hdf",
+    "adapted_system_type": ["standard"],
+    "rom": "600KB",
+    "ram": "7400KB",
+    "deps": {
+      "components": [
+        "ipc",
+        "c_utils",
+        "hdf_core",
+        "init",
+        "hilog",
+        "drivers_interface_partitionslot"
+      ]
+    },
+    "build": {
+      "sub_component": [
+        "//drivers/peripheral/partitionslot:partitionslot_entry"
+      ],
+      "inner_kits": [
+        {
+          "name": "//drivers/peripheral/partitionslot/hal:libpartition_slot_manager",
+          "header": {
+            "header_files": [],
+            "header_base": [
+              "//drivers/peripheral/partitionslot/hal/include"
+            ]
+          }
+        }
+      ],
+      "test": [
+        "//drivers/peripheral/partitionslot/test:partitionslot_unittest"
+      ]
+    }
+  }
+}

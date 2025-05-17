@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ /**
+ * @addtogroup HdiLpfenceWififence
+ * @{
+ *
+ * @brief Provides Wi-Fi fence APIs for the low-power fence service.
+ *
+ * You can use the APIs provided by this module to add or remove Wi-Fi fences, obtain Wi-Fi fence information of a device, and obtain the relationship between a device and a Wi-Fi fence.
+ * The Wi-Fi fence feature is used to determine whether a device is in a specific indoor location, for example, an area at home or a store in a shopping mall.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @file IWififenceCallback.idl
+ *
+ * @brief Declares the callbacks for the Wi-Fi fence module.
+ *
+ * @since 4.0
+ * @version 1.0
+ */
+
+/**
+ * @brief Declares the path of the Wi-Fi fence module interface package.
+ *
+ * @since 4.0
+ */
+package ohos.hdi.location.lpfence.wififence.v1_0;
+
+/**
+ * @brief Imports data types of the Wi-Fi fence module.
+ *
+ * @since 4.0
+ */
+import ohos.hdi.location.lpfence.wififence.v1_0.WififenceTypes;
+
+/**
+ * @brief Defines the callback for the Wi-Fi fence module.
+ *
+ * Before enabling the Wi-Fi fence feature, you need to register this callback to report the Wi-Fi fence status when the relationship between a Wi-Fi fence and a device changes.
+ * For details, see {@link ICellfenceInterface}.
+ *
+ * @since 4.0
+ */
+[callback] interface IWififenceCallback {
+    /**
+     * @brief Called when the Wi-Fi fence status changes.
+     *
+     * This callback will be invoked to report the Wi-Fi fence status when the relationship between a device and a Wi-Fi fence changes.
+     *
+     * @param wififenceId Indicates the ID of the Wi-Fi fence.
+     * @param transition Indicates the Wi-Fi fence status. For details, see {@link WififenceTransition}.
+     * @param timestamp Indicates the timestamp.
+     *
+     * @return Returns <b>0</b> if the operation is successful.
+     * @return Returns a negative value if the operation fails.
+     *
+     * @since 4.0
+     */
+    OnWififenceChanged([in] int wififenceId,
+                       [in] int transition,
+                       [in] long timestamp);
+
+    /**
+     * @brief Called to return the Wi-Fi fence information.
+     *
+     *
+     *
+     * @param size Indicates the Wi-Fi fence information obtained. For details, see {@link WififenceSize}.
+     *
+     * @return Returns <b>0</b> if the callback is invoked successfully.
+     * @return Returns a negative value if the callback fails to be invoked.
+     *
+     * @since 4.0
+     */
+    OnGetWififenceSizeCb([in] struct WififenceSize size);
+
+    /**
+     * @brief Called when the low-power fence service is reset.
+     *
+     *
+     *
+     * @return Returns <b>0</b> if the callback is invoked successfully.
+     * @return Returns a negative value if the callback fails to be invoked.
+     *
+     * @since 4.0
+     */
+    OnWififenceReset();
+}
+/** @} */

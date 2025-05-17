@@ -1,0 +1,54 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2021. All rights reserved.
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("${ohos_product_adapter_dir}/audio/product.gni")
+} else {
+  import("//build/ohos.gni")
+}
+
+declare_args() {
+  drivers_peripheral_audio_feature_mono_to_stereo = false
+  drivers_peripheral_audio_feature_hal_notsupport_pathselect = false
+  drivers_peripheral_audio_feature_hdf_proxy_stub = true
+  drivers_peripheral_audio_feature_user_mode = false
+  drivers_peripheral_audio_feature_full_test_suite = false
+  drivers_peripheral_audio_feature_policy_config = true
+  drivers_peripheral_audio_feature_alsa_lib = false
+  drivers_peripheral_audio_feature_rich_device = false
+  drivers_peripheral_audio_feature_community = true
+  drivers_peripheral_audio_feature_effect = false
+  drivers_peripheral_audio_feature_double_pnp_detect = false
+  drivers_peripheral_audio_feature_offload = false
+  drivers_peripheral_audio_feature_multichannel = false
+}
+
+if (defined(ohos_lite)) {
+  if (defined(enable_audio_hal_notsupport_pathselect) &&
+      enable_audio_hal_notsupport_pathselect == true) {
+    drivers_peripheral_audio_feature_hal_notsupport_pathselect = true
+  } else {
+    drivers_peripheral_audio_feature_hal_notsupport_pathselect = false
+  }
+  if (defined(enable_hdf_audio_full_test_suite)) {
+    drivers_peripheral_audio_feature_full_test_suite = true
+  }
+}
+
+#If set flag is false, the printf log will be built; if set flag is true, the hdf log version will be built.
+enable_audio_hal_hdf_log = true
+
+# testcase build switch
+#If flag is true, the ADM_SO version testcase will be built; if set flag is false, the other version will be built.
+enable_audio_adm_passthrough = false
+
+#If flag is true, the ADM_SERVICE version testcase will be built; if set flag is false, the other version will be built.
+enable_audio_adm_service = true
+
+#If all above flag is set to false, it will build failure.so forbid setting all above flag to false.
+enable_coverage = false
+
+enable_c_utils = true
+if (defined(global_parts_info) &&
+    !defined(global_parts_info.commonlibrary_c_utils)) {
+  enable_c_utils = false
+}

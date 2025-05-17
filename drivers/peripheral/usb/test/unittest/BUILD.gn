@@ -1,0 +1,85 @@
+# Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("./../../usb.gni")
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("//build/lite/config/test.gni")
+  lite_component("hdf_manual_test_usb_device") {
+    if (ohos_build_type == "debug") {
+      deps = [
+        "./../../performance:hdf_usb_device_sdk_io_test",
+        "device_sdk:hdf_usb_device_sdk_if_test",
+      ]
+    }
+    features = []
+  }
+  lite_component("hdf_manual_test_usb_host") {
+    if (ohos_build_type == "debug") {
+      deps = [
+        "host_sdk:usb_host_raw_io_test",
+        "host_sdk:usb_host_raw_test",
+        "host_sdk:usb_host_sdk_io_test",
+        "host_sdk:usb_host_sdk_test",
+      ]
+    }
+    features = []
+  }
+} else {
+  import("//build/config/sanitizers/sanitizers.gni")
+  import("//build/test.gni")
+  import("./../../../../hdf_core/adapter/uhdf2/uhdf.gni")
+
+  module_output_path = "hdf/usb"
+  ohos_unittest("usb_device_sdk_io_test") {
+    module_out_path = module_output_path
+    include_dirs = [
+      "./../../../ddk/common/include",
+      "./../../../ddk/device/include",
+      "./../../../interfaces/ddk/common",
+      "./../../../interfaces/ddk/device",
+      "//third_party/googletest/googletest/include",
+      "./../device_sdk",
+      "${usb_driver_path}/utils/include",
+    ]
+
+    sources = [
+      "./../device_sdk/usb_device_cdcacm_test.cpp",
+      "./../device_sdk/usb_device_sdk_io_test.cpp",
+    ]
+    deps = [ "./../../../ddk:libusb_core" ]
+
+    if (is_standard_system) {
+      external_deps = [
+        "hdf_core:libhdf_host",
+        "hdf_core:libhdf_ipc_adapter",
+        "hdf_core:libhdf_utils",
+        "hdf_core:libhdi",
+        "hilog:libhilog",
+      ]
+      if (usb_c_utils_enable) {
+        external_deps += [ "c_utils:utils" ]
+      }
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+  }
+
+  group("hdf_manual_test_usb") {
+    testonly = true
+    deps = [
+      ":usb_device_sdk_io_test",
+      "host_sdk:hdf_unittest_usb_host",
+    ]
+  }
+}
